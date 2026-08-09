@@ -1,0 +1,22 @@
+league: EPL
+football_data_division: E0
+start_season: 2021
+end_season: 2025
+
+model:
+  venue_window: 20
+  min_venue_matches: 5
+  lambda_floor: 0.15
+  lambda_cap: 4.5
+
+backtest:
+  min_prior_seasons_for_calibration: 2
+  ev_thresholds: [0.00, 0.02, 0.05, 0.075, 0.10]
+
+paths:
+  raw_dir: data/raw
+  processed_dir: data/processed
+  master: data/processed/master_matches.csv
+  predictions: data/processed/xg_predictions.csv
+  summary: data/processed/backtest_summary.csv
+  validation: data/processed/validation_report.json

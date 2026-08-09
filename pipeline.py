@@ -2,13 +2,11 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Iterable
 
 import pandas as pd
 import requests
 import yaml
-from underdata.league import League
-from underdata.team import Team
+from understatapi import UnderstatClient
 
 TEAM_MAP = {
     "Manchester United": "Man United",
@@ -89,84 +87,54 @@ def fetch_football_data(start_year: int, division: str, raw_dir: str) -> pd.Data
     return df
 
 
-def _pick_column(df: pd.DataFrame, aliases: Iterable[str], required: bool = True) -> str | None:
-    normalized = {str(c).strip().lower(): c for c in df.columns}
-    for alias in aliases:
-        if alias.lower() in normalized:
-            return normalized[alias.lower()]
-    if required:
-        raise RuntimeError(f"Could not find any of columns {list(aliases)}. Available: {list(df.columns)}")
-    return None
+def _team_title(value: object) -> str:
+    if isinstance(value, dict):
+        return str(value.get("title") or value.get("name") or value.get("team") or "").strip()
+    return str(value).strip()
 
 
-def _team_names_from_league(start_year: int) -> list[str]:
-    league = League(league_name="EPL", season=start_year)
-    teams = league.get_teams()
-    if teams is None or len(teams) == 0:
-        raise RuntimeError(f"Understat returned no EPL teams for {start_year}")
-
-    if not isinstance(teams, pd.DataFrame):
-        teams = pd.DataFrame(teams)
-
-    candidates = ["title", "team", "team_name", "equipo", "name", "Team"]
-    for candidate in candidates:
-        matches = [c for c in teams.columns if str(c).strip().lower() == candidate.lower()]
-        if matches:
-            vals = teams[matches[0]].dropna().astype(str).str.strip().tolist()
-            if vals:
-                return list(dict.fromkeys(vals))
-
-    if teams.index.dtype == object:
-        vals = [str(x).strip() for x in teams.index if str(x).strip()]
-        if vals:
-            return list(dict.fromkeys(vals))
-
-    # Last-resort heuristic: choose the first mostly-string column.
-    for c in teams.columns:
-        s = teams[c].dropna()
-        if len(s) and s.map(lambda x: isinstance(x, str)).mean() > 0.8:
-            vals = s.astype(str).str.strip().tolist()
-            return list(dict.fromkeys(vals))
-
-    raise RuntimeError(f"Could not infer team names from Understat columns: {list(teams.columns)}")
+def _num(value: object) -> float | None:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 def fetch_understat_xg(start_year: int, raw_dir: str) -> pd.DataFrame:
-    team_names = _team_names_from_league(start_year)
-    frames: list[pd.DataFrame] = []
+    """Download all EPL fixtures for a season directly from Understat's league endpoint."""
+    print(f"  Understat {season_label(start_year)} league match data")
+    with UnderstatClient() as client:
+        matches = client.league(league="EPL").get_match_data(season=str(start_year))
 
-    for idx, team_name in enumerate(team_names, start=1):
-        print(f"  Understat {season_label(start_year)} [{idx:02d}/{len(team_names)}] {team_name}")
-        history = Team(team_name=team_name, season=start_year).get_match_history()
-        if history is None or len(history) == 0:
+    if not matches:
+        raise RuntimeError(f"Understat returned no EPL match data for {start_year}")
+
+    rows = []
+    for m in matches:
+        home = _team_title(m.get("h"))
+        away = _team_title(m.get("a"))
+        date = m.get("datetime") or m.get("date")
+        goals = m.get("goals") or {}
+        xg = m.get("xG") or m.get("xg") or {}
+
+        if not home or not away or not date:
             continue
-        if not isinstance(history, pd.DataFrame):
-            history = pd.DataFrame(history)
-        frames.append(history.copy())
 
-    if not frames:
-        raise RuntimeError(f"Understat returned no match histories for {start_year}")
+        rows.append({
+            "Season": season_label(start_year),
+            "Date": pd.to_datetime(date, errors="coerce").normalize(),
+            "HomeTeam": normalize_team(home),
+            "AwayTeam": normalize_team(away),
+            "Understat_FTHG": _num(goals.get("h") if isinstance(goals, dict) else None),
+            "Understat_FTAG": _num(goals.get("a") if isinstance(goals, dict) else None),
+            "Home_xG": _num(xg.get("h") if isinstance(xg, dict) else None),
+            "Away_xG": _num(xg.get("a") if isinstance(xg, dict) else None),
+            "UnderstatMatchId": m.get("id"),
+        })
 
-    raw = pd.concat(frames, ignore_index=True)
-
-    date_c = _pick_column(raw, ["Fecha", "Date", "date"])
-    home_c = _pick_column(raw, ["Local", "HomeTeam", "Home", "home_team"])
-    away_c = _pick_column(raw, ["Visitante", "AwayTeam", "Away", "away_team"])
-    hg_c = _pick_column(raw, ["Goles Local", "FTHG", "Home Goals", "home_goals"])
-    ag_c = _pick_column(raw, ["Goles Visitante", "FTAG", "Away Goals", "away_goals"])
-    hxg_c = _pick_column(raw, ["xG Local", "Home_xG", "Home xG", "home_xg"])
-    axg_c = _pick_column(raw, ["xG Visitante", "Away_xG", "Away xG", "away_xg"])
-
-    df = pd.DataFrame({
-        "Season": season_label(start_year),
-        "Date": pd.to_datetime(raw[date_c], errors="coerce").dt.normalize(),
-        "HomeTeam": raw[home_c].map(normalize_team),
-        "AwayTeam": raw[away_c].map(normalize_team),
-        "Understat_FTHG": pd.to_numeric(raw[hg_c], errors="coerce"),
-        "Understat_FTAG": pd.to_numeric(raw[ag_c], errors="coerce"),
-        "Home_xG": pd.to_numeric(raw[hxg_c], errors="coerce"),
-        "Away_xG": pd.to_numeric(raw[axg_c], errors="coerce"),
-    })
+    df = pd.DataFrame(rows)
+    if df.empty:
+        raise RuntimeError(f"Understat response for {start_year} could not be parsed")
 
     df = df.dropna(subset=["Date", "HomeTeam", "AwayTeam", "Home_xG", "Away_xG"])
     df = (

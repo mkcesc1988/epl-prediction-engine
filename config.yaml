@@ -9,6 +9,14 @@ model:
   lambda_floor: 0.15
   lambda_cap: 4.5
 
+model_v07:
+  half_life_days: 180
+  venue_window: 30
+  overall_window: 60
+  league_window: 760
+  min_matches: 5
+  shrinkage_matches: 10
+
 backtest:
   min_prior_seasons_for_calibration: 2
   ev_thresholds: [0.00, 0.02, 0.05, 0.075, 0.10]
@@ -18,5 +26,8 @@ paths:
   processed_dir: data/processed
   master: data/processed/master_matches.csv
   predictions: data/processed/xg_predictions.csv
+  predictions_v07: data/processed/xg_predictions_v07.csv
   summary: data/processed/backtest_summary.csv
+  summary_v07: data/processed/backtest_summary_v07.csv
+  comparison: data/processed/model_comparison.csv
   validation: data/processed/validation_report.json

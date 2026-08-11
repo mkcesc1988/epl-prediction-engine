@@ -46,6 +46,11 @@ daily:
   horizon_days: 14
   next_matchday_only: true
 
+market_comparison:
+  odds_api_sport: soccer_epl
+  regions: us
+  markets: h2h,totals
+
 backtest:
   min_prior_seasons_for_calibration: 2
   ev_thresholds: [0.00, 0.02, 0.05, 0.075, 0.10]

@@ -49,7 +49,16 @@ daily:
 market_comparison:
   odds_api_sport: soccer_epl
   regions: us
-  markets: h2h,totals
+  markets: h2h,spreads,totals
+
+ranking:
+  primary_book: mybookie
+  min_expected_return: 0.00
+  confidence_probability_weight: 0.65
+  confidence_edge_weight: 0.35
+  overall_confidence_weight: 0.55
+  overall_profitability_weight: 0.45
+  profitability_full_score_ev: 0.15
 
 backtest:
   min_prior_seasons_for_calibration: 2

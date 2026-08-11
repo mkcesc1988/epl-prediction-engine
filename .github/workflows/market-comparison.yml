@@ -12,6 +12,10 @@ on:
     - cron: '0 13 * * *'
     - cron: '0 17 * * *'
 
+concurrency:
+  group: epl-market-comparison
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -23,6 +27,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -55,17 +61,20 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git add data/history/*.csv
           git add data/processed/daily_predictions_latest.csv
           git add data/processed/market_odds_latest.csv
           git add data/processed/market_comparison_latest.csv
           git add data/processed/gameweek_rankings_latest.csv
           git add data/processed/paper_portfolio_latest.csv
+
           if git diff --cached --quiet; then
             echo "No dashboard/history changes to commit"
           else
             git commit -m "data: publish latest EPL dashboard outputs [skip ci]"
-            git push
+            git pull --rebase origin main
+            git push origin HEAD:main
           fi
 
       - name: Upload comparison outputs

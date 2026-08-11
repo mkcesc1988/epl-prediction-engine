@@ -32,8 +32,6 @@ def load_history(name: str) -> pd.DataFrame:
 
 def pct(value: object, digits: int = 1) -> str:
     try:
-        if pd.isna(value):
-            return "–"
         return f"{float(value) * 100:.{digits}f}%"
     except (TypeError, ValueError):
         return "–"
@@ -41,26 +39,30 @@ def pct(value: object, digits: int = 1) -> str:
 
 def dec(value: object, digits: int = 2) -> str:
     try:
-        if pd.isna(value):
-            return "–"
         return f"{float(value):.{digits}f}"
     except (TypeError, ValueError):
         return "–"
 
 
 st.title("⚽ EPL Prediction Engine")
-st.caption("Production model V1.2 · xG strength ratings · Dixon-Coles · live market research")
+st.caption("Production model V1.2 · xG strength ratings · Dixon-Coles · MyBookie market research")
 
 predictions = load_csv("daily_predictions_latest.csv")
 market = load_csv("market_comparison_latest.csv")
+rankings = load_csv("gameweek_rankings_latest.csv")
 summary = load_csv("backtest_summary_v12.csv")
 comparison = load_csv("model_comparison_v12.csv")
 pred_history = load_history("prediction_history.csv")
 market_history = load_history("market_comparison_history.csv")
 clv = load_history("clv_report.csv")
 
-pred_tab, market_tab, live_tab, clv_tab, perf_tab = st.tabs([
-    "Today's Predictions", "Market Comparison", "Live History", "Closing Line", "Model Performance"
+pred_tab, rank_tab, market_tab, live_tab, clv_tab, perf_tab = st.tabs([
+    "Today's Predictions",
+    "Gameweek Rankings",
+    "Market Comparison",
+    "Live History",
+    "Closing Line",
+    "Model Performance",
 ])
 
 with pred_tab:
@@ -95,37 +97,91 @@ with pred_tab:
                 d.metric("Fair U2.5", dec(row.get("FairOdds_Under2_5")))
                 st.caption(f"Most likely score: {row.get('MostLikelyScore', '–')}")
 
+with rank_tab:
+    st.subheader("Gameweek MyBookie rankings")
+    st.caption(
+        "Confidence Score is a ranking heuristic, not a literal probability of success. "
+        "Profitability is model-implied expected return at the observed MyBookie price."
+    )
+
+    if rankings.empty:
+        st.info("No gameweek ranking file is available yet. Run EPL market comparison after the latest code update.")
+    else:
+        markets = ["All"] + sorted(rankings["MarketType"].dropna().astype(str).unique().tolist()) if "MarketType" in rankings.columns else ["All"]
+        selected_market = st.selectbox("Market", markets, index=0)
+        positive_only = st.toggle("Show positive expected return only", value=True)
+
+        view = rankings.copy()
+        if selected_market != "All":
+            view = view[view["MarketType"].astype(str) == selected_market]
+        if positive_only and "ExpectedReturnPerUnit" in view.columns:
+            view = view[pd.to_numeric(view["ExpectedReturnPerUnit"], errors="coerce") > 0]
+
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("Ranked selections", len(view))
+        if not view.empty and "ConfidenceScore" in view.columns:
+            c2.metric("Top confidence", f"{pd.to_numeric(view['ConfidenceScore'], errors='coerce').max():.1f}/100")
+        if not view.empty and "ExpectedProfitPer100" in view.columns:
+            c3.metric("Top expected profit / $100", f"${pd.to_numeric(view['ExpectedProfitPer100'], errors='coerce').max():.2f}")
+        if not view.empty and "OverallRankScore" in view.columns:
+            c4.metric("Top overall score", f"{pd.to_numeric(view['OverallRankScore'], errors='coerce').max():.1f}/100")
+
+        if view.empty:
+            st.info("No selections match the current filters.")
+        else:
+            sort_choice = st.selectbox(
+                "Rank by",
+                ["OverallRankScore", "ConfidenceScore", "ExpectedReturnPerUnit", "ExpectedProfitPer100"],
+                index=0,
+            )
+            view = view.sort_values(sort_choice, ascending=False)
+            view = view.reset_index(drop=True)
+            view["DisplayRank"] = range(1, len(view) + 1)
+
+            preferred = [
+                "DisplayRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection",
+                "MyBookieOdds", "ModelWinProbability", "ModelFairOdds", "MyBookieImpliedProbability",
+                "ProbabilityEdge", "ExpectedReturnPerUnit", "ExpectedProfitPer100",
+                "ConfidenceScore", "ProfitabilityScore", "OverallRankScore",
+            ]
+            cols = [c for c in preferred if c in view.columns]
+            st.dataframe(view[cols] if cols else view, use_container_width=True, hide_index=True)
+
+            st.markdown("### Top 5 this gameweek")
+            for _, row in view.head(5).iterrows():
+                ev = float(row.get("ExpectedReturnPerUnit", 0.0))
+                with st.container(border=True):
+                    st.markdown(
+                        f"**#{int(row['DisplayRank'])} · {row.get('Grade', '')} · "
+                        f"{row.get('MarketType', '')}: {row.get('Selection', '')}**"
+                    )
+                    st.write(f"{row.get('HomeTeam', '')} vs {row.get('AwayTeam', '')}")
+                    a, b, c, d = st.columns(4)
+                    a.metric("MyBookie", dec(row.get("MyBookieOdds")))
+                    b.metric("Model win probability", pct(row.get("ModelWinProbability")))
+                    c.metric("Confidence", f"{float(row.get('ConfidenceScore', 0)):.1f}/100")
+                    d.metric("Expected profit / $100", f"${ev * 100:.2f}")
+
 with market_tab:
     if market.empty:
         st.info("No market comparison file is available yet.")
     else:
-        st.subheader("MyBookie vs model")
-        st.caption("MyBookie is the primary reference book. Best available market price is retained as a benchmark. Research view only, no staking or automated betting is performed.")
-
-        my_ev = pd.to_numeric(market.get("MyBookieExpectedReturn"), errors="coerce") if "MyBookieExpectedReturn" in market.columns else pd.Series(dtype=float)
-        best_ev = pd.to_numeric(market.get("BestMarketExpectedReturn"), errors="coerce") if "BestMarketExpectedReturn" in market.columns else pd.Series(dtype=float)
-
-        c1, c2, c3, c4 = st.columns(4)
+        st.subheader("Model vs MyBookie and broader market")
+        st.caption("Research view only. No staking or automated betting is performed.")
+        edge_col = "MyBookieExpectedReturn" if "MyBookieExpectedReturn" in market.columns else "ExpectedReturnPerUnit"
+        edge = pd.to_numeric(market.get(edge_col), errors="coerce") if edge_col in market.columns else pd.Series(dtype=float)
+        c1, c2, c3 = st.columns(3)
         c1.metric("Market rows", len(market))
-        c2.metric("MyBookie quotes", int(market.get("MyBookieAvailable", pd.Series(dtype=bool)).fillna(False).sum()) if "MyBookieAvailable" in market.columns else 0)
-        c3.metric("Positive MyBookie EV", int((my_ev > 0).sum()) if not my_ev.empty else 0)
-        if not my_ev.empty and my_ev.notna().any():
-            c4.metric("Largest MyBookie EV", pct(my_ev.max()))
-        elif not best_ev.empty and best_ev.notna().any():
-            c4.metric("Largest best-market EV", pct(best_ev.max()))
-
+        c2.metric("Positive MyBookie discrepancies", int((edge > 0).sum()) if not edge.empty else 0)
+        if not edge.empty and edge.notna().any():
+            c3.metric("Largest expected return", pct(edge.max()))
         preferred = [
-            "Date", "HomeTeam", "AwayTeam", "Side",
-            "ModelProbability", "ModelFairOdds",
-            "MyBookieOdds", "MyBookieImpliedProbability", "MyBookieExpectedReturn",
-            "BestBookmaker", "BestMarketOdds", "BestMarketExpectedReturn",
-            "MyBookiePriceGapVsBest",
+            "Date", "HomeTeam", "AwayTeam", "Market", "Side", "ModelProbability", "ModelFairOdds",
+            "MyBookieOdds", "MyBookieImpliedProbability", "MyBookieProbabilityDifference", "MyBookieExpectedReturn",
+            "BestBookmaker", "BestMarketOdds", "BestMarketExpectedReturn", "MyBookiePriceGapVsBest",
         ]
         cols = [c for c in preferred if c in market.columns]
         st.dataframe(market[cols] if cols else market, use_container_width=True, hide_index=True)
-
-        if "MyBookieAvailable" in market.columns and not market["MyBookieAvailable"].fillna(False).all():
-            st.info("Some rows do not currently have a MyBookie quote from the odds feed. Those rows still show the best available market benchmark.")
 
 with live_tab:
     st.subheader("Permanent live record")
@@ -139,13 +195,7 @@ with live_tab:
         c3.metric("Snapshots", snapshots)
         if not market_history.empty:
             hist = market_history.sort_values("SnapshotUTC", ascending=False) if "SnapshotUTC" in market_history.columns else market_history
-            preferred = [
-                "SnapshotUTC", "Date", "HomeTeam", "AwayTeam", "Side",
-                "ModelFairOdds", "MyBookieOdds", "MyBookieExpectedReturn",
-                "BestBookmaker", "BestMarketOdds", "BestMarketExpectedReturn",
-            ]
-            cols = [c for c in preferred if c in hist.columns]
-            st.dataframe(hist[cols] if cols else hist, use_container_width=True, hide_index=True)
+            st.dataframe(hist, use_container_width=True, hide_index=True)
 
 with clv_tab:
     st.subheader("Closing-line tracking")
@@ -175,4 +225,4 @@ with perf_tab:
         st.dataframe(comparison, use_container_width=True, hide_index=True)
 
 st.divider()
-st.caption("Research and decision-support only. Historical backtests and model probabilities do not guarantee future profitability.")
+st.caption("Research and decision-support only. Confidence scores are heuristic ranking scores, and model-implied profitability is not guaranteed future profit.")

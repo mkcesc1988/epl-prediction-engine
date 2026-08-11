@@ -100,8 +100,9 @@ with pred_tab:
 with rank_tab:
     st.subheader("Gameweek MyBookie rankings")
     st.caption(
-        "Confidence Score is a ranking heuristic, not a literal probability of success. "
-        "Profitability is model-implied expected return at the observed MyBookie price."
+        "Model Win Probability is the model's estimated chance of the selection winning. "
+        "Bet Quality Score is a 0–100 ranking heuristic combining probability, price edge, and validation depth. "
+        "It is not a literal percentage chance of success."
     )
 
     if rankings.empty:
@@ -119,8 +120,8 @@ with rank_tab:
 
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Ranked selections", len(view))
-        if not view.empty and "ConfidenceScore" in view.columns:
-            c2.metric("Top confidence", f"{pd.to_numeric(view['ConfidenceScore'], errors='coerce').max():.1f}/100")
+        if not view.empty and "BetQualityScore" in view.columns:
+            c2.metric("Top bet quality", f"{pd.to_numeric(view['BetQualityScore'], errors='coerce').max():.1f}/100")
         if not view.empty and "ExpectedProfitPer100" in view.columns:
             c3.metric("Top expected profit / $100", f"${pd.to_numeric(view['ExpectedProfitPer100'], errors='coerce').max():.2f}")
         if not view.empty and "OverallRankScore" in view.columns:
@@ -129,20 +130,16 @@ with rank_tab:
         if view.empty:
             st.info("No selections match the current filters.")
         else:
-            sort_choice = st.selectbox(
-                "Rank by",
-                ["OverallRankScore", "ConfidenceScore", "ExpectedReturnPerUnit", "ExpectedProfitPer100"],
-                index=0,
-            )
-            view = view.sort_values(sort_choice, ascending=False)
-            view = view.reset_index(drop=True)
+            sort_options = [c for c in ["OverallRankScore", "BetQualityScore", "ExpectedReturnPerUnit", "ExpectedProfitPer100", "ModelWinProbability"] if c in view.columns]
+            sort_choice = st.selectbox("Rank by", sort_options, index=0)
+            view = view.sort_values(sort_choice, ascending=False).reset_index(drop=True)
             view["DisplayRank"] = range(1, len(view) + 1)
 
             preferred = [
                 "DisplayRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection",
                 "MyBookieOdds", "ModelWinProbability", "ModelFairOdds", "MyBookieImpliedProbability",
                 "ProbabilityEdge", "ExpectedReturnPerUnit", "ExpectedProfitPer100",
-                "ConfidenceScore", "ProfitabilityScore", "OverallRankScore",
+                "BetQualityScore", "ProfitabilityScore", "OverallRankScore", "ValidationStatus",
             ]
             cols = [c for c in preferred if c in view.columns]
             st.dataframe(view[cols] if cols else view, use_container_width=True, hide_index=True)
@@ -159,8 +156,10 @@ with rank_tab:
                     a, b, c, d = st.columns(4)
                     a.metric("MyBookie", dec(row.get("MyBookieOdds")))
                     b.metric("Model win probability", pct(row.get("ModelWinProbability")))
-                    c.metric("Confidence", f"{float(row.get('ConfidenceScore', 0)):.1f}/100")
+                    c.metric("Bet quality", f"{float(row.get('BetQualityScore', 0)):.1f}/100")
                     d.metric("Expected profit / $100", f"${ev * 100:.2f}")
+                    if pd.notna(row.get("ValidationStatus")):
+                        st.caption(f"Validation: {row.get('ValidationStatus')}")
 
 with market_tab:
     if market.empty:
@@ -225,4 +224,7 @@ with perf_tab:
         st.dataframe(comparison, use_container_width=True, hide_index=True)
 
 st.divider()
-st.caption("Research and decision-support only. Confidence scores are heuristic ranking scores, and model-implied profitability is not guaranteed future profit.")
+st.caption(
+    "Research and decision-support only. Bet Quality Score is a heuristic ranking metric, not a probability. "
+    "Model-implied expected profit is not guaranteed future profit."
+)

@@ -98,18 +98,36 @@ def _moneyline_prob(pred: pd.Series, selection: str) -> tuple[float, float]:
     return np.nan, np.nan
 
 
-def _confidence_score(model_p: float, edge: float, cfg: dict) -> float:
+def _validation_factor(market_label: str, selection: str) -> tuple[float, str]:
+    """Reliability factor based on how directly the market has been calibrated/backtested.
+
+    V1.2's explicit calibration and historical betting evaluation are strongest for
+    O/U 2.5. Other markets are derived consistently from the Dixon-Coles score
+    matrix but have not yet accumulated equally deep market-specific validation.
+    """
+    if market_label == "Total" and (selection.startswith("Over 2.5") or selection.startswith("Under 2.5")):
+        return 1.00, "Calibrated O/U 2.5"
+    if market_label == "Moneyline":
+        return 0.88, "Derived, live validation building"
+    if market_label == "Spread":
+        return 0.84, "Derived, live validation building"
+    return 0.86, "Derived alternate total"
+
+
+def _bet_quality_score(model_p: float, ev: float, validation_factor: float, cfg: dict) -> float:
     rc = cfg.get("ranking", {})
-    wp = float(rc.get("confidence_probability_weight", 0.65))
-    we = float(rc.get("confidence_edge_weight", 0.35))
+    wp = float(rc.get("quality_probability_weight", 0.50))
+    we = float(rc.get("quality_edge_weight", 0.35))
+    wv = float(rc.get("quality_validation_weight", 0.15))
 
-    # Probability component rewards selections the model believes are more likely.
     prob_component = np.clip(model_p, 0.0, 1.0)
-
-    # Edge component maps roughly -5% to +15% EV onto a 0..1 scale.
-    edge_component = np.clip((edge + 0.05) / 0.20, 0.0, 1.0)
-    denom = wp + we if (wp + we) > 0 else 1.0
-    return float(100.0 * (wp * prob_component + we * edge_component) / denom)
+    # Map roughly -5% to +15% EV onto 0..1, with no assumption that +15% is certain.
+    edge_component = np.clip((ev + 0.05) / 0.20, 0.0, 1.0)
+    validation_component = np.clip(validation_factor, 0.0, 1.0)
+    denom = wp + we + wv if (wp + we + wv) > 0 else 1.0
+    return float(100.0 * (
+        wp * prob_component + we * edge_component + wv * validation_component
+    ) / denom)
 
 
 def _profitability_score(ev: float, cfg: dict) -> float:
@@ -119,22 +137,23 @@ def _profitability_score(ev: float, cfg: dict) -> float:
     return float(100.0 * np.clip(ev / full, 0.0, 1.0))
 
 
-def _overall_score(confidence: float, profitability: float, cfg: dict) -> float:
+def _overall_score(quality: float, profitability: float, cfg: dict) -> float:
     rc = cfg.get("ranking", {})
-    wc = float(rc.get("overall_confidence_weight", 0.55))
-    wp = float(rc.get("overall_profitability_weight", 0.45))
-    denom = wc + wp if (wc + wp) > 0 else 1.0
-    return float((wc * confidence + wp * profitability) / denom)
+    wq = float(rc.get("overall_quality_weight", 0.60))
+    wp = float(rc.get("overall_profitability_weight", 0.40))
+    denom = wq + wp if (wq + wp) > 0 else 1.0
+    return float((wq * quality + wp * profitability) / denom)
 
 
-def _grade(score: float, ev: float) -> str:
+def _grade(score: float, ev: float, validation_factor: float) -> str:
     if ev <= 0:
         return "PASS"
-    if score >= 80:
+    # Do not award A-grade to a market that is still lightly validated.
+    if score >= 80 and validation_factor >= 0.95:
         return "A"
-    if score >= 70:
+    if score >= 72:
         return "B"
-    if score >= 60:
+    if score >= 62:
         return "C"
     return "D"
 
@@ -198,13 +217,17 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
             side = outcome.title()
             if side not in {"Over", "Under"}:
                 continue
-            # Rank standard whole/half-goal lines only. Quarter-line Asian totals
-            # require split-stake settlement and are deliberately excluded here.
             if abs(point * 2 - round(point * 2)) > 1e-9:
                 continue
             p_win, p_push = _totals_prob(matrix, side, point)
             selection = f"{side} {point:g}"
             market_label = "Total"
+            # Use the explicitly calibrated V1.2 O/U 2.5 probability where available.
+            if abs(point - 2.5) < 1e-9:
+                if side == "Over" and pd.notna(pred.get("CalP_Over2_5")):
+                    p_win, p_push = float(pred["CalP_Over2_5"]), 0.0
+                elif side == "Under" and pd.notna(pred.get("CalP_Under2_5")):
+                    p_win, p_push = float(pred["CalP_Under2_5"]), 0.0
         elif market == "spreads":
             if pd.isna(point):
                 continue
@@ -224,9 +247,10 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
         fair_odds = _binary_fair_odds(p_win, p_push)
         implied = 1.0 / odds_price
         ev = _ev_with_push(p_win, p_push, odds_price)
-        confidence = _confidence_score(p_win, ev, cfg)
+        validation_factor, validation_label = _validation_factor(market_label, selection)
+        quality = _bet_quality_score(p_win, ev, validation_factor, cfg)
         profitability = _profitability_score(ev, cfg)
-        overall = _overall_score(confidence, profitability, cfg)
+        overall = _overall_score(quality, profitability, cfg)
 
         rows.append({
             "Date": pred["Date"],
@@ -246,10 +270,12 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
             "ProbabilityEdge": p_win - implied,
             "ExpectedReturnPerUnit": ev,
             "ExpectedProfitPer100": ev * 100.0,
-            "ConfidenceScore": confidence,
+            "ValidationFactor": validation_factor,
+            "ValidationStatus": validation_label,
+            "BetQualityScore": quality,
             "ProfitabilityScore": profitability,
             "OverallRankScore": overall,
-            "Grade": _grade(overall, ev),
+            "Grade": _grade(overall, ev, validation_factor),
             "Lambda_Home_xG": lam_h,
             "Lambda_Away_xG": lam_a,
             "MostLikelyScore": pred.get("MostLikelyScore"),
@@ -260,7 +286,6 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
     if out.empty:
         return out
 
-    # Remove duplicate quotes for the same MyBookie selection by keeping the best price.
     dedupe = ["Date", "HomeTeam", "AwayTeam", "MarketType", "Selection"]
     out = out.sort_values("MyBookieOdds", ascending=False).drop_duplicates(dedupe, keep="first")
     out = out.sort_values(["OverallRankScore", "ExpectedReturnPerUnit"], ascending=[False, False]).reset_index(drop=True)
@@ -288,8 +313,8 @@ def main() -> None:
         display = ranked[[
             "GameweekRank", "HomeTeam", "AwayTeam", "MarketType", "Selection",
             "MyBookieOdds", "ModelWinProbability", "ModelFairOdds",
-            "ExpectedReturnPerUnit", "ExpectedProfitPer100", "ConfidenceScore",
-            "ProfitabilityScore", "OverallRankScore", "Grade"
+            "ExpectedReturnPerUnit", "ExpectedProfitPer100", "BetQualityScore",
+            "ProfitabilityScore", "OverallRankScore", "Grade", "ValidationStatus"
         ]]
         pd.set_option("display.max_columns", None)
         print(display.to_string(index=False))

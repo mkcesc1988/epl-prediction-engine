@@ -50,15 +50,17 @@ st.caption("Production model V1.2 · xG strength ratings · Dixon-Coles · MyBoo
 predictions = load_csv("daily_predictions_latest.csv")
 market = load_csv("market_comparison_latest.csv")
 rankings = load_csv("gameweek_rankings_latest.csv")
+portfolio = load_csv("paper_portfolio_latest.csv")
 summary = load_csv("backtest_summary_v12.csv")
 comparison = load_csv("model_comparison_v12.csv")
 pred_history = load_history("prediction_history.csv")
 market_history = load_history("market_comparison_history.csv")
 clv = load_history("clv_report.csv")
 
-pred_tab, rank_tab, market_tab, live_tab, clv_tab, perf_tab = st.tabs([
+pred_tab, rank_tab, portfolio_tab, market_tab, live_tab, clv_tab, perf_tab = st.tabs([
     "Today's Predictions",
     "Gameweek Rankings",
+    "Paper Portfolio",
     "Market Comparison",
     "Live History",
     "Closing Line",
@@ -161,6 +163,45 @@ with rank_tab:
                     if pd.notna(row.get("ValidationStatus")):
                         st.caption(f"Validation: {row.get('ValidationStatus')}")
 
+with portfolio_tab:
+    st.subheader("Conservative paper portfolio")
+    st.caption(
+        "Paper-testing only. Sizing uses capped fractional Kelly with hard per-selection, per-match, "
+        "and total gameweek exposure limits. It does not place wagers."
+    )
+    if portfolio.empty:
+        st.info("No paper portfolio is available yet. The next EPL market comparison run will generate it automatically.")
+    else:
+        exposure = pd.to_numeric(portfolio.get("PaperStakeAmount"), errors="coerce").sum() if "PaperStakeAmount" in portfolio.columns else 0.0
+        expected_profit = pd.to_numeric(portfolio.get("ExpectedPaperProfit"), errors="coerce").sum() if "ExpectedPaperProfit" in portfolio.columns else 0.0
+        max_exposure = pd.to_numeric(portfolio.get("PortfolioExposurePct"), errors="coerce").max() if "PortfolioExposurePct" in portfolio.columns else 0.0
+        c1, c2, c3, c4 = st.columns(4)
+        c1.metric("Paper selections", len(portfolio))
+        c2.metric("Paper exposure", f"{exposure:.2f} units")
+        c3.metric("Expected paper profit", f"{expected_profit:.2f} units")
+        c4.metric("Gameweek exposure", pct(max_exposure))
+
+        preferred = [
+            "PortfolioRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection",
+            "MyBookieOdds", "ModelWinProbability", "BetQualityScore", "ExpectedReturnPerUnit",
+            "PaperStakeUnits", "PaperStakeAmount", "ExpectedPaperProfit", "SizingNote",
+        ]
+        cols = [c for c in preferred if c in portfolio.columns]
+        st.dataframe(portfolio[cols] if cols else portfolio, use_container_width=True, hide_index=True)
+
+        st.markdown("### Paper allocation")
+        for _, row in portfolio.iterrows():
+            with st.container(border=True):
+                st.markdown(
+                    f"**#{int(row.get('PortfolioRank', 0))} · {row.get('MarketType', '')}: {row.get('Selection', '')}**"
+                )
+                st.write(f"{row.get('HomeTeam', '')} vs {row.get('AwayTeam', '')}")
+                a, b, c, d = st.columns(4)
+                a.metric("MyBookie", dec(row.get("MyBookieOdds")))
+                b.metric("Bet quality", f"{float(row.get('BetQualityScore', 0)):.1f}/100")
+                c.metric("Paper units", f"{float(row.get('PaperStakeUnits', 0)):.2f}")
+                d.metric("Expected paper profit", f"{float(row.get('ExpectedPaperProfit', 0)):.2f}")
+
 with market_tab:
     if market.empty:
         st.info("No market comparison file is available yet.")
@@ -226,5 +267,5 @@ with perf_tab:
 st.divider()
 st.caption(
     "Research and decision-support only. Bet Quality Score is a heuristic ranking metric, not a probability. "
-    "Model-implied expected profit is not guaranteed future profit."
+    "Paper sizing and model-implied expected profit do not guarantee future profit."
 )

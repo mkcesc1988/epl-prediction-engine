@@ -60,6 +60,16 @@ ranking:
   overall_profitability_weight: 0.45
   profitability_full_score_ev: 0.15
 
+portfolio:
+  paper_bankroll: 100.0
+  unit_size_pct: 0.01
+  fractional_kelly: 0.25
+  max_stake_pct: 0.02
+  max_gameweek_exposure_pct: 0.08
+  max_same_match_exposure_pct: 0.03
+  min_bet_quality: 60.0
+  min_expected_return: 0.02
+
 backtest:
   min_prior_seasons_for_calibration: 2
   ev_thresholds: [0.00, 0.02, 0.05, 0.075, 0.10]

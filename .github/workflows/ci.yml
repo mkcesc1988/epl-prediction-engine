@@ -20,6 +20,6 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
       - name: Syntax check
-        run: python -m py_compile pipeline.py model.py model_v07.py model_v11.py model_v12.py daily_predictions.py market_comparison.py gameweek_rankings.py history_logger.py closing_line_tracker.py backtest.py run_all.py app.py
+        run: python -m py_compile pipeline.py model.py model_v07.py model_v11.py model_v12.py daily_predictions.py market_comparison.py gameweek_rankings.py portfolio_manager.py history_logger.py closing_line_tracker.py backtest.py run_all.py app.py
       - name: Unit tests
         run: pytest -q

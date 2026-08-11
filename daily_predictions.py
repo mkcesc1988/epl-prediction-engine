@@ -31,11 +31,7 @@ def _num(value: object) -> float | None:
 
 
 def fetch_current_understat_completed(start_year: int) -> pd.DataFrame:
-    """Fetch completed current-season EPL matches with xG from Understat.
-
-    Understat is used for xG history only. It is not relied on for future fixtures,
-    because the next season's schedule may not be published there before kickoff.
-    """
+    """Fetch completed current-season EPL matches with xG from Understat."""
     with UnderstatClient() as client:
         matches = client.league(league="EPL").get_match_data(season=str(start_year))
 
@@ -148,7 +144,6 @@ def _build_training_history(cfg: dict, current_completed: pd.DataFrame) -> pd.Da
 
 
 def _fit_live_over25_calibrator(history: pd.DataFrame, cfg: dict) -> np.ndarray | None:
-    """Fit the live Over 2.5 calibration using only historical pre-match predictions."""
     preds = build_predictions_v12(history, cfg)
     train = preds.dropna(subset=["RawP_Over2_5_xG", "Over2_5_Result"]).copy()
     if len(train) < 200:
@@ -178,7 +173,6 @@ def _predict_fixture(row: pd.Series, fit, rho: float, cfg: dict, beta: np.ndarra
     markets = _derived_markets(matrix)
     raw_over = float(markets["P_Over_2_5_DC"])
     cal_over = raw_over if beta is None else _sigmoid(beta[0] + beta[1] * _logit(raw_over))
-
     best_idx = np.unravel_index(np.argmax(matrix), matrix.shape)
 
     return {
@@ -218,8 +212,8 @@ def _predict_fixture(row: pd.Series, fit, rho: float, cfg: dict, beta: np.ndarra
 def build_daily_predictions(cfg: dict) -> pd.DataFrame:
     daily = cfg.get("daily", {})
     current_season = int(daily.get("current_season", 2026))
-    horizon_days = int(daily.get("horizon_days", 14))
-    next_matchday_only = bool(daily.get("next_matchday_only", True))
+    horizon_days = int(daily.get("horizon_days", 21))
+    next_gameweek_only = bool(daily.get("next_gameweek_only", True))
 
     current_completed = fetch_current_understat_completed(current_season)
     fixtures_all = fetch_fpl_fixtures(current_season)
@@ -236,9 +230,13 @@ def build_daily_predictions(cfg: dict) -> pd.DataFrame:
         print("No upcoming EPL fixtures found inside the configured horizon.")
         return pd.DataFrame()
 
-    if next_matchday_only:
-        next_date = fixtures["Date"].min()
-        fixtures = fixtures[fixtures["Date"] == next_date].copy()
+    if next_gameweek_only and "FPLGameweek" in fixtures.columns:
+        gw = pd.to_numeric(fixtures["FPLGameweek"], errors="coerce")
+        valid = fixtures[gw.notna()].copy()
+        if not valid.empty:
+            next_gw = int(pd.to_numeric(valid["FPLGameweek"]).min())
+            fixtures = fixtures[pd.to_numeric(fixtures["FPLGameweek"], errors="coerce") == next_gw].copy()
+            print(f"Predicting full EPL Gameweek {next_gw}: {len(fixtures)} fixtures")
 
     reference_date = fixtures["Date"].min()
     fit = _fit_strengths(history, reference_date, cfg)
@@ -249,7 +247,7 @@ def build_daily_predictions(cfg: dict) -> pd.DataFrame:
     beta = _fit_live_over25_calibrator(history, cfg)
 
     rows = [_predict_fixture(r, fit, rho, cfg, beta) for _, r in fixtures.iterrows()]
-    return pd.DataFrame(rows).sort_values(["Date", "KickoffUTC", "HomeTeam"]).reset_index(drop=True)
+    return pd.DataFrame(rows).sort_values(["FPLGameweek", "Date", "KickoffUTC", "HomeTeam"]).reset_index(drop=True)
 
 
 def main() -> None:
@@ -265,14 +263,18 @@ def main() -> None:
         print(f"Saved empty daily prediction file: {latest_path}")
         return
 
-    stamp = predictions["Date"].min().replace("-", "")
+    gameweek = predictions["FPLGameweek"].dropna()
+    if not gameweek.empty:
+        stamp = f"gw{int(gameweek.iloc[0]):02d}"
+    else:
+        stamp = predictions["Date"].min().replace("-", "")
     dated_path = out_dir / f"daily_predictions_{stamp}.csv"
     predictions.to_csv(dated_path, index=False)
 
     pd.set_option("display.max_columns", None)
     print(predictions.to_string(index=False))
     print(f"\nLatest: {latest_path}")
-    print(f"Dated:  {dated_path}")
+    print(f"Gameweek file: {dated_path}")
 
 
 if __name__ == "__main__":

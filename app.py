@@ -44,6 +44,62 @@ def dec(value: object, digits: int = 2) -> str:
         return "–"
 
 
+def pick_explanation(row: pd.Series) -> list[str]:
+    reasons: list[str] = []
+
+    home = str(row.get("HomeTeam", "Home"))
+    away = str(row.get("AwayTeam", "Away"))
+    market = str(row.get("MarketType", ""))
+    selection = str(row.get("Selection", ""))
+
+    model_p = pd.to_numeric(row.get("ModelWinProbability"), errors="coerce")
+    implied_p = pd.to_numeric(row.get("MyBookieImpliedProbability"), errors="coerce")
+    fair = pd.to_numeric(row.get("ModelFairOdds"), errors="coerce")
+    book = pd.to_numeric(row.get("MyBookieOdds"), errors="coerce")
+    ev = pd.to_numeric(row.get("ExpectedReturnPerUnit"), errors="coerce")
+    lam_h = pd.to_numeric(row.get("Lambda_Home_xG"), errors="coerce")
+    lam_a = pd.to_numeric(row.get("Lambda_Away_xG"), errors="coerce")
+    score = row.get("MostLikelyScore", "–")
+    validation = row.get("ValidationStatus", "")
+
+    if pd.notna(model_p):
+        reasons.append(f"Model win probability: {model_p * 100:.1f}% for {selection}.")
+    if pd.notna(implied_p):
+        reasons.append(f"MyBookie implied probability: {implied_p * 100:.1f}%.")
+    if pd.notna(model_p) and pd.notna(implied_p):
+        edge = model_p - implied_p
+        reasons.append(f"Probability edge versus MyBookie: {edge * 100:+.1f} percentage points.")
+    if pd.notna(fair) and pd.notna(book):
+        reasons.append(f"Model fair odds: {fair:.2f}, MyBookie price: {book:.2f}.")
+    if pd.notna(ev):
+        reasons.append(f"Model-implied expected return at this price: {ev * 100:+.1f}% per unit risked.")
+    if pd.notna(lam_h) and pd.notna(lam_a):
+        reasons.append(f"Projected xG: {home} {lam_h:.2f}, {away} {lam_a:.2f}, with most likely score {score}.")
+
+        if market == "Spread":
+            xg_gap = lam_h - lam_a
+            reasons.append(f"Projected xG margin is {xg_gap:+.2f} goals from the home-team perspective, which is compared against the listed handicap.")
+        elif market == "Total":
+            total_xg = lam_h + lam_a
+            reasons.append(f"Projected total xG is {total_xg:.2f}, which drives the model's over/under probability.")
+        elif market == "Moneyline":
+            if lam_h > lam_a:
+                reasons.append(f"The home side has the stronger xG projection by {lam_h - lam_a:.2f} goals.")
+            elif lam_a > lam_h:
+                reasons.append(f"The away side has the stronger xG projection by {lam_a - lam_h:.2f} goals.")
+            else:
+                reasons.append("The xG projection is effectively even, so the price edge matters more than raw team separation.")
+
+    if validation:
+        reasons.append(f"Validation status: {validation}.")
+        if "Derived" in str(validation):
+            reasons.append("Caution: this market is derived from the score-distribution model and has less direct validation than calibrated O/U 2.5.")
+        elif "Calibrated O/U 2.5" in str(validation):
+            reasons.append("This market uses the model's calibrated O/U 2.5 probability, currently the best-validated market in the system.")
+
+    return reasons
+
+
 st.title("⚽ EPL Prediction Engine")
 st.caption("Production model V1.2 · xG strength ratings · Dixon-Coles · MyBookie market research")
 
@@ -163,6 +219,28 @@ with rank_tab:
                     if pd.notna(row.get("ValidationStatus")):
                         st.caption(f"Validation: {row.get('ValidationStatus')}")
 
+                    with st.expander("Why this pick?"):
+                        for reason in pick_explanation(row):
+                            st.write(f"• {reason}")
+
+            st.markdown("### Explain any ranked pick")
+            option_labels = [
+                f"#{int(r['DisplayRank'])} · {r.get('HomeTeam', '')} vs {r.get('AwayTeam', '')} · {r.get('MarketType', '')}: {r.get('Selection', '')}"
+                for _, r in view.iterrows()
+            ]
+            selected_label = st.selectbox("Pick", option_labels)
+            selected_idx = option_labels.index(selected_label)
+            selected_row = view.iloc[selected_idx]
+            with st.container(border=True):
+                st.markdown(f"**{selected_label}**")
+                a, b, c, d = st.columns(4)
+                a.metric("MyBookie", dec(selected_row.get("MyBookieOdds")))
+                b.metric("Model win probability", pct(selected_row.get("ModelWinProbability")))
+                c.metric("Bet quality", f"{float(selected_row.get('BetQualityScore', 0)):.1f}/100")
+                d.metric("EV", pct(selected_row.get("ExpectedReturnPerUnit")))
+                for reason in pick_explanation(selected_row):
+                    st.write(f"• {reason}")
+
 with portfolio_tab:
     st.subheader("Conservative paper portfolio")
     st.caption(
@@ -201,6 +279,10 @@ with portfolio_tab:
                 b.metric("Bet quality", f"{float(row.get('BetQualityScore', 0)):.1f}/100")
                 c.metric("Paper units", f"{float(row.get('PaperStakeUnits', 0)):.2f}")
                 d.metric("Expected paper profit", f"{float(row.get('ExpectedPaperProfit', 0)):.2f}")
+
+                with st.expander("Why this pick?"):
+                    for reason in pick_explanation(row):
+                        st.write(f"• {reason}")
 
 with market_tab:
     if market.empty:

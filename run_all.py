@@ -7,27 +7,28 @@ import pandas as pd
 from pipeline import build_master, load_config
 from model import build_predictions
 from model_v07 import build_predictions_v07
+from model_v11 import build_predictions_v11
 from backtest import walk_forward_backtest
 
 
-def _comparison_frame(base: pd.DataFrame, candidate: pd.DataFrame) -> pd.DataFrame:
+def _comparison_frame(base: pd.DataFrame, candidate: pd.DataFrame, candidate_label: str) -> pd.DataFrame:
     left = base[["Season", "Matches", "Brier", "LogLoss"]].copy()
     left = left.rename(columns={
-        "Brier": "Brier_V06",
-        "LogLoss": "LogLoss_V06",
-        "Matches": "Matches_V06",
+        "Brier": "Brier_Base",
+        "LogLoss": "LogLoss_Base",
+        "Matches": "Matches_Base",
     })
     right = candidate[["Season", "Matches", "Brier", "LogLoss"]].copy()
     right = right.rename(columns={
-        "Brier": "Brier_V07",
-        "LogLoss": "LogLoss_V07",
-        "Matches": "Matches_V07",
+        "Brier": f"Brier_{candidate_label}",
+        "LogLoss": f"LogLoss_{candidate_label}",
+        "Matches": f"Matches_{candidate_label}",
     })
     out = left.merge(right, on="Season", how="outer")
-    out["BrierDelta_V07_minus_V06"] = out["Brier_V07"] - out["Brier_V06"]
-    out["LogLossDelta_V07_minus_V06"] = out["LogLoss_V07"] - out["LogLoss_V06"]
-    out["V07_Better_Brier"] = out["BrierDelta_V07_minus_V06"] < 0
-    out["V07_Better_LogLoss"] = out["LogLossDelta_V07_minus_V06"] < 0
+    out[f"BrierDelta_{candidate_label}_minus_Base"] = out[f"Brier_{candidate_label}"] - out["Brier_Base"]
+    out[f"LogLossDelta_{candidate_label}_minus_Base"] = out[f"LogLoss_{candidate_label}"] - out["LogLoss_Base"]
+    out[f"{candidate_label}_Better_Brier"] = out[f"BrierDelta_{candidate_label}_minus_Base"] < 0
+    out[f"{candidate_label}_Better_LogLoss"] = out[f"LogLossDelta_{candidate_label}_minus_Base"] < 0
     return out
 
 
@@ -38,59 +39,56 @@ def main() -> None:
     master = build_master(cfg)
     print(f"Master rows: {len(master)}")
 
-    print("\n=== 2. BUILD V0.6 BASELINE PREDICTIONS ===")
+    print("\n=== 2. BUILD V1.0 BASELINE PREDICTIONS ===")
     predictions = build_predictions(master, cfg)
     predictions.to_csv(cfg["paths"]["predictions"], index=False)
-    valid = predictions["RawP_Over2_5_xG"].notna().sum()
-    print(f"V0.6 predictions generated: {valid}")
+    print(f"V1.0 predictions generated: {predictions['RawP_Over2_5_xG'].notna().sum()}")
 
-    print("\n=== 3. BACKTEST V0.6 ===")
+    print("\n=== 3. BACKTEST V1.0 BASELINE ===")
     evaluated, summary = walk_forward_backtest(predictions, cfg)
     summary.to_csv(cfg["paths"]["summary"], index=False)
-    evaluated_path = Path(cfg["paths"]["processed_dir"]) / "walkforward_predictions.csv"
-    evaluated.to_csv(evaluated_path, index=False)
+    evaluated.to_csv(Path(cfg["paths"]["processed_dir"]) / "walkforward_predictions.csv", index=False)
 
-    print("\n=== 4. BUILD V0.7 CANDIDATE PREDICTIONS ===")
-    candidate_predictions = build_predictions_v07(master, cfg)
-    candidate_predictions.to_csv(cfg["paths"]["predictions_v07"], index=False)
-    valid_v07 = candidate_predictions["RawP_Over2_5_xG"].notna().sum()
-    print(f"V0.7 candidate predictions generated: {valid_v07}")
-
-    print("\n=== 5. BACKTEST V0.7 CANDIDATE ===")
-    evaluated_v07, summary_v07 = walk_forward_backtest(candidate_predictions, cfg)
+    print("\n=== 4. BUILD V0.7 RESEARCH CANDIDATE ===")
+    candidate_v07 = build_predictions_v07(master, cfg)
+    candidate_v07.to_csv(cfg["paths"]["predictions_v07"], index=False)
+    evaluated_v07, summary_v07 = walk_forward_backtest(candidate_v07, cfg)
     summary_v07.to_csv(cfg["paths"]["summary_v07"], index=False)
-    evaluated_v07_path = Path(cfg["paths"]["processed_dir"]) / "walkforward_predictions_v07.csv"
-    evaluated_v07.to_csv(evaluated_v07_path, index=False)
+    evaluated_v07.to_csv(Path(cfg["paths"]["processed_dir"]) / "walkforward_predictions_v07.csv", index=False)
+    _comparison_frame(summary, summary_v07, "V07").to_csv(cfg["paths"]["comparison"], index=False)
 
-    print("\n=== 6. COMPARE V0.6 VS V0.7 ===")
-    comparison = _comparison_frame(summary, summary_v07)
-    comparison.to_csv(cfg["paths"]["comparison"], index=False)
+    print("\n=== 5. BUILD V1.1 DIXON-COLES CANDIDATE ===")
+    candidate_v11 = build_predictions_v11(master, cfg)
+    candidate_v11.to_csv(cfg["paths"]["predictions_v11"], index=False)
+    print(f"V1.1 predictions generated: {candidate_v11['RawP_Over2_5_xG'].notna().sum()}")
 
-    if summary.empty:
-        print("No V0.6 walk-forward seasons available.")
-    else:
-        pd.set_option("display.max_columns", None)
-        print("\nV0.6 baseline")
+    print("\n=== 6. BACKTEST V1.1 DIXON-COLES ===")
+    evaluated_v11, summary_v11 = walk_forward_backtest(candidate_v11, cfg)
+    summary_v11.to_csv(cfg["paths"]["summary_v11"], index=False)
+    evaluated_v11.to_csv(Path(cfg["paths"]["processed_dir"]) / "walkforward_predictions_v11.csv", index=False)
+
+    print("\n=== 7. COMPARE V1.0 VS V1.1 ===")
+    comparison_v11 = _comparison_frame(summary, summary_v11, "V11")
+    comparison_v11.to_csv(cfg["paths"]["comparison_v11"], index=False)
+
+    pd.set_option("display.max_columns", None)
+    if not summary.empty:
+        print("\nV1.0 baseline")
         print(summary.to_string(index=False))
-
-    if summary_v07.empty:
-        print("No V0.7 walk-forward seasons available.")
-    else:
-        print("\nV0.7 candidate")
-        print(summary_v07.to_string(index=False))
-
-    if not comparison.empty:
-        print("\nModel comparison, negative deltas favor V0.7")
-        print(comparison.to_string(index=False))
+    if not summary_v11.empty:
+        print("\nV1.1 Dixon-Coles candidate")
+        print(summary_v11.to_string(index=False))
+    if not comparison_v11.empty:
+        print("\nV1.0 vs V1.1, negative deltas favor V1.1")
+        print(comparison_v11.to_string(index=False))
 
     print("\n=== COMPLETE ===")
-    print(f"Master:         {cfg['paths']['master']}")
-    print(f"V0.6 preds:     {cfg['paths']['predictions']}")
-    print(f"V0.6 backtest:  {cfg['paths']['summary']}")
-    print(f"V0.7 preds:     {cfg['paths']['predictions_v07']}")
-    print(f"V0.7 backtest:  {cfg['paths']['summary_v07']}")
-    print(f"Comparison:     {cfg['paths']['comparison']}")
-    print(f"Validation:     {cfg['paths']['validation']}")
+    print(f"Master:          {cfg['paths']['master']}")
+    print(f"V1.0 backtest:   {cfg['paths']['summary']}")
+    print(f"V1.1 predictions:{cfg['paths']['predictions_v11']}")
+    print(f"V1.1 backtest:   {cfg['paths']['summary_v11']}")
+    print(f"V1.1 comparison: {cfg['paths']['comparison_v11']}")
+    print(f"Validation:      {cfg['paths']['validation']}")
 
 
 if __name__ == "__main__":

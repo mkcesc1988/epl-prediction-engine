@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths-ignore:
       - 'data/history/**'
+      - 'data/processed/*_latest.csv'
   workflow_dispatch:
   schedule:
     - cron: '0 10 * * *'
@@ -50,15 +51,20 @@ jobs:
       - name: Build closing-line report
         run: python closing_line_tracker.py
 
-      - name: Commit history snapshot
+      - name: Publish history and latest dashboard outputs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add data/history/*.csv
+          git add data/processed/daily_predictions_latest.csv
+          git add data/processed/market_odds_latest.csv
+          git add data/processed/market_comparison_latest.csv
+          git add data/processed/gameweek_rankings_latest.csv
+          git add data/processed/paper_portfolio_latest.csv
           if git diff --cached --quiet; then
-            echo "No history changes to commit"
+            echo "No dashboard/history changes to commit"
           else
-            git commit -m "data: append live EPL market snapshot [skip ci]"
+            git commit -m "data: publish latest EPL dashboard outputs [skip ci]"
             git push
           fi
 

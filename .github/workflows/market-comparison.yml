@@ -3,9 +3,14 @@ name: EPL market comparison
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'data/history/**'
   workflow_dispatch:
   schedule:
     - cron: '0 13 * * *'
+
+permissions:
+  contents: write
 
 jobs:
   compare:
@@ -31,6 +36,21 @@ jobs:
           THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
         run: python market_comparison.py
 
+      - name: Append permanent live-history snapshot
+        run: python history_logger.py
+
+      - name: Commit history snapshot
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/history/*.csv
+          if git diff --cached --quiet; then
+            echo "No history changes to commit"
+          else
+            git commit -m "data: append live EPL market snapshot [skip ci]"
+            git push
+          fi
+
       - name: Upload comparison outputs
         if: always()
         uses: actions/upload-artifact@v4
@@ -40,5 +60,6 @@ jobs:
             data/processed/daily_predictions_latest.csv
             data/processed/market_odds_latest.csv
             data/processed/market_comparison_latest.csv
+            data/history/*.csv
           if-no-files-found: warn
           retention-days: 30

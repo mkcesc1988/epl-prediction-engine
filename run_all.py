@@ -8,6 +8,7 @@ from pipeline import build_master, load_config
 from model import build_predictions
 from model_v07 import build_predictions_v07
 from model_v11 import build_predictions_v11
+from model_v12 import build_predictions_v12
 from backtest import walk_forward_backtest
 
 
@@ -60,34 +61,43 @@ def main() -> None:
     print("\n=== 5. BUILD V1.1 DIXON-COLES CANDIDATE ===")
     candidate_v11 = build_predictions_v11(master, cfg)
     candidate_v11.to_csv(cfg["paths"]["predictions_v11"], index=False)
-    print(f"V1.1 predictions generated: {candidate_v11['RawP_Over2_5_xG'].notna().sum()}")
-
-    print("\n=== 6. BACKTEST V1.1 DIXON-COLES ===")
     evaluated_v11, summary_v11 = walk_forward_backtest(candidate_v11, cfg)
     summary_v11.to_csv(cfg["paths"]["summary_v11"], index=False)
     evaluated_v11.to_csv(Path(cfg["paths"]["processed_dir"]) / "walkforward_predictions_v11.csv", index=False)
-
-    print("\n=== 7. COMPARE V1.0 VS V1.1 ===")
     comparison_v11 = _comparison_frame(summary, summary_v11, "V11")
     comparison_v11.to_csv(cfg["paths"]["comparison_v11"], index=False)
+
+    print("\n=== 6. BUILD V1.2 FITTED ATTACK/DEFENSE CANDIDATE ===")
+    candidate_v12 = build_predictions_v12(master, cfg)
+    candidate_v12.to_csv(cfg["paths"]["predictions_v12"], index=False)
+    print(f"V1.2 predictions generated: {candidate_v12['RawP_Over2_5_xG'].notna().sum()}")
+
+    print("\n=== 7. BACKTEST V1.2 FITTED STRENGTH MODEL ===")
+    evaluated_v12, summary_v12 = walk_forward_backtest(candidate_v12, cfg)
+    summary_v12.to_csv(cfg["paths"]["summary_v12"], index=False)
+    evaluated_v12.to_csv(Path(cfg["paths"]["processed_dir"]) / "walkforward_predictions_v12.csv", index=False)
+
+    print("\n=== 8. COMPARE V1.0 VS V1.2 ===")
+    comparison_v12 = _comparison_frame(summary, summary_v12, "V12")
+    comparison_v12.to_csv(cfg["paths"]["comparison_v12"], index=False)
 
     pd.set_option("display.max_columns", None)
     if not summary.empty:
         print("\nV1.0 baseline")
         print(summary.to_string(index=False))
-    if not summary_v11.empty:
-        print("\nV1.1 Dixon-Coles candidate")
-        print(summary_v11.to_string(index=False))
-    if not comparison_v11.empty:
-        print("\nV1.0 vs V1.1, negative deltas favor V1.1")
-        print(comparison_v11.to_string(index=False))
+    if not summary_v12.empty:
+        print("\nV1.2 fitted attack/defense candidate")
+        print(summary_v12.to_string(index=False))
+    if not comparison_v12.empty:
+        print("\nV1.0 vs V1.2, negative deltas favor V1.2")
+        print(comparison_v12.to_string(index=False))
 
     print("\n=== COMPLETE ===")
     print(f"Master:          {cfg['paths']['master']}")
     print(f"V1.0 backtest:   {cfg['paths']['summary']}")
-    print(f"V1.1 predictions:{cfg['paths']['predictions_v11']}")
-    print(f"V1.1 backtest:   {cfg['paths']['summary_v11']}")
-    print(f"V1.1 comparison: {cfg['paths']['comparison_v11']}")
+    print(f"V1.2 predictions:{cfg['paths']['predictions_v12']}")
+    print(f"V1.2 backtest:   {cfg['paths']['summary_v12']}")
+    print(f"V1.2 comparison: {cfg['paths']['comparison_v12']}")
     print(f"Validation:      {cfg['paths']['validation']}")
 
 

@@ -28,6 +28,12 @@ def _norm(name: object) -> str:
     return normalize_team(mapping.get(value, value))
 
 
+def _is_mybookie(row: pd.Series) -> bool:
+    title = str(row.get("Bookmaker", "")).lower()
+    key = str(row.get("BookmakerKey", "")).lower()
+    return "mybookie" in title or "mybookie" in key
+
+
 def fetch_market_odds(cfg: dict) -> pd.DataFrame:
     """Fetch current EPL market prices for paper-testing and model evaluation.
 
@@ -93,7 +99,11 @@ def fetch_market_odds(cfg: dict) -> pd.DataFrame:
 
 
 def compare_totals_25(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataFrame:
-    """Compare V1.2 calibrated O/U 2.5 probabilities with observed market prices."""
+    """Compare V1.2 calibrated O/U 2.5 probabilities with observed market prices.
+
+    The output preserves the best available market quote as a benchmark and
+    separately records MyBookie if present in the Odds API response.
+    """
     if predictions.empty or odds.empty:
         return pd.DataFrame()
 
@@ -103,13 +113,41 @@ def compare_totals_25(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataF
 
     totals["Side"] = totals["Outcome"].astype(str).str.lower().map({"over": "Over", "under": "Under"})
     totals = totals.dropna(subset=["Side", "DecimalOdds"])
+    totals["IsMyBookie"] = totals.apply(_is_mybookie, axis=1)
 
-    idx = totals.groupby(["Date", "HomeTeam", "AwayTeam", "Side"])["DecimalOdds"].idxmax()
-    best = totals.loc[idx].reset_index(drop=True)
+    group_cols = ["Date", "HomeTeam", "AwayTeam", "Side"]
+
+    best_idx = totals.groupby(group_cols)["DecimalOdds"].idxmax()
+    best = totals.loc[best_idx].copy().reset_index(drop=True)
+    best = best.rename(columns={
+        "Bookmaker": "BestBookmaker",
+        "BookmakerKey": "BestBookmakerKey",
+        "DecimalOdds": "BestMarketOdds",
+        "BookLastUpdate": "BestBookLastUpdate",
+    })
+
+    mybookie = totals[totals["IsMyBookie"]].copy()
+    if not mybookie.empty:
+        my_idx = mybookie.groupby(group_cols)["DecimalOdds"].idxmax()
+        mybookie = mybookie.loc[my_idx].copy().reset_index(drop=True)
+        mybookie = mybookie[group_cols + ["Bookmaker", "BookmakerKey", "BookLastUpdate", "DecimalOdds"]]
+        mybookie = mybookie.rename(columns={
+            "Bookmaker": "MyBookieBookmaker",
+            "BookmakerKey": "MyBookieKey",
+            "BookLastUpdate": "MyBookieLastUpdate",
+            "DecimalOdds": "MyBookieOdds",
+        })
+        quotes = best.merge(mybookie, on=group_cols, how="left", validate="one_to_one")
+    else:
+        quotes = best.copy()
+        quotes["MyBookieBookmaker"] = pd.NA
+        quotes["MyBookieKey"] = pd.NA
+        quotes["MyBookieLastUpdate"] = pd.NA
+        quotes["MyBookieOdds"] = pd.NA
 
     pred = predictions.copy()
     pred["Date"] = pred["Date"].astype(str)
-    merged = best.merge(
+    merged = quotes.merge(
         pred,
         on=["Date", "HomeTeam", "AwayTeam"],
         how="inner",
@@ -121,8 +159,16 @@ def compare_totals_25(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataF
     for _, r in merged.iterrows():
         side = r["Side"]
         model_p = float(r["CalP_Over2_5"] if side == "Over" else r["CalP_Under2_5"])
-        market_odds = float(r["DecimalOdds"])
-        implied = 1.0 / market_odds
+        fair_odds = 1.0 / model_p
+
+        best_odds = float(r["BestMarketOdds"])
+        best_implied = 1.0 / best_odds
+        best_ev = model_p * best_odds - 1.0
+
+        my_odds_raw = r.get("MyBookieOdds")
+        my_odds = float(my_odds_raw) if pd.notna(my_odds_raw) else None
+        my_implied = (1.0 / my_odds) if my_odds else None
+        my_ev = (model_p * my_odds - 1.0) if my_odds else None
 
         rows.append({
             "Date": r["Date"],
@@ -133,12 +179,23 @@ def compare_totals_25(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataF
             "Side": side,
             "ModelVersion": r.get("ModelVersion", "V1.2"),
             "ModelProbability": model_p,
-            "ModelFairOdds": 1.0 / model_p,
-            "Bookmaker": r["Bookmaker"],
-            "MarketOdds": market_odds,
-            "MarketImpliedProbability": implied,
-            "ProbabilityDifference": model_p - implied,
-            "ExpectedReturnPerUnit": model_p * market_odds - 1.0,
+            "ModelFairOdds": fair_odds,
+            "Bookmaker": r["BestBookmaker"],
+            "MarketOdds": best_odds,
+            "MarketImpliedProbability": best_implied,
+            "ProbabilityDifference": model_p - best_implied,
+            "ExpectedReturnPerUnit": best_ev,
+            "BestBookmaker": r["BestBookmaker"],
+            "BestMarketOdds": best_odds,
+            "BestMarketImpliedProbability": best_implied,
+            "BestMarketExpectedReturn": best_ev,
+            "MyBookieAvailable": my_odds is not None,
+            "MyBookieBookmaker": r.get("MyBookieBookmaker"),
+            "MyBookieOdds": my_odds,
+            "MyBookieImpliedProbability": my_implied,
+            "MyBookieProbabilityDifference": (model_p - my_implied) if my_implied else None,
+            "MyBookieExpectedReturn": my_ev,
+            "MyBookiePriceGapVsBest": (my_odds - best_odds) if my_odds else None,
             "Lambda_Home_xG": r.get("Lambda_Home_xG"),
             "Lambda_Away_xG": r.get("Lambda_Away_xG"),
             "Lambda_Total_xG": r.get("Lambda_Total_xG"),
@@ -148,7 +205,9 @@ def compare_totals_25(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataF
     out = pd.DataFrame(rows)
     if out.empty:
         return out
-    return out.sort_values("ProbabilityDifference", ascending=False).reset_index(drop=True)
+
+    sort_col = "MyBookieExpectedReturn" if out["MyBookieExpectedReturn"].notna().any() else "BestMarketExpectedReturn"
+    return out.sort_values(sort_col, ascending=False, na_position="last").reset_index(drop=True)
 
 
 def main() -> None:
@@ -169,11 +228,13 @@ def main() -> None:
     print(f"Market outcome rows:      {len(odds)}")
     print(f"O/U 2.5 comparisons:     {len(comparison)}")
     if not comparison.empty:
+        my_count = int(comparison["MyBookieAvailable"].fillna(False).sum()) if "MyBookieAvailable" in comparison.columns else 0
+        print(f"MyBookie comparisons:    {my_count}")
         pd.set_option("display.max_columns", None)
         print(comparison[[
             "Date", "HomeTeam", "AwayTeam", "Side", "ModelProbability",
-            "ModelFairOdds", "Bookmaker", "MarketOdds",
-            "ProbabilityDifference", "ExpectedReturnPerUnit"
+            "ModelFairOdds", "MyBookieOdds", "MyBookieExpectedReturn",
+            "BestBookmaker", "BestMarketOdds", "BestMarketExpectedReturn"
         ]].to_string(index=False))
 
 

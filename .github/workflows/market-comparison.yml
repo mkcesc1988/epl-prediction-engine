@@ -41,6 +41,9 @@ jobs:
       - name: Rank MyBookie gameweek markets
         run: python gameweek_rankings.py
 
+      - name: Build conservative paper portfolio
+        run: python portfolio_manager.py
+
       - name: Append permanent live-history snapshot
         run: python history_logger.py
 
@@ -69,6 +72,7 @@ jobs:
             data/processed/market_odds_latest.csv
             data/processed/market_comparison_latest.csv
             data/processed/gameweek_rankings_latest.csv
+            data/processed/paper_portfolio_latest.csv
             data/history/*.csv
           if-no-files-found: warn
           retention-days: 30

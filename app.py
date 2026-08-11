@@ -32,6 +32,8 @@ def load_history(name: str) -> pd.DataFrame:
 
 def pct(value: object, digits: int = 1) -> str:
     try:
+        if pd.isna(value):
+            return "–"
         return f"{float(value) * 100:.{digits}f}%"
     except (TypeError, ValueError):
         return "–"
@@ -39,6 +41,8 @@ def pct(value: object, digits: int = 1) -> str:
 
 def dec(value: object, digits: int = 2) -> str:
     try:
+        if pd.isna(value):
+            return "–"
         return f"{float(value):.{digits}f}"
     except (TypeError, ValueError):
         return "–"
@@ -95,17 +99,33 @@ with market_tab:
     if market.empty:
         st.info("No market comparison file is available yet.")
     else:
-        st.subheader("Model vs bookmaker market")
-        st.caption("Research view only. No staking or automated betting is performed.")
-        edge = pd.to_numeric(market.get("ExpectedReturnPerUnit"), errors="coerce") if "ExpectedReturnPerUnit" in market.columns else pd.Series(dtype=float)
-        c1, c2, c3 = st.columns(3)
+        st.subheader("MyBookie vs model")
+        st.caption("MyBookie is the primary reference book. Best available market price is retained as a benchmark. Research view only, no staking or automated betting is performed.")
+
+        my_ev = pd.to_numeric(market.get("MyBookieExpectedReturn"), errors="coerce") if "MyBookieExpectedReturn" in market.columns else pd.Series(dtype=float)
+        best_ev = pd.to_numeric(market.get("BestMarketExpectedReturn"), errors="coerce") if "BestMarketExpectedReturn" in market.columns else pd.Series(dtype=float)
+
+        c1, c2, c3, c4 = st.columns(4)
         c1.metric("Market rows", len(market))
-        c2.metric("Positive discrepancies", int((edge > 0).sum()) if not edge.empty else 0)
-        if not edge.empty and edge.notna().any():
-            c3.metric("Largest expected return", pct(edge.max()))
-        preferred = ["Date", "HomeTeam", "AwayTeam", "Market", "Side", "Bookmaker", "ModelProbability", "ModelFairOdds", "MarketOdds", "MarketImpliedProbability", "ProbabilityDifference", "ExpectedReturnPerUnit"]
+        c2.metric("MyBookie quotes", int(market.get("MyBookieAvailable", pd.Series(dtype=bool)).fillna(False).sum()) if "MyBookieAvailable" in market.columns else 0)
+        c3.metric("Positive MyBookie EV", int((my_ev > 0).sum()) if not my_ev.empty else 0)
+        if not my_ev.empty and my_ev.notna().any():
+            c4.metric("Largest MyBookie EV", pct(my_ev.max()))
+        elif not best_ev.empty and best_ev.notna().any():
+            c4.metric("Largest best-market EV", pct(best_ev.max()))
+
+        preferred = [
+            "Date", "HomeTeam", "AwayTeam", "Side",
+            "ModelProbability", "ModelFairOdds",
+            "MyBookieOdds", "MyBookieImpliedProbability", "MyBookieExpectedReturn",
+            "BestBookmaker", "BestMarketOdds", "BestMarketExpectedReturn",
+            "MyBookiePriceGapVsBest",
+        ]
         cols = [c for c in preferred if c in market.columns]
         st.dataframe(market[cols] if cols else market, use_container_width=True, hide_index=True)
+
+        if "MyBookieAvailable" in market.columns and not market["MyBookieAvailable"].fillna(False).all():
+            st.info("Some rows do not currently have a MyBookie quote from the odds feed. Those rows still show the best available market benchmark.")
 
 with live_tab:
     st.subheader("Permanent live record")
@@ -119,7 +139,13 @@ with live_tab:
         c3.metric("Snapshots", snapshots)
         if not market_history.empty:
             hist = market_history.sort_values("SnapshotUTC", ascending=False) if "SnapshotUTC" in market_history.columns else market_history
-            st.dataframe(hist, use_container_width=True, hide_index=True)
+            preferred = [
+                "SnapshotUTC", "Date", "HomeTeam", "AwayTeam", "Side",
+                "ModelFairOdds", "MyBookieOdds", "MyBookieExpectedReturn",
+                "BestBookmaker", "BestMarketOdds", "BestMarketExpectedReturn",
+            ]
+            cols = [c for c in preferred if c in hist.columns]
+            st.dataframe(hist[cols] if cols else hist, use_container_width=True, hide_index=True)
 
 with clv_tab:
     st.subheader("Closing-line tracking")

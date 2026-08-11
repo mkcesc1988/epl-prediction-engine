@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 
 DATA_DIR = Path("data/processed")
+HISTORY_DIR = Path("data/history")
 
 st.set_page_config(
     page_title="EPL Prediction Engine",
@@ -14,8 +15,8 @@ st.set_page_config(
 )
 
 
-def load_csv(name: str) -> pd.DataFrame:
-    path = DATA_DIR / name
+def load_csv_from(directory: Path, name: str) -> pd.DataFrame:
+    path = directory / name
     if not path.exists():
         return pd.DataFrame()
     try:
@@ -23,6 +24,14 @@ def load_csv(name: str) -> pd.DataFrame:
     except Exception as exc:
         st.warning(f"Could not read {name}: {exc}")
         return pd.DataFrame()
+
+
+def load_csv(name: str) -> pd.DataFrame:
+    return load_csv_from(DATA_DIR, name)
+
+
+def load_history(name: str) -> pd.DataFrame:
+    return load_csv_from(HISTORY_DIR, name)
 
 
 def pct(value: object, digits: int = 1) -> str:
@@ -39,13 +48,6 @@ def dec(value: object, digits: int = 2) -> str:
         return "–"
 
 
-def probability_bar(value: object) -> float:
-    try:
-        return max(0.0, min(float(value), 1.0))
-    except (TypeError, ValueError):
-        return 0.0
-
-
 st.title("⚽ EPL Prediction Engine")
 st.caption("Production model V1.2 · xG strength ratings · Dixon-Coles · live market research")
 
@@ -53,10 +55,13 @@ predictions = load_csv("daily_predictions_latest.csv")
 market = load_csv("market_comparison_latest.csv")
 summary = load_csv("backtest_summary_v12.csv")
 comparison = load_csv("model_comparison_v12.csv")
+pred_history = load_history("prediction_history.csv")
+market_history = load_history("market_comparison_history.csv")
 
-pred_tab, market_tab, perf_tab = st.tabs([
+pred_tab, market_tab, live_tab, perf_tab = st.tabs([
     "Today's Predictions",
     "Market Comparison",
+    "Live History",
     "Model Performance",
 ])
 
@@ -126,14 +131,52 @@ with market_tab:
 
         display = market.copy()
         preferred = [
-            "Date", "HomeTeam", "AwayTeam", "Market", "Selection", "Bookmaker",
-            "ModelProbability", "ModelFairOdds", "BookmakerOdds", "ImpliedProbability",
+            "Date", "HomeTeam", "AwayTeam", "Market", "Side", "Bookmaker",
+            "ModelProbability", "ModelFairOdds", "MarketOdds", "MarketImpliedProbability",
             "ProbabilityDifference", "ExpectedReturnPerUnit",
         ]
         columns = [c for c in preferred if c in display.columns]
         if not columns:
             columns = list(display.columns)
         st.dataframe(display[columns], use_container_width=True, hide_index=True)
+
+with live_tab:
+    st.subheader("Permanent live record")
+    st.caption("Each successful market workflow stores a timestamped snapshot. This is the evidence base for future CLV and live-performance analysis.")
+
+    if pred_history.empty and market_history.empty:
+        st.info("No permanent live-history snapshot has been committed yet. The next successful EPL market comparison run will create it automatically.")
+    else:
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Prediction rows", len(pred_history))
+        c2.metric("Market comparison rows", len(market_history))
+
+        snapshots = 0
+        if not market_history.empty and "SnapshotUTC" in market_history.columns:
+            snapshots = market_history["SnapshotUTC"].nunique()
+        elif not pred_history.empty and "SnapshotUTC" in pred_history.columns:
+            snapshots = pred_history["SnapshotUTC"].nunique()
+        c3.metric("Snapshots", snapshots)
+
+        if not market_history.empty:
+            st.markdown("### Market comparison history")
+            hist = market_history.copy()
+            if "SnapshotUTC" in hist.columns:
+                hist = hist.sort_values("SnapshotUTC", ascending=False)
+            preferred = [
+                "SnapshotUTC", "Date", "HomeTeam", "AwayTeam", "Side", "Bookmaker",
+                "ModelProbability", "ModelFairOdds", "MarketOdds",
+                "ProbabilityDifference", "ExpectedReturnPerUnit",
+            ]
+            cols = [c for c in preferred if c in hist.columns]
+            st.dataframe(hist[cols] if cols else hist, use_container_width=True, hide_index=True)
+
+        if not pred_history.empty:
+            with st.expander("Prediction snapshot history"):
+                hist = pred_history.copy()
+                if "SnapshotUTC" in hist.columns:
+                    hist = hist.sort_values("SnapshotUTC", ascending=False)
+                st.dataframe(hist, use_container_width=True, hide_index=True)
 
 with perf_tab:
     st.subheader("Historical V1.2 performance")

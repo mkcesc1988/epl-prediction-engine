@@ -38,6 +38,9 @@ jobs:
           THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
         run: python market_comparison.py
 
+      - name: Rank MyBookie gameweek markets
+        run: python gameweek_rankings.py
+
       - name: Append permanent live-history snapshot
         run: python history_logger.py
 
@@ -65,6 +68,7 @@ jobs:
             data/processed/daily_predictions_latest.csv
             data/processed/market_odds_latest.csv
             data/processed/market_comparison_latest.csv
+            data/processed/gameweek_rankings_latest.csv
             data/history/*.csv
           if-no-files-found: warn
           retention-days: 30

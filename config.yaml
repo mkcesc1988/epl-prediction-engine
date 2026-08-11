@@ -17,6 +17,15 @@ model_v07:
   min_matches: 5
   shrinkage_matches: 10
 
+model_v11:
+  max_goal: 10
+  rho_history_window: 760
+  rho_min_matches: 200
+  rho_fallback: -0.08
+  rho_grid_min: -0.20
+  rho_grid_max: 0.05
+  rho_grid_step: 0.005
+
 backtest:
   min_prior_seasons_for_calibration: 2
   ev_thresholds: [0.00, 0.02, 0.05, 0.075, 0.10]
@@ -27,7 +36,10 @@ paths:
   master: data/processed/master_matches.csv
   predictions: data/processed/xg_predictions.csv
   predictions_v07: data/processed/xg_predictions_v07.csv
+  predictions_v11: data/processed/xg_predictions_v11.csv
   summary: data/processed/backtest_summary.csv
   summary_v07: data/processed/backtest_summary_v07.csv
+  summary_v11: data/processed/backtest_summary_v11.csv
   comparison: data/processed/model_comparison.csv
+  comparison_v11: data/processed/model_comparison_v11.csv
   validation: data/processed/validation_report.json

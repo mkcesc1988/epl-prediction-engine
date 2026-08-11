@@ -5,12 +5,16 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import requests
 from understatapi import UnderstatClient
 
 from backtest import _fit_platt, _logit, _sigmoid
 from model_v11 import _derived_markets, _score_matrix
 from model_v12 import _estimate_rho_from_history, _fit_strengths, build_predictions_v12
 from pipeline import build_master, load_config, normalize_team, season_label
+
+FPL_FIXTURES_URL = "https://fantasy.premierleague.com/api/fixtures/"
+FPL_BOOTSTRAP_URL = "https://fantasy.premierleague.com/api/bootstrap-static/"
 
 
 def _team_title(value: object) -> str:
@@ -26,8 +30,12 @@ def _num(value: object) -> float | None:
         return None
 
 
-def fetch_current_understat(start_year: int) -> pd.DataFrame:
-    """Fetch current-season EPL matches and fixtures from Understat."""
+def fetch_current_understat_completed(start_year: int) -> pd.DataFrame:
+    """Fetch completed current-season EPL matches with xG from Understat.
+
+    Understat is used for xG history only. It is not relied on for future fixtures,
+    because the next season's schedule may not be published there before kickoff.
+    """
     with UnderstatClient() as client:
         matches = client.league(league="EPL").get_match_data(season=str(start_year))
 
@@ -41,29 +49,91 @@ def fetch_current_understat(start_year: int) -> pd.DataFrame:
 
         goals = m.get("goals") or {}
         xg = m.get("xG") or m.get("xg") or {}
+        fthg = _num(goals.get("h") if isinstance(goals, dict) else None)
+        ftag = _num(goals.get("a") if isinstance(goals, dict) else None)
+        home_xg = _num(xg.get("h") if isinstance(xg, dict) else None)
+        away_xg = _num(xg.get("a") if isinstance(xg, dict) else None)
+
+        if fthg is None or ftag is None or home_xg is None or away_xg is None:
+            continue
+
         rows.append({
             "Season": season_label(start_year),
             "Date": pd.to_datetime(date, errors="coerce").normalize(),
             "HomeTeam": home,
             "AwayTeam": away,
-            "FTHG": _num(goals.get("h") if isinstance(goals, dict) else None),
-            "FTAG": _num(goals.get("a") if isinstance(goals, dict) else None),
-            "Home_xG": _num(xg.get("h") if isinstance(xg, dict) else None),
-            "Away_xG": _num(xg.get("a") if isinstance(xg, dict) else None),
+            "FTHG": fthg,
+            "FTAG": ftag,
+            "Home_xG": home_xg,
+            "Away_xG": away_xg,
             "UnderstatMatchId": m.get("id"),
+        })
+
+    cols = [
+        "Season", "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG",
+        "Home_xG", "Away_xG", "UnderstatMatchId",
+    ]
+    if not rows:
+        return pd.DataFrame(columns=cols)
+
+    return (
+        pd.DataFrame(rows)
+        .dropna(subset=["Date", "HomeTeam", "AwayTeam"])
+        .sort_values("Date")
+        .reset_index(drop=True)
+    )
+
+
+def fetch_fpl_fixtures(start_year: int) -> pd.DataFrame:
+    """Fetch the official Fantasy Premier League fixture schedule."""
+    headers = {"User-Agent": "Mozilla/5.0 EPL prediction engine"}
+    teams_resp = requests.get(FPL_BOOTSTRAP_URL, headers=headers, timeout=45)
+    teams_resp.raise_for_status()
+    fixtures_resp = requests.get(FPL_FIXTURES_URL, headers=headers, timeout=45)
+    fixtures_resp.raise_for_status()
+
+    bootstrap = teams_resp.json()
+    fixtures = fixtures_resp.json()
+    team_map = {
+        int(t["id"]): normalize_team(t.get("name") or t.get("short_name") or str(t["id"]))
+        for t in bootstrap.get("teams", [])
+    }
+
+    rows: list[dict] = []
+    for f in fixtures or []:
+        kickoff = f.get("kickoff_time")
+        home_id = f.get("team_h")
+        away_id = f.get("team_a")
+        if not kickoff or home_id not in team_map or away_id not in team_map:
+            continue
+        ts = pd.to_datetime(kickoff, utc=True, errors="coerce")
+        if pd.isna(ts):
+            continue
+        rows.append({
+            "Season": season_label(start_year),
+            "Date": ts.tz_convert(None).normalize(),
+            "KickoffUTC": ts.isoformat(),
+            "HomeTeam": team_map[int(home_id)],
+            "AwayTeam": team_map[int(away_id)],
+            "FPLFixtureId": f.get("id"),
+            "FPLGameweek": f.get("event"),
+            "Finished": bool(f.get("finished", False)),
+            "Started": bool(f.get("started", False)),
+            "HomeGoals": f.get("team_h_score"),
+            "AwayGoals": f.get("team_a_score"),
         })
 
     df = pd.DataFrame(rows)
     if df.empty:
-        raise RuntimeError(f"No EPL {start_year}/{str(start_year + 1)[-2:]} schedule returned by Understat")
-    return df.dropna(subset=["Date", "HomeTeam", "AwayTeam"]).sort_values("Date").reset_index(drop=True)
+        raise RuntimeError("FPL returned no EPL fixtures")
+    return df.sort_values(["Date", "KickoffUTC", "HomeTeam"]).reset_index(drop=True)
 
 
-def _build_training_history(cfg: dict, current: pd.DataFrame) -> pd.DataFrame:
+def _build_training_history(cfg: dict, current_completed: pd.DataFrame) -> pd.DataFrame:
     historical = build_master(cfg).copy()
     historical["Date"] = pd.to_datetime(historical["Date"])
 
-    completed_current = current.dropna(subset=["FTHG", "FTAG", "Home_xG", "Away_xG"]).copy()
+    completed_current = current_completed.copy()
     if not completed_current.empty:
         completed_current["TotalGoals"] = completed_current["FTHG"] + completed_current["FTAG"]
         completed_current["Over2_5_Result"] = (completed_current["TotalGoals"] >= 3).astype("Int64")
@@ -113,6 +183,8 @@ def _predict_fixture(row: pd.Series, fit, rho: float, cfg: dict, beta: np.ndarra
 
     return {
         "Date": pd.Timestamp(row["Date"]).strftime("%Y-%m-%d"),
+        "KickoffUTC": row.get("KickoffUTC"),
+        "FPLGameweek": row.get("FPLGameweek"),
         "Season": row["Season"],
         "HomeTeam": h,
         "AwayTeam": a,
@@ -149,15 +221,15 @@ def build_daily_predictions(cfg: dict) -> pd.DataFrame:
     horizon_days = int(daily.get("horizon_days", 14))
     next_matchday_only = bool(daily.get("next_matchday_only", True))
 
-    current = fetch_current_understat(current_season)
-    history = _build_training_history(cfg, current)
+    current_completed = fetch_current_understat_completed(current_season)
+    fixtures_all = fetch_fpl_fixtures(current_season)
+    history = _build_training_history(cfg, current_completed)
 
     today = pd.Timestamp.now(tz="UTC").tz_localize(None).normalize()
-    fixtures = current[
-        current["FTHG"].isna()
-        & current["FTAG"].isna()
-        & (current["Date"] >= today)
-        & (current["Date"] <= today + pd.Timedelta(days=horizon_days))
+    fixtures = fixtures_all[
+        (~fixtures_all["Finished"])
+        & (fixtures_all["Date"] >= today)
+        & (fixtures_all["Date"] <= today + pd.Timedelta(days=horizon_days))
     ].copy()
 
     if fixtures.empty:
@@ -177,7 +249,7 @@ def build_daily_predictions(cfg: dict) -> pd.DataFrame:
     beta = _fit_live_over25_calibrator(history, cfg)
 
     rows = [_predict_fixture(r, fit, rho, cfg, beta) for _, r in fixtures.iterrows()]
-    return pd.DataFrame(rows).sort_values(["Date", "HomeTeam"]).reset_index(drop=True)
+    return pd.DataFrame(rows).sort_values(["Date", "KickoffUTC", "HomeTeam"]).reset_index(drop=True)
 
 
 def main() -> None:

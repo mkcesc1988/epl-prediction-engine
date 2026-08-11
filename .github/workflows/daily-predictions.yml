@@ -1,6 +1,8 @@
 name: Daily EPL predictions
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
   schedule:
     - cron: '0 12 * * *'

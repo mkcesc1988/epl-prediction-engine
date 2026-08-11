@@ -43,8 +43,8 @@ model_v12:
 
 daily:
   current_season: 2026
-  horizon_days: 14
-  next_matchday_only: true
+  horizon_days: 21
+  next_gameweek_only: true
 
 market_comparison:
   odds_api_sport: soccer_epl

@@ -41,6 +41,11 @@ model_v12:
   rho_grid_max: 0.05
   rho_grid_step: 0.005
 
+daily:
+  current_season: 2026
+  horizon_days: 14
+  next_matchday_only: true
+
 backtest:
   min_prior_seasons_for_calibration: 2
   ev_thresholds: [0.00, 0.02, 0.05, 0.075, 0.10]

@@ -69,6 +69,7 @@ portfolio:
   max_same_match_exposure_pct: 0.03
   min_bet_quality: 60.0
   min_expected_return: 0.02
+  min_stake_units: 0.25
 
 backtest:
   min_prior_seasons_for_calibration: 2

@@ -56,6 +56,12 @@ v2_shadow:
   preseason_form_matches: 5
   preseason_goal_diff_log_lambda_per_goal: 0.018
   max_preseason_form_log_adjustment: 0.06
+  preseason_goal_diff_cap: 3.0
+  preseason_form_metric_cap: 2.0
+  preseason_unknown_opponent_weight: 0.55
+  preseason_known_opponent_weight_min: 0.75
+  preseason_known_opponent_weight_max: 1.25
+  preseason_opponent_power_scale: 0.35
 
 daily:
   current_season: 2026

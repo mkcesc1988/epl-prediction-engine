@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import time
 from pathlib import Path
 from typing import Any
 
@@ -21,22 +22,45 @@ EPL_CLUBS = {
     "Man City", "Man United",
 }
 
+REQUEST_DELAY_SECONDS = 1.25
+MAX_RETRIES = 4
+
 
 def api_get(endpoint: str, params: dict[str, Any]) -> dict[str, Any]:
     key = os.environ.get("API_FOOTBALL_KEY")
     if not key:
         raise RuntimeError("API_FOOTBALL_KEY is not set")
-    r = requests.get(
-        f"{BASE_URL}/{endpoint}",
-        headers={"x-apisports-key": key},
-        params=params,
-        timeout=30,
-    )
-    r.raise_for_status()
-    payload = r.json()
-    if payload.get("errors"):
-        raise RuntimeError(f"API-Football error for {endpoint}: {payload['errors']}")
-    return payload
+
+    url = f"{BASE_URL}/{endpoint}"
+    for attempt in range(MAX_RETRIES):
+        r = requests.get(
+            url,
+            headers={"x-apisports-key": key},
+            params=params,
+            timeout=30,
+        )
+
+        if r.status_code == 429:
+            wait = 4 * (attempt + 1)
+            print(f"Rate limited on {endpoint}; waiting {wait}s before retry {attempt + 1}/{MAX_RETRIES}.")
+            time.sleep(wait)
+            continue
+
+        r.raise_for_status()
+        payload = r.json()
+        if payload.get("errors"):
+            raise RuntimeError(f"API-Football error for {endpoint}: {payload['errors']}")
+        time.sleep(REQUEST_DELAY_SECONDS)
+        return payload
+
+    raise RuntimeError(f"API-Football rate limit persisted for {endpoint} after {MAX_RETRIES} retries")
+
+
+def safe_api_get(endpoint: str, params: dict[str, Any]) -> tuple[dict[str, Any], str]:
+    try:
+        return api_get(endpoint, params), ""
+    except Exception as exc:
+        return {"response": []}, str(exc)
 
 
 def normalize_name(name: str) -> str:
@@ -116,13 +140,13 @@ def main() -> None:
     fixtures_df.to_csv(fixtures_path, index=False)
 
     completed = fixtures_df[fixtures_df["status"].isin(["FT", "AET", "PEN"])] if not fixtures_df.empty else fixtures_df
-    sample = completed.head(12)
+    sample = completed.head(5)
 
     coverage_rows: list[dict[str, Any]] = []
     for _, row in sample.iterrows():
         fixture_id = int(row["fixture_id"])
-        stats_payload = api_get("fixtures/statistics", {"fixture": fixture_id})
-        lineups_payload = api_get("fixtures/lineups", {"fixture": fixture_id})
+        stats_payload, stats_error = safe_api_get("fixtures/statistics", {"fixture": fixture_id})
+        lineups_payload, lineups_error = safe_api_get("fixtures/lineups", {"fixture": fixture_id})
 
         stats_resp = stats_payload.get("response", [])
         lineups_resp = lineups_payload.get("response", [])
@@ -144,6 +168,8 @@ def main() -> None:
                 "possession": "Ball Possession" in stat_types,
                 "corner_kicks": "Corner Kicks" in stat_types,
                 "expected_goals": "expected_goals" in stat_types or "Expected Goals" in stat_types,
+                "stats_error": stats_error,
+                "lineups_error": lineups_error,
                 "stat_fields": " | ".join(sorted(stat_types)),
             }
         )
@@ -166,6 +192,7 @@ def main() -> None:
         "total_shots_coverage_pct": float(coverage_df["total_shots"].mean() * 100) if not coverage_df.empty else 0.0,
         "possession_coverage_pct": float(coverage_df["possession"].mean() * 100) if not coverage_df.empty else 0.0,
         "expected_goals_coverage_pct": float(coverage_df["expected_goals"].mean() * 100) if not coverage_df.empty else 0.0,
+        "rate_limit_strategy": "5-match sample, 1.25s request spacing, 429 retry backoff",
         "note": "Diagnostic only. No V1.2 production model files are modified.",
     }
 

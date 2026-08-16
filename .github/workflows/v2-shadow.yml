@@ -1,0 +1,60 @@
+name: V2 shadow predictions
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 10 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: epl-v2-shadow
+  cancel-in-progress: false
+
+jobs:
+  shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run V2 shadow predictions
+        run: python v2_shadow_predictions.py
+
+      - name: Publish V2 shadow output
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/processed/v2_shadow_predictions_latest.csv
+          if git diff --cached --quiet; then
+            echo "No V2 shadow changes to commit"
+          else
+            git commit -m "data: publish V2 shadow predictions [skip ci]"
+            git fetch origin main
+            git rebase -X theirs origin/main
+            git push origin HEAD:main
+          fi
+
+      - name: Upload V2 shadow artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v2-shadow-predictions
+          path: data/processed/v2_shadow_predictions_latest.csv
+          if-no-files-found: warn
+          retention-days: 30

@@ -49,6 +49,13 @@ v2_shadow:
   congestion_free_matches: 2
   congestion_log_lambda_per_extra_match: 0.020
   max_context_log_adjustment: 0.10
+  preseason_enabled: true
+  preseason_league_id: 667
+  preseason_start_month_day: "06-15"
+  preseason_end_month_day: "08-20"
+  preseason_form_matches: 5
+  preseason_goal_diff_log_lambda_per_goal: 0.018
+  max_preseason_form_log_adjustment: 0.06
 
 daily:
   current_season: 2026

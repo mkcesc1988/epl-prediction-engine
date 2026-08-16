@@ -1,0 +1,158 @@
+from __future__ import annotations
+
+import json
+import os
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+import requests
+
+BASE_URL = "https://v3.football.api-sports.io"
+OUT_DIR = Path("data/diagnostics/api_football")
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+EPL_CLUBS = {
+    "Arsenal", "Aston Villa", "Bournemouth", "Brentford", "Brighton",
+    "Burnley", "Chelsea", "Crystal Palace", "Everton", "Fulham",
+    "Leeds", "Liverpool", "Manchester City", "Manchester United",
+    "Newcastle", "Nottingham Forest", "Sunderland", "Tottenham",
+    "West Ham", "Wolves", "Hull City", "Ipswich Town", "Nott'm Forest",
+    "Man City", "Man United",
+}
+
+
+def api_get(endpoint: str, params: dict[str, Any]) -> dict[str, Any]:
+    key = os.environ.get("API_FOOTBALL_KEY")
+    if not key:
+        raise RuntimeError("API_FOOTBALL_KEY is not set")
+    r = requests.get(
+        f"{BASE_URL}/{endpoint}",
+        headers={"x-apisports-key": key},
+        params=params,
+        timeout=30,
+    )
+    r.raise_for_status()
+    payload = r.json()
+    if payload.get("errors"):
+        raise RuntimeError(f"API-Football error for {endpoint}: {payload['errors']}")
+    return payload
+
+
+def normalize_name(name: str) -> str:
+    aliases = {
+        "Manchester City": "Man City",
+        "Manchester United": "Man United",
+        "Nottingham Forest": "Nott'm Forest",
+        "Tottenham Hotspur": "Tottenham",
+        "Wolverhampton Wanderers": "Wolves",
+        "Brighton & Hove Albion": "Brighton",
+        "West Ham United": "West Ham",
+        "Newcastle United": "Newcastle",
+        "Leeds United": "Leeds",
+        "Sunderland AFC": "Sunderland",
+    }
+    return aliases.get(name, name)
+
+
+def main() -> None:
+    # Pull all club friendlies in a broad preseason window, then keep fixtures
+    # involving clubs that map to the EPL project naming scheme.
+    fixtures_payload = api_get(
+        "fixtures",
+        {
+            "league": 667,  # Club Friendlies
+            "season": 2026,
+            "from": "2026-06-15",
+            "to": "2026-08-20",
+        },
+    )
+
+    fixture_rows: list[dict[str, Any]] = []
+    raw_fixtures = fixtures_payload.get("response", [])
+    for item in raw_fixtures:
+        home_raw = item["teams"]["home"]["name"]
+        away_raw = item["teams"]["away"]["name"]
+        home = normalize_name(home_raw)
+        away = normalize_name(away_raw)
+        if home not in EPL_CLUBS and away not in EPL_CLUBS:
+            continue
+        fixture_rows.append(
+            {
+                "fixture_id": item["fixture"]["id"],
+                "date": item["fixture"]["date"],
+                "status": item["fixture"]["status"]["short"],
+                "home_team": home,
+                "away_team": away,
+                "home_goals": item.get("goals", {}).get("home"),
+                "away_goals": item.get("goals", {}).get("away"),
+                "league_name": item["league"]["name"],
+            }
+        )
+
+    fixtures_df = pd.DataFrame(fixture_rows)
+    fixtures_path = OUT_DIR / "preseason_fixtures_2026.csv"
+    fixtures_df.to_csv(fixtures_path, index=False)
+
+    # Keep diagnostic usage under the 100-request free quota.
+    completed = fixtures_df[fixtures_df["status"].isin(["FT", "AET", "PEN"])] if not fixtures_df.empty else fixtures_df
+    sample = completed.head(12)
+
+    coverage_rows: list[dict[str, Any]] = []
+    for _, row in sample.iterrows():
+        fixture_id = int(row["fixture_id"])
+        stats_payload = api_get("fixtures/statistics", {"fixture": fixture_id})
+        lineups_payload = api_get("fixtures/lineups", {"fixture": fixture_id})
+
+        stats_resp = stats_payload.get("response", [])
+        lineups_resp = lineups_payload.get("response", [])
+
+        stat_types: set[str] = set()
+        for team_block in stats_resp:
+            for stat in team_block.get("statistics", []):
+                stat_types.add(str(stat.get("type")))
+
+        coverage_rows.append(
+            {
+                "fixture_id": fixture_id,
+                "home_team": row["home_team"],
+                "away_team": row["away_team"],
+                "statistics_available": bool(stats_resp),
+                "lineups_available": bool(lineups_resp),
+                "shots_on_goal": "Shots on Goal" in stat_types,
+                "total_shots": "Total Shots" in stat_types,
+                "possession": "Ball Possession" in stat_types,
+                "corner_kicks": "Corner Kicks" in stat_types,
+                "expected_goals": "expected_goals" in stat_types or "Expected Goals" in stat_types,
+                "stat_fields": " | ".join(sorted(stat_types)),
+            }
+        )
+
+    coverage_df = pd.DataFrame(coverage_rows)
+    coverage_path = OUT_DIR / "coverage_sample_2026.csv"
+    coverage_df.to_csv(coverage_path, index=False)
+
+    report = {
+        "api_fixture_results_total": len(raw_fixtures),
+        "epl_related_preseason_fixtures": len(fixtures_df),
+        "completed_sample_checked": len(coverage_df),
+        "statistics_coverage_pct": float(coverage_df["statistics_available"].mean() * 100) if not coverage_df.empty else 0.0,
+        "lineup_coverage_pct": float(coverage_df["lineups_available"].mean() * 100) if not coverage_df.empty else 0.0,
+        "shots_on_goal_coverage_pct": float(coverage_df["shots_on_goal"].mean() * 100) if not coverage_df.empty else 0.0,
+        "total_shots_coverage_pct": float(coverage_df["total_shots"].mean() * 100) if not coverage_df.empty else 0.0,
+        "possession_coverage_pct": float(coverage_df["possession"].mean() * 100) if not coverage_df.empty else 0.0,
+        "expected_goals_coverage_pct": float(coverage_df["expected_goals"].mean() * 100) if not coverage_df.empty else 0.0,
+        "note": "Diagnostic only. No V1.2 production model files are modified.",
+    }
+
+    report_path = OUT_DIR / "diagnostic_report.json"
+    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+
+    print(json.dumps(report, indent=2))
+    print(f"Saved: {fixtures_path}")
+    print(f"Saved: {coverage_path}")
+    print(f"Saved: {report_path}")
+
+
+if __name__ == "__main__":
+    main()

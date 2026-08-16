@@ -34,6 +34,8 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run V2 shadow predictions
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
         run: python v2_shadow_predictions.py
 
       - name: Publish V2 shadow output

@@ -37,6 +37,7 @@ def build_portfolio(rankings: pd.DataFrame, cfg: dict) -> pd.DataFrame:
     min_quality = float(pcfg.get("min_bet_quality", 60.0))
     min_ev = float(pcfg.get("min_expected_return", 0.02))
     max_same_match_exposure_pct = float(pcfg.get("max_same_match_exposure_pct", 0.03))
+    min_stake_units = float(pcfg.get("min_stake_units", 0.25))
 
     df = rankings.copy()
     for col in [
@@ -69,6 +70,7 @@ def build_portfolio(rankings: pd.DataFrame, cfg: dict) -> pd.DataFrame:
     max_per_bet = paper_bankroll * max_stake_pct
     max_per_match = paper_bankroll * max_same_match_exposure_pct
     unit_amount = paper_bankroll * unit_size_pct
+    min_stake_amount = min_stake_units * unit_amount
 
     used_total = 0.0
     used_by_match: dict[tuple[str, str, str], float] = {}
@@ -87,7 +89,9 @@ def build_portfolio(rankings: pd.DataFrame, cfg: dict) -> pd.DataFrame:
         remaining_total = max(0.0, max_total - used_total)
         stake = min(target, remaining_match, remaining_total)
 
-        if stake <= 1e-9:
+        # Exclude dust positions. The threshold is expressed in units so it
+        # scales naturally with the configured bankroll and unit size.
+        if stake < min_stake_amount - 1e-12:
             continue
 
         used_total += stake
@@ -101,7 +105,7 @@ def build_portfolio(rankings: pd.DataFrame, cfg: dict) -> pd.DataFrame:
             "PaperStakeAmount": stake,
             "ExpectedPaperProfit": stake * float(r["ExpectedReturnPerUnit"]),
             "PortfolioExposurePct": used_total / paper_bankroll if paper_bankroll > 0 else 0.0,
-            "SizingNote": "paper only; capped fractional Kelly",
+            "SizingNote": f"paper only; capped fractional Kelly; minimum {min_stake_units:g}u",
         })
         rows.append(out)
 

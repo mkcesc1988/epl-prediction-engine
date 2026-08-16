@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import time
 from pathlib import Path
 
 import numpy as np
@@ -28,6 +29,33 @@ def _num(value: object) -> float | None:
         return float(value)
     except (TypeError, ValueError):
         return None
+
+
+def _get_json_with_retry(url: str, headers: dict[str, str], label: str, attempts: int = 5) -> object:
+    """Fetch JSON with bounded exponential backoff for transient FPL failures."""
+    last_error: Exception | None = None
+    retryable_statuses = {408, 425, 429, 500, 502, 503, 504}
+
+    for attempt in range(1, attempts + 1):
+        try:
+            response = requests.get(url, headers=headers, timeout=45)
+            if response.status_code in retryable_statuses:
+                raise requests.HTTPError(
+                    f"Transient HTTP {response.status_code} from {label}",
+                    response=response,
+                )
+            response.raise_for_status()
+            return response.json()
+        except (requests.ConnectionError, requests.Timeout, requests.HTTPError, ValueError) as exc:
+            last_error = exc
+            if attempt >= attempts:
+                break
+            delay = min(2 ** (attempt - 1), 16)
+            print(f"{label} request failed on attempt {attempt}/{attempts}: {exc}")
+            print(f"Retrying {label} in {delay}s...")
+            time.sleep(delay)
+
+    raise RuntimeError(f"{label} failed after {attempts} attempts: {last_error}")
 
 
 def fetch_current_understat_completed(start_year: int) -> pd.DataFrame:
@@ -83,13 +111,9 @@ def fetch_current_understat_completed(start_year: int) -> pd.DataFrame:
 def fetch_fpl_fixtures(start_year: int) -> pd.DataFrame:
     """Fetch the official Fantasy Premier League fixture schedule."""
     headers = {"User-Agent": "Mozilla/5.0 EPL prediction engine"}
-    teams_resp = requests.get(FPL_BOOTSTRAP_URL, headers=headers, timeout=45)
-    teams_resp.raise_for_status()
-    fixtures_resp = requests.get(FPL_FIXTURES_URL, headers=headers, timeout=45)
-    fixtures_resp.raise_for_status()
+    bootstrap = _get_json_with_retry(FPL_BOOTSTRAP_URL, headers, "FPL bootstrap")
+    fixtures = _get_json_with_retry(FPL_FIXTURES_URL, headers, "FPL fixtures")
 
-    bootstrap = teams_resp.json()
-    fixtures = fixtures_resp.json()
     team_map = {
         int(t["id"]): normalize_team(t.get("name") or t.get("short_name") or str(t["id"]))
         for t in bootstrap.get("teams", [])

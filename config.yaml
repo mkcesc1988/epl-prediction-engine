@@ -41,6 +41,15 @@ model_v12:
   rho_grid_max: 0.05
   rho_grid_step: 0.005
 
+v2_shadow:
+  rest_day_floor: 3
+  rest_day_cap: 10
+  rest_log_lambda_per_day: 0.015
+  congestion_window_days: 14
+  congestion_free_matches: 2
+  congestion_log_lambda_per_extra_match: 0.020
+  max_context_log_adjustment: 0.10
+
 daily:
   current_season: 2026
   horizon_days: 21

@@ -55,18 +55,38 @@ def normalize_name(name: str) -> str:
     return aliases.get(name, name)
 
 
-def main() -> None:
-    # Pull all club friendlies in a broad preseason window, then keep fixtures
-    # involving clubs that map to the EPL project naming scheme.
-    fixtures_payload = api_get(
+def fetch_friendlies(season: int) -> dict[str, Any]:
+    return api_get(
         "fixtures",
         {
-            "league": 667,  # Club Friendlies
-            "season": 2026,
-            "from": "2026-06-15",
-            "to": "2026-08-20",
+            "league": 667,
+            "season": season,
+            "from": f"{season}-06-15",
+            "to": f"{season}-08-20",
         },
     )
+
+
+def main() -> None:
+    requested_season = 2026
+    tested_season = requested_season
+    current_season_access = True
+    access_note = "2026 season accessible on current API plan."
+
+    try:
+        fixtures_payload = fetch_friendlies(requested_season)
+    except RuntimeError as exc:
+        message = str(exc)
+        if "Free plans do not have access to this season" not in message:
+            raise
+        current_season_access = False
+        tested_season = 2024
+        access_note = (
+            "Current free plan cannot access 2026. Diagnostic automatically fell back to 2024 "
+            "to test Club Friendlies coverage and available fields before considering a paid plan."
+        )
+        print(access_note)
+        fixtures_payload = fetch_friendlies(tested_season)
 
     fixture_rows: list[dict[str, Any]] = []
     raw_fixtures = fixtures_payload.get("response", [])
@@ -87,14 +107,14 @@ def main() -> None:
                 "home_goals": item.get("goals", {}).get("home"),
                 "away_goals": item.get("goals", {}).get("away"),
                 "league_name": item["league"]["name"],
+                "tested_season": tested_season,
             }
         )
 
     fixtures_df = pd.DataFrame(fixture_rows)
-    fixtures_path = OUT_DIR / "preseason_fixtures_2026.csv"
+    fixtures_path = OUT_DIR / f"preseason_fixtures_{tested_season}.csv"
     fixtures_df.to_csv(fixtures_path, index=False)
 
-    # Keep diagnostic usage under the 100-request free quota.
     completed = fixtures_df[fixtures_df["status"].isin(["FT", "AET", "PEN"])] if not fixtures_df.empty else fixtures_df
     sample = completed.head(12)
 
@@ -129,10 +149,14 @@ def main() -> None:
         )
 
     coverage_df = pd.DataFrame(coverage_rows)
-    coverage_path = OUT_DIR / "coverage_sample_2026.csv"
+    coverage_path = OUT_DIR / f"coverage_sample_{tested_season}.csv"
     coverage_df.to_csv(coverage_path, index=False)
 
     report = {
+        "requested_season": requested_season,
+        "tested_season": tested_season,
+        "current_season_access": current_season_access,
+        "access_note": access_note,
         "api_fixture_results_total": len(raw_fixtures),
         "epl_related_preseason_fixtures": len(fixtures_df),
         "completed_sample_checked": len(coverage_df),

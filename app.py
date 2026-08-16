@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+from pandas.errors import EmptyDataError
 
 DATA_DIR = Path("data/processed")
 HISTORY_DIR = Path("data/history")
@@ -13,10 +14,12 @@ st.set_page_config(page_title="EPL Prediction Engine", page_icon="⚽", layout="
 
 def load_csv_from(directory: Path, name: str) -> pd.DataFrame:
     path = directory / name
-    if not path.exists():
+    if not path.exists() or path.stat().st_size == 0:
         return pd.DataFrame()
     try:
         return pd.read_csv(path)
+    except EmptyDataError:
+        return pd.DataFrame()
     except Exception as exc:
         st.warning(f"Could not read {name}: {exc}")
         return pd.DataFrame()
@@ -128,13 +131,8 @@ backtest_summary = load_csv("backtest_summary_v12.csv")
 model_comparison = load_csv("model_comparison_v12.csv")
 
 pred_tab, rank_tab, portfolio_tab, market_tab, live_tab, clv_tab, perf_tab = st.tabs([
-    "Today's Predictions",
-    "Gameweek Rankings",
-    "Paper Portfolio",
-    "Market Comparison",
-    "Live History",
-    "Closing Line",
-    "Model Performance",
+    "Today's Predictions", "Gameweek Rankings", "Paper Portfolio", "Market Comparison",
+    "Live History", "Closing Line", "Model Performance",
 ])
 
 with pred_tab:
@@ -170,11 +168,7 @@ with rank_tab:
             positive = st.toggle("Positive expected return only", value=True)
             if positive:
                 view = view[num_series(view, "ExpectedReturnPerUnit") > 0]
-        preferred = [
-            "GameweekRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection",
-            "MyBookieOdds", "ModelWinProbability", "ProbabilityEdge", "ExpectedReturnPerUnit",
-            "BetQualityScore", "ProfitabilityScore", "OverallRankScore", "ValidationStatus",
-        ]
+        preferred = ["GameweekRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "MyBookieOdds", "ModelWinProbability", "ProbabilityEdge", "ExpectedReturnPerUnit", "BetQualityScore", "ProfitabilityScore", "OverallRankScore", "ValidationStatus"]
         st.dataframe(view[[c for c in preferred if c in view.columns]], use_container_width=True, hide_index=True)
         st.markdown("### Top picks")
         for _, row in view.head(5).iterrows():
@@ -187,8 +181,7 @@ with rank_tab:
                 c.metric("Bet quality", f"{float(row.get('BetQualityScore', 0)):.1f}/100")
                 d.metric("EV", pct(row.get("ExpectedReturnPerUnit")))
                 with st.expander("Why this pick?"):
-                    for reason in pick_explanation(row):
-                        st.write(f"• {reason}")
+                    for reason in pick_explanation(row): st.write(f"• {reason}")
 
 with portfolio_tab:
     st.subheader("Conservative paper portfolio")
@@ -198,146 +191,82 @@ with portfolio_tab:
         exposure = num_series(portfolio, "PaperStakeUnits").sum()
         exp_profit = num_series(portfolio, "ExpectedPaperProfit").sum()
         c1, c2, c3 = st.columns(3)
-        c1.metric("Selections", len(portfolio))
-        c2.metric("Exposure", f"{exposure:.2f}u")
-        c3.metric("Expected profit", f"{exp_profit:.2f}u")
-        preferred = [
-            "PortfolioRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection",
-            "MyBookieOdds", "ModelWinProbability", "BetQualityScore", "ExpectedReturnPerUnit",
-            "PaperStakeUnits", "ExpectedPaperProfit",
-        ]
+        c1.metric("Selections", len(portfolio)); c2.metric("Exposure", f"{exposure:.2f}u"); c3.metric("Expected profit", f"{exp_profit:.2f}u")
+        preferred = ["PortfolioRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "MyBookieOdds", "ModelWinProbability", "BetQualityScore", "ExpectedReturnPerUnit", "PaperStakeUnits", "ExpectedPaperProfit"]
         st.dataframe(portfolio[[c for c in preferred if c in portfolio.columns]], use_container_width=True, hide_index=True)
 
 with market_tab:
     st.subheader("Model vs MyBookie and broader market")
-    if market.empty:
-        st.info("No market comparison file is available yet.")
-    else:
-        st.dataframe(market, use_container_width=True, hide_index=True)
+    if market.empty: st.info("No market comparison file is available yet.")
+    else: st.dataframe(market, use_container_width=True, hide_index=True)
 
 with live_tab:
     st.subheader("Permanent live record")
-    if pred_history.empty and market_history.empty:
-        st.info("No permanent history has been stored yet.")
+    if pred_history.empty and market_history.empty: st.info("No permanent history has been stored yet.")
     else:
         c1, c2, c3 = st.columns(3)
-        c1.metric("Prediction rows", len(pred_history))
-        c2.metric("Market rows", len(market_history))
+        c1.metric("Prediction rows", len(pred_history)); c2.metric("Market rows", len(market_history))
         snapshots = market_history["SnapshotUTC"].nunique() if "SnapshotUTC" in market_history.columns else 0
         c3.metric("Snapshots", snapshots)
-        if not market_history.empty:
-            st.dataframe(market_history.tail(200), use_container_width=True, hide_index=True)
+        if not market_history.empty: st.dataframe(market_history.tail(200), use_container_width=True, hide_index=True)
 
 with clv_tab:
     st.subheader("Closing-line tracking")
-    if clv.empty:
-        st.info("CLV needs multiple pre-kickoff market snapshots.")
+    if clv.empty: st.info("CLV needs multiple pre-kickoff market snapshots.")
     else:
         price_clv = num_series(clv, "PriceCLV")
         c1, c2, c3 = st.columns(3)
-        c1.metric("Tracked sides", len(clv))
-        c2.metric("Mean price CLV", pct(price_clv.mean()))
-        c3.metric("Positive CLV", int((price_clv > 0).sum()))
+        c1.metric("Tracked sides", len(clv)); c2.metric("Mean price CLV", pct(price_clv.mean())); c3.metric("Positive CLV", int((price_clv > 0).sum()))
         st.dataframe(clv, use_container_width=True, hide_index=True)
 
 with perf_tab:
     st.subheader("Live V1.2 betting performance")
     st.caption("This is the permanent out-of-sample tracker for bets admitted by the paper portfolio.")
-
     if ledger.empty:
         st.info("No automatic tracked bets are available yet. Run EPL market comparison first.")
     else:
         work = ledger.copy()
         result = work.get("Result", pd.Series("OPEN", index=work.index)).fillna("OPEN").astype(str)
-        open_bets = work[result == "OPEN"].copy()
-        settled = work[result.isin(["W", "L", "PUSH"])].copy()
-
-        tracked = len(work)
-        open_count = len(open_bets)
-        settled_count = len(settled)
-        open_exposure = num_series(open_bets, "StakeUnits").sum()
-        profit_units = num_series(settled, "ProfitUnits").sum()
-        settled_stake = num_series(settled, "StakeUnits").sum()
+        open_bets = work[result == "OPEN"].copy(); settled = work[result.isin(["W", "L", "PUSH"])].copy()
+        tracked = len(work); open_count = len(open_bets); settled_count = len(settled)
+        open_exposure = num_series(open_bets, "StakeUnits").sum(); profit_units = num_series(settled, "ProfitUnits").sum(); settled_stake = num_series(settled, "StakeUnits").sum()
         roi = profit_units / settled_stake if settled_stake > 0 else None
         win_rate = ((settled.get("Result", pd.Series(dtype=str)).astype(str) == "W").mean() if settled_count else None)
         avg_clv = num_series(work, "PriceCLV").mean() if "PriceCLV" in work.columns else None
         brier = num_series(settled, "BrierScore").mean() if settled_count else None
-
-        r1 = st.columns(4)
-        r1[0].metric("Tracked bets", tracked)
-        r1[1].metric("Open", open_count)
-        r1[2].metric("Settled", settled_count)
-        r1[3].metric("Open exposure", f"{open_exposure:.2f}u")
-
-        r2 = st.columns(4)
-        r2[0].metric("Realized units", f"{profit_units:+.2f}u")
-        r2[1].metric("ROI", pct(roi) if roi is not None else "Waiting")
-        r2[2].metric("Win rate", pct(win_rate) if win_rate is not None else "Waiting")
-        r2[3].metric("Avg price CLV", pct(avg_clv) if avg_clv is not None and pd.notna(avg_clv) else "Waiting")
-
-        r3 = st.columns(2)
-        r3[0].metric("Brier score", dec(brier, 3) if brier is not None and pd.notna(brier) else "Waiting")
-        r3[1].metric("Model version", str(work.get("ModelVersion", pd.Series(["V1.2"])).iloc[0]))
-
+        r1 = st.columns(4); r1[0].metric("Tracked bets", tracked); r1[1].metric("Open", open_count); r1[2].metric("Settled", settled_count); r1[3].metric("Open exposure", f"{open_exposure:.2f}u")
+        r2 = st.columns(4); r2[0].metric("Realized units", f"{profit_units:+.2f}u"); r2[1].metric("ROI", pct(roi) if roi is not None else "Waiting"); r2[2].metric("Win rate", pct(win_rate) if win_rate is not None else "Waiting"); r2[3].metric("Avg price CLV", pct(avg_clv) if avg_clv is not None and pd.notna(avg_clv) else "Waiting")
+        r3 = st.columns(2); r3[0].metric("Brier score", dec(brier, 3) if brier is not None and pd.notna(brier) else "Waiting"); r3[1].metric("Model version", str(work.get("ModelVersion", pd.Series(["V1.2"])).iloc[0]))
         st.markdown("### Open tracked bets")
-        if open_bets.empty:
-            st.info("No open bets.")
+        if open_bets.empty: st.info("No open bets.")
         else:
-            cols = [
-                "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "EntryOdds",
-                "ModelProbability", "ProbabilityEdge", "StakeUnits", "ClosingOdds", "PriceCLV",
-                "ConfidenceBucket", "EdgeBucket", "Grade",
-            ]
+            cols = ["Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "EntryOdds", "ModelProbability", "ProbabilityEdge", "StakeUnits", "ClosingOdds", "PriceCLV", "ConfidenceBucket", "EdgeBucket", "Grade"]
             st.dataframe(open_bets[[c for c in cols if c in open_bets.columns]], use_container_width=True, hide_index=True)
-
         if settled.empty:
             st.info("No EPL tracked bets have settled yet. ROI, win rate and Brier score will populate automatically after results are available.")
         else:
-            settled = settled.copy()
-            settled["SettledOrder"] = pd.to_datetime(settled.get("SettledUTC"), errors="coerce")
-            settled = settled.sort_values(["SettledOrder", "Date"], na_position="last")
-            settled["CumulativeUnits"] = num_series(settled, "ProfitUnits").fillna(0).cumsum()
-
-            st.markdown("### Cumulative units")
-            chart = settled[["CumulativeUnits"]].copy()
-            chart.index = range(1, len(chart) + 1)
-            st.line_chart(chart)
-
-            st.markdown("### Settled bets")
-            cols = [
-                "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "EntryOdds", "ClosingOdds",
-                "StakeUnits", "Result", "FinalScore", "ProfitUnits", "PriceCLV", "BrierScore",
-                "ConfidenceBucket", "EdgeBucket", "Grade",
-            ]
+            settled = settled.copy(); settled["SettledOrder"] = pd.to_datetime(settled.get("SettledUTC"), errors="coerce"); settled = settled.sort_values(["SettledOrder", "Date"], na_position="last"); settled["CumulativeUnits"] = num_series(settled, "ProfitUnits").fillna(0).cumsum()
+            st.markdown("### Cumulative units"); chart = settled[["CumulativeUnits"]].copy(); chart.index = range(1, len(chart) + 1); st.line_chart(chart)
+            st.markdown("### Settled bets"); cols = ["Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "EntryOdds", "ClosingOdds", "StakeUnits", "Result", "FinalScore", "ProfitUnits", "PriceCLV", "BrierScore", "ConfidenceBucket", "EdgeBucket"]
             st.dataframe(settled[[c for c in cols if c in settled.columns]], use_container_width=True, hide_index=True)
-
-            for group_col, title in [
-                ("MarketType", "By market"),
-                ("ConfidenceBucket", "By confidence bucket"),
-                ("EdgeBucket", "By edge bucket"),
-                ("Grade", "By grade"),
-            ]:
+            for group_col, title in [("ConfidenceBucket", "Performance by confidence"), ("EdgeBucket", "Performance by edge"), ("MarketType", "Performance by market")]:
                 breakdown = performance_breakdown(settled, group_col)
                 if not breakdown.empty:
-                    st.markdown(f"### {title}")
-                    st.dataframe(breakdown, use_container_width=True, hide_index=True)
+                    st.markdown(f"### {title}"); display = breakdown.copy(); display["WinRate"] = display["WinRate"].map(lambda x: f"{x:.1%}"); display["ROI"] = display["ROI"].map(lambda x: f"{x:.1%}"); display["AvgPriceCLV"] = display["AvgPriceCLV"].map(lambda x: "–" if pd.isna(x) else f"{x:.1%}"); st.dataframe(display, use_container_width=True, hide_index=True)
 
-        if not perf_summary.empty:
-            with st.expander("Stored performance summary"):
-                st.dataframe(perf_summary, use_container_width=True, hide_index=True)
+    if not perf_summary.empty:
+        st.markdown("### Latest tracker summary")
+        st.dataframe(perf_summary, use_container_width=True, hide_index=True)
 
-    st.markdown("---")
-    st.markdown("### Historical V1.2 backtest")
-    if backtest_summary.empty:
-        st.caption("No historical backtest summary file is currently published to data/processed.")
-    else:
-        st.dataframe(backtest_summary, use_container_width=True, hide_index=True)
-    if not model_comparison.empty:
-        st.markdown("### V1.2 vs baseline")
-        st.dataframe(model_comparison, use_container_width=True, hide_index=True)
+    with st.expander("Historical V1.2 backtest (research only)"):
+        if backtest_summary.empty:
+            st.info("No V1.2 backtest summary is available in data/processed.")
+        else:
+            summary = backtest_summary.iloc[0]
+            c1, c2, c3 = st.columns(3); c1.metric("Fixtures", int(summary.get("Fixtures", 0))); c2.metric("Log loss", dec(summary.get("LogLoss"), 3)); c3.metric("Brier score", dec(summary.get("BrierScore"), 3))
+            c1, c2, c3 = st.columns(3); c1.metric("Home calibration MAE", pct(summary.get("HomeCalibrationMAE"))); c2.metric("Draw calibration MAE", pct(summary.get("DrawCalibrationMAE"))); c3.metric("Away calibration MAE", pct(summary.get("AwayCalibrationMAE")))
+            if not model_comparison.empty:
+                st.markdown("### Baseline vs V1.2"); st.dataframe(model_comparison, use_container_width=True, hide_index=True)
 
 st.divider()
-st.caption(
-    "Research and decision-support only. Bet Quality Score is a heuristic ranking metric, not a probability. "
-    "Paper sizing and model-implied expected profit do not guarantee future profit."
-)
+st.caption("Research and decision-support only. Bet Quality Score is a heuristic ranking metric, not a probability. Paper sizing and model-implied expected profit do not guarantee future profit.")

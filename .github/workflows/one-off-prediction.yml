@@ -1,0 +1,62 @@
+name: One-Off Match Prediction
+
+on:
+  workflow_dispatch:
+    inputs:
+      home_team:
+        description: Home/listed-first team
+        required: true
+        default: Arsenal
+      away_team:
+        description: Away/listed-second team
+        required: true
+        default: Man City
+      match_date:
+        description: Match date YYYY-MM-DD
+        required: true
+        default: '2026-08-16'
+      neutral_venue:
+        description: Neutral venue?
+        required: true
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run one-off prediction
+        shell: bash
+        run: |
+          EXTRA=""
+          if [ "${{ inputs.neutral_venue }}" = "true" ]; then EXTRA="--neutral"; fi
+          python one_off_prediction.py \
+            --home "${{ inputs.home_team }}" \
+            --away "${{ inputs.away_team }}" \
+            --date "${{ inputs.match_date }}" \
+            $EXTRA
+
+      - name: Upload prediction artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: one-off-prediction
+          path: data/processed/one_off_prediction_latest.csv
+          if-no-files-found: error
+          retention-days: 30

@@ -100,6 +100,10 @@ portfolio:
   extreme_min_consensus_books: 3
   extreme_max_model_consensus_probability_gap: 0.18
   extreme_max_mybookie_price_deviation_pct: 0.20
+  ml_bucket_mult_100_149: 0.0
+  ml_bucket_mult_150_199: 1.0
+  ml_bucket_mult_200_299: 0.5
+  ml_bucket_mult_300_plus: 0.0
 
 backtest:
   min_prior_seasons_for_calibration: 2

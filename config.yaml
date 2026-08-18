@@ -92,6 +92,9 @@ portfolio:
   min_bet_quality: 60.0
   min_expected_return: 0.02
   min_stake_units: 0.25
+  require_v2_agreement: true
+  v2_min_expected_return: 0.00
+  v2_max_probability_gap: 0.10
 
 backtest:
   min_prior_seasons_for_calibration: 2

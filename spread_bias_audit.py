@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from io import BytesIO
 from pathlib import Path
 
 import numpy as np
@@ -26,8 +27,6 @@ def _line_bucket(point: float) -> str:
 
 
 def _supported_line(point: float) -> bool:
-    # Current engine settles whole and half-goal Asian lines exactly. Exclude
-    # quarter-goal split handicaps from this first audit rather than approximate.
     doubled = round(point * 2)
     return abs(point * 2 - doubled) < 1e-9
 
@@ -38,7 +37,7 @@ def fetch_handicap_history(cfg: dict) -> pd.DataFrame:
         url = FD_BASE.format(code=season_code(year), division=cfg["football_data_division"])
         resp = requests.get(url, timeout=45)
         resp.raise_for_status()
-        raw = pd.read_csv(pd.io.common.BytesIO(resp.content))
+        raw = pd.read_csv(BytesIO(resp.content))
         if "AHh" not in raw.columns:
             continue
         cols = [c for c in [

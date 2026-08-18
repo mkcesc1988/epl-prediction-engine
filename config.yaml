@@ -95,6 +95,11 @@ portfolio:
   require_v2_agreement: true
   v2_min_expected_return: 0.00
   v2_max_probability_gap: 0.10
+  extreme_edge_threshold: 0.25
+  extreme_max_v1_v2_probability_gap: 0.03
+  extreme_min_consensus_books: 3
+  extreme_max_model_consensus_probability_gap: 0.18
+  extreme_max_mybookie_price_deviation_pct: 0.20
 
 backtest:
   min_prior_seasons_for_calibration: 2

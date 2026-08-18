@@ -10,6 +10,7 @@ from model_v07 import build_predictions_v07
 from model_v11 import build_predictions_v11
 from model_v12 import build_predictions_v12
 from backtest import walk_forward_backtest
+from underdog_bias_audit import save_underdog_audit
 
 
 def _comparison_frame(base: pd.DataFrame, candidate: pd.DataFrame, candidate_label: str) -> pd.DataFrame:
@@ -77,7 +78,13 @@ def main() -> None:
     summary_v12.to_csv(cfg["paths"]["summary_v12"], index=False)
     evaluated_v12.to_csv(Path(cfg["paths"]["processed_dir"]) / "walkforward_predictions_v12.csv", index=False)
 
-    print("\n=== 8. COMPARE V1.0 VS V1.2 ===")
+    print("\n=== 8. AUDIT V1.2 UNDERDOG CALIBRATION AND ROI ===")
+    underdog_detail, underdog_summary = save_underdog_audit(candidate_v12, cfg["paths"]["processed_dir"])
+    print(f"Historical quoted home/away sides audited: {len(underdog_detail)}")
+    if not underdog_summary.empty:
+        print(underdog_summary.to_string(index=False))
+
+    print("\n=== 9. COMPARE V1.0 VS V1.2 ===")
     comparison_v12 = _comparison_frame(summary, summary_v12, "V12")
     comparison_v12.to_csv(cfg["paths"]["comparison_v12"], index=False)
 
@@ -97,6 +104,7 @@ def main() -> None:
     print(f"V1.0 backtest:   {cfg['paths']['summary']}")
     print(f"V1.2 predictions:{cfg['paths']['predictions_v12']}")
     print(f"V1.2 backtest:   {cfg['paths']['summary_v12']}")
+    print(f"Underdog audit:  {Path(cfg['paths']['processed_dir']) / 'underdog_bias_summary_v12.csv'}")
     print(f"V1.2 comparison: {cfg['paths']['comparison_v12']}")
     print(f"Validation:      {cfg['paths']['validation']}")
 

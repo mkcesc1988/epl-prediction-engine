@@ -77,6 +77,7 @@ jobs:
           git add -f data/processed/gameweek_rankings_latest.csv
           git add -f data/processed/v2_shadow_predictions_latest.csv
           git add -f data/processed/v1_v2_agreement_audit_latest.csv
+          git add -f data/processed/extreme_edge_audit_latest.csv
           git add -f data/processed/paper_portfolio_latest.csv
 
           if git diff --cached --quiet; then
@@ -100,6 +101,7 @@ jobs:
             data/processed/gameweek_rankings_latest.csv
             data/processed/v2_shadow_predictions_latest.csv
             data/processed/v1_v2_agreement_audit_latest.csv
+            data/processed/extreme_edge_audit_latest.csv
             data/processed/paper_portfolio_latest.csv
             data/history/*.csv
           if-no-files-found: warn

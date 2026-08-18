@@ -10,6 +10,7 @@ from daily_predictions import build_daily_predictions
 from pipeline import load_config, normalize_team
 
 ODDS_API_BASE = "https://api.the-odds-api.com/v4"
+MANUAL_MYBOOKIE_PATH = Path("data/manual_mybookie_odds.csv")
 
 
 def _norm(name: object) -> str:
@@ -34,13 +35,27 @@ def _is_mybookie(row: pd.Series) -> bool:
     return "mybookie" in title or "mybookie" in key
 
 
-def fetch_market_odds(cfg: dict) -> pd.DataFrame:
-    """Fetch current EPL market prices for paper-testing and model evaluation.
+def _load_manual_mybookie() -> pd.DataFrame:
+    if not MANUAL_MYBOOKIE_PATH.exists() or MANUAL_MYBOOKIE_PATH.stat().st_size == 0:
+        return pd.DataFrame()
+    manual = pd.read_csv(MANUAL_MYBOOKIE_PATH)
+    if manual.empty:
+        return manual
+    manual["HomeTeam"] = manual["HomeTeam"].map(_norm)
+    manual["AwayTeam"] = manual["AwayTeam"].map(_norm)
+    manual["Date"] = manual["Date"].astype(str)
+    manual["Bookmaker"] = manual.get("Bookmaker", "MyBookie.ag")
+    manual["BookmakerKey"] = manual.get("BookmakerKey", "mybookie_manual")
+    manual["BookLastUpdate"] = manual.get("ManualSource", "manual_screenshot")
+    manual["KickoffUTC"] = pd.NA
+    manual["EventId"] = "manual-" + manual.index.astype(str)
+    return manual[[
+        "EventId", "Date", "KickoffUTC", "HomeTeam", "AwayTeam", "Bookmaker",
+        "BookmakerKey", "BookLastUpdate", "Market", "Outcome", "Point", "DecimalOdds"
+    ]]
 
-    Requires THE_ODDS_API_KEY in the environment. This module records market
-    prices and model-market discrepancies only. It does not place wagers or
-    calculate stakes.
-    """
+
+def fetch_market_odds(cfg: dict) -> pd.DataFrame:
     key = os.getenv("THE_ODDS_API_KEY", "").strip()
     if not key:
         raise RuntimeError(
@@ -95,15 +110,42 @@ def fetch_market_odds(cfg: dict) -> pd.DataFrame:
                         "DecimalOdds": float(price),
                     })
 
-    return pd.DataFrame(rows)
+    live = pd.DataFrame(rows)
+    manual = _load_manual_mybookie()
+    if manual.empty:
+        return live
+
+    if live.empty:
+        return manual
+
+    # Keep the broader live market, but replace matching MyBookie quotes with the
+    # user's current screenshot prices. This lets rankings use the actual book the
+    # user can access while preserving other books for market benchmarking.
+    live = live.copy()
+    live["Date"] = live["Date"].astype(str)
+    live["HomeTeam"] = live["HomeTeam"].map(_norm)
+    live["AwayTeam"] = live["AwayTeam"].map(_norm)
+
+    manual_keys = set()
+    for _, r in manual.iterrows():
+        point = pd.to_numeric(r.get("Point"), errors="coerce")
+        point_key = None if pd.isna(point) else round(float(point), 4)
+        manual_keys.add((r["Date"], r["HomeTeam"], r["AwayTeam"], str(r["Market"]), str(r["Outcome"]), point_key))
+
+    keep_mask = []
+    for _, r in live.iterrows():
+        if not _is_mybookie(r):
+            keep_mask.append(True)
+            continue
+        point = pd.to_numeric(r.get("Point"), errors="coerce")
+        point_key = None if pd.isna(point) else round(float(point), 4)
+        key_tuple = (r["Date"], r["HomeTeam"], r["AwayTeam"], str(r["Market"]), str(r["Outcome"]), point_key)
+        keep_mask.append(key_tuple not in manual_keys)
+
+    return pd.concat([live.loc[keep_mask], manual], ignore_index=True, sort=False)
 
 
 def compare_totals_25(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataFrame:
-    """Compare V1.2 calibrated O/U 2.5 probabilities with observed market prices.
-
-    The output preserves the best available market quote as a benchmark and
-    separately records MyBookie if present in the Odds API response.
-    """
     if predictions.empty or odds.empty:
         return pd.DataFrame()
 
@@ -116,7 +158,6 @@ def compare_totals_25(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataF
     totals["IsMyBookie"] = totals.apply(_is_mybookie, axis=1)
 
     group_cols = ["Date", "HomeTeam", "AwayTeam", "Side"]
-
     best_idx = totals.groupby(group_cols)["DecimalOdds"].idxmax()
     best = totals.loc[best_idx].copy().reset_index(drop=True)
     best = best.rename(columns={
@@ -147,65 +188,38 @@ def compare_totals_25(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataF
 
     pred = predictions.copy()
     pred["Date"] = pred["Date"].astype(str)
-    merged = quotes.merge(
-        pred,
-        on=["Date", "HomeTeam", "AwayTeam"],
-        how="inner",
-        validate="many_to_one",
-        suffixes=("_Market", "_Model"),
-    )
+    merged = quotes.merge(pred, on=["Date", "HomeTeam", "AwayTeam"], how="inner", validate="many_to_one", suffixes=("_Market", "_Model"))
 
     rows: list[dict] = []
     for _, r in merged.iterrows():
         side = r["Side"]
         model_p = float(r["CalP_Over2_5"] if side == "Over" else r["CalP_Under2_5"])
         fair_odds = 1.0 / model_p
-
         best_odds = float(r["BestMarketOdds"])
         best_implied = 1.0 / best_odds
         best_ev = model_p * best_odds - 1.0
-
         my_odds_raw = r.get("MyBookieOdds")
         my_odds = float(my_odds_raw) if pd.notna(my_odds_raw) else None
         my_implied = (1.0 / my_odds) if my_odds else None
         my_ev = (model_p * my_odds - 1.0) if my_odds else None
-
         rows.append({
-            "Date": r["Date"],
-            "KickoffUTC": r.get("KickoffUTC_Model", r.get("KickoffUTC_Market")),
-            "HomeTeam": r["HomeTeam"],
-            "AwayTeam": r["AwayTeam"],
-            "Market": "Total Goals 2.5",
-            "Side": side,
-            "ModelVersion": r.get("ModelVersion", "V1.2"),
-            "ModelProbability": model_p,
-            "ModelFairOdds": fair_odds,
-            "Bookmaker": r["BestBookmaker"],
-            "MarketOdds": best_odds,
-            "MarketImpliedProbability": best_implied,
-            "ProbabilityDifference": model_p - best_implied,
-            "ExpectedReturnPerUnit": best_ev,
-            "BestBookmaker": r["BestBookmaker"],
-            "BestMarketOdds": best_odds,
-            "BestMarketImpliedProbability": best_implied,
-            "BestMarketExpectedReturn": best_ev,
-            "MyBookieAvailable": my_odds is not None,
-            "MyBookieBookmaker": r.get("MyBookieBookmaker"),
-            "MyBookieOdds": my_odds,
-            "MyBookieImpliedProbability": my_implied,
-            "MyBookieProbabilityDifference": (model_p - my_implied) if my_implied else None,
-            "MyBookieExpectedReturn": my_ev,
-            "MyBookiePriceGapVsBest": (my_odds - best_odds) if my_odds else None,
-            "Lambda_Home_xG": r.get("Lambda_Home_xG"),
-            "Lambda_Away_xG": r.get("Lambda_Away_xG"),
-            "Lambda_Total_xG": r.get("Lambda_Total_xG"),
-            "MostLikelyScore": r.get("MostLikelyScore"),
+            "Date": r["Date"], "KickoffUTC": r.get("KickoffUTC_Model", r.get("KickoffUTC_Market")),
+            "HomeTeam": r["HomeTeam"], "AwayTeam": r["AwayTeam"], "Market": "Total Goals 2.5", "Side": side,
+            "ModelVersion": r.get("ModelVersion", "V1.2"), "ModelProbability": model_p, "ModelFairOdds": fair_odds,
+            "Bookmaker": r["BestBookmaker"], "MarketOdds": best_odds, "MarketImpliedProbability": best_implied,
+            "ProbabilityDifference": model_p - best_implied, "ExpectedReturnPerUnit": best_ev,
+            "BestBookmaker": r["BestBookmaker"], "BestMarketOdds": best_odds, "BestMarketImpliedProbability": best_implied,
+            "BestMarketExpectedReturn": best_ev, "MyBookieAvailable": my_odds is not None,
+            "MyBookieBookmaker": r.get("MyBookieBookmaker"), "MyBookieOdds": my_odds,
+            "MyBookieImpliedProbability": my_implied, "MyBookieProbabilityDifference": (model_p - my_implied) if my_implied else None,
+            "MyBookieExpectedReturn": my_ev, "MyBookiePriceGapVsBest": (my_odds - best_odds) if my_odds else None,
+            "Lambda_Home_xG": r.get("Lambda_Home_xG"), "Lambda_Away_xG": r.get("Lambda_Away_xG"),
+            "Lambda_Total_xG": r.get("Lambda_Total_xG"), "MostLikelyScore": r.get("MostLikelyScore"),
         })
 
     out = pd.DataFrame(rows)
     if out.empty:
         return out
-
     sort_col = "MyBookieExpectedReturn" if out["MyBookieExpectedReturn"].notna().any() else "BestMarketExpectedReturn"
     return out.sort_values(sort_col, ascending=False, na_position="last").reset_index(drop=True)
 
@@ -214,16 +228,12 @@ def main() -> None:
     cfg = load_config()
     out_dir = Path(cfg["paths"]["processed_dir"])
     out_dir.mkdir(parents=True, exist_ok=True)
-
     predictions = build_daily_predictions(cfg)
     predictions.to_csv(out_dir / "daily_predictions_latest.csv", index=False)
-
     odds = fetch_market_odds(cfg)
     odds.to_csv(out_dir / "market_odds_latest.csv", index=False)
-
     comparison = compare_totals_25(predictions, odds)
     comparison.to_csv(out_dir / "market_comparison_latest.csv", index=False)
-
     print(f"Daily fixtures predicted: {len(predictions)}")
     print(f"Market outcome rows:      {len(odds)}")
     print(f"O/U 2.5 comparisons:     {len(comparison)}")
@@ -231,11 +241,7 @@ def main() -> None:
         my_count = int(comparison["MyBookieAvailable"].fillna(False).sum()) if "MyBookieAvailable" in comparison.columns else 0
         print(f"MyBookie comparisons:    {my_count}")
         pd.set_option("display.max_columns", None)
-        print(comparison[[
-            "Date", "HomeTeam", "AwayTeam", "Side", "ModelProbability",
-            "ModelFairOdds", "MyBookieOdds", "MyBookieExpectedReturn",
-            "BestBookmaker", "BestMarketOdds", "BestMarketExpectedReturn"
-        ]].to_string(index=False))
+        print(comparison[["Date", "HomeTeam", "AwayTeam", "Side", "ModelProbability", "ModelFairOdds", "MyBookieOdds", "MyBookieExpectedReturn", "BestBookmaker", "BestMarketOdds", "BestMarketExpectedReturn"]].to_string(index=False))
 
 
 if __name__ == "__main__":

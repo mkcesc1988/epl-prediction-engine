@@ -65,13 +65,22 @@ def fetch_football_data(start_year: int, division: str, raw_dir: str) -> pd.Data
     df["HomeTeam"] = df["HomeTeam"].map(normalize_team)
     df["AwayTeam"] = df["AwayTeam"].map(normalize_team)
 
+    # Preserve both total-goals and 1X2 prices. The 1X2 fields are required for
+    # historical calibration/ROI audits by market-implied underdog bucket.
     wanted = [
         "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG",
+        "B365H", "B365D", "B365A", "PSH", "PSD", "PSA",
         "B365>2.5", "B365<2.5", "P>2.5", "P<2.5", "PC>2.5", "PC<2.5",
     ]
     wanted = [c for c in wanted if c in df.columns]
     df = df[wanted].copy()
     df = df.rename(columns={
+        "B365H": "B365_Home",
+        "B365D": "B365_Draw",
+        "B365A": "B365_Away",
+        "PSH": "Pinnacle_Home",
+        "PSD": "Pinnacle_Draw",
+        "PSA": "Pinnacle_Away",
         "B365>2.5": "B365_Over2_5",
         "B365<2.5": "B365_Under2_5",
         "P>2.5": "Pinnacle_Over2_5",
@@ -101,7 +110,6 @@ def _num(value: object) -> float | None:
 
 
 def fetch_understat_xg(start_year: int, raw_dir: str) -> pd.DataFrame:
-    """Download all EPL fixtures for a season directly from Understat's league endpoint."""
     print(f"  Understat {season_label(start_year)} league match data")
     with UnderstatClient() as client:
         matches = client.league(league="EPL").get_match_data(season=str(start_year))

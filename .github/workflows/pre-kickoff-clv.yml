@@ -1,0 +1,70 @@
+name: Pre-kickoff CLV capture
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
+
+concurrency:
+  group: pre-kickoff-clv
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Capture only when a tracked kickoff window is due
+        env:
+          THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+        run: python pre_kickoff_clv_capture.py
+
+      - name: Publish CLV snapshots and updated ledgers
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/history/*.csv
+          git add -f data/processed/market_odds_latest.csv
+          git add -f data/processed/market_comparison_latest.csv
+          git add -f data/processed/daily_predictions_latest.csv
+
+          if git diff --cached --quiet; then
+            echo "No CLV capture due, nothing to publish"
+          else
+            git commit -m "data: capture pre-kickoff CLV snapshot [skip ci]"
+            git fetch origin main
+            git rebase -X theirs origin/main
+            git push origin HEAD:main
+          fi
+
+      - name: Upload CLV capture artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pre-kickoff-clv
+          path: |
+            data/history/pre_kickoff_capture_log.csv
+            data/history/market_odds_history.csv
+            data/history/real_money_bet_ledger.csv
+            data/history/auto_bet_ledger.csv
+          if-no-files-found: warn
+          retention-days: 30

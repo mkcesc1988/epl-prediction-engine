@@ -65,8 +65,11 @@ jobs:
       - name: Build closing-line report
         run: python closing_line_tracker.py
 
-      - name: Update automatic bet ledger and performance analytics
+      - name: Update automatic paper-bet ledger and analytics
         run: python bet_tracker.py
+
+      - name: Update separate real-money execution ledger
+        run: python real_money_tracker.py
 
       - name: Publish history and latest dashboard outputs
         run: |

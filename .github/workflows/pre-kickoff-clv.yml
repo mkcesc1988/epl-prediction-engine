@@ -3,7 +3,7 @@ name: Pre-kickoff CLV capture
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '*/15 10-21 * * *'
 
 concurrency:
   group: pre-kickoff-clv

@@ -71,6 +71,9 @@ jobs:
       - name: Update separate real-money execution ledger
         run: python real_money_tracker.py
 
+      - name: Apply verified manual exceptional results
+        run: python manual_result_settler.py
+
       - name: Reconcile settlements with two result sources
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}

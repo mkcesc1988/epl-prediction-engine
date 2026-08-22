@@ -71,6 +71,16 @@ jobs:
       - name: Update separate real-money execution ledger
         run: python real_money_tracker.py
 
+      - name: Reconcile settlements with two result sources
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+        run: python settlement_guard.py
+
+      - name: Rebuild analytics after settlement reconciliation
+        run: |
+          python bet_tracker.py
+          python real_money_tracker.py
+
       - name: Publish history and latest dashboard outputs
         run: |
           git config user.name "github-actions[bot]"
@@ -95,6 +105,9 @@ jobs:
             git rebase -X theirs origin/main
             git push origin HEAD:main
           fi
+
+      - name: Fail workflow if settlement integrity is not clean
+        run: python settlement_guard.py --assert-clean
 
       - name: Upload comparison outputs
         if: always()

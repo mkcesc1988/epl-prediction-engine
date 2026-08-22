@@ -16,3 +16,4 @@ real_money,RM-20260821-COV15,2026-08-21T19:00:00+00:00,Arsenal,Coventry City,Spr
 real_money,RM-20260822-IPSML,2026-08-22T14:00:00+00:00,Ipswich Town,Sunderland,Moneyline,Ipswich Town,,,,,OPEN,W,,INFO
 real_money,RM-20260822-LEE,2026-08-22T14:00:00+00:00,Nott'm Forest,Leeds,Moneyline,Leeds,,,0-1,API_FOOTBALL_ONLY,W,W,,INFO
 real_money,RM-20260822-CPML,2026-08-22T14:00:00+00:00,Everton,Crystal Palace,Moneyline,Crystal Palace,,,2-0,API_FOOTBALL_ONLY,L,L,,INFO
+real_money,RM-20260822-NEVML,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Moneyline,Newcastle,,,,,OPEN,OPEN,,INFO

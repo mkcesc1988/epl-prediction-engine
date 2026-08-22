@@ -1,0 +1,85 @@
+name: EPL settlement reconciliation
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/30 10-23 * * *'
+
+concurrency:
+  group: epl-data-publisher
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  settle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Apply verified exceptional results
+        run: |
+          if [ -f manual_result_settler.py ]; then
+            python manual_result_settler.py
+          fi
+
+      - name: Reconcile finished fixtures and audit ledgers
+        env:
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+        run: python settlement_guard.py
+
+      - name: Rebuild settlement performance summaries
+        run: python settlement_summaries.py
+
+      - name: Assert settlement integrity
+        run: python settlement_guard.py --assert-clean
+
+      - name: Publish settlement updates only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/history/auto_bet_ledger.csv
+          git add data/history/real_money_bet_ledger.csv
+          git add data/history/bet_performance_summary.csv
+          git add data/history/real_money_performance_summary.csv
+          git add data/history/settlement_audit_latest.csv
+
+          if git diff --cached --quiet; then
+            echo "No settlement changes to publish"
+          else
+            git commit -m "data: reconcile finished EPL bets [skip ci]"
+            git fetch origin main
+            git rebase -X theirs origin/main
+            git push origin HEAD:main
+          fi
+
+      - name: Upload settlement audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: settlement-reconciliation
+          path: |
+            data/history/auto_bet_ledger.csv
+            data/history/real_money_bet_ledger.csv
+            data/history/bet_performance_summary.csv
+            data/history/real_money_performance_summary.csv
+            data/history/settlement_audit_latest.csv
+          if-no-files-found: warn
+          retention-days: 14

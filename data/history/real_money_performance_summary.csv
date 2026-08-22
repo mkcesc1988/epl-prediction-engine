@@ -1,3 +1,4 @@
 Segment,Bets,Wins,Losses,Pushes,StakeUSD,ProfitUSD,ROI,AvgPriceCLV,AvgSameLinePriceCLV
-ALL,1,0,1,0,1.0,-1.0,-1.0,0.0,0.0
+ALL,3,1,2,0,3.0,-0.010000000000000009,-0.003333333333333336,-0.005343778603348929,0.0
+MarketType:Moneyline,2,1,1,0,2.0,0.99,0.495,-0.008015667905023394,
 MarketType:Spread,1,0,1,0,1.0,-1.0,-1.0,0.0,0.0

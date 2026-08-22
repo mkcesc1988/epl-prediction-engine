@@ -6,7 +6,7 @@ on:
     - cron: '*/15 10-21 * * *'
 
 concurrency:
-  group: pre-kickoff-clv
+  group: epl-data-publisher
   cancel-in-progress: false
 
 permissions:
@@ -38,11 +38,15 @@ jobs:
           THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
         run: python pre_kickoff_clv_capture.py
 
-      - name: Publish CLV snapshots and updated ledgers
+      - name: Publish CLV snapshots only
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/history/*.csv
+          git add data/history/pre_kickoff_capture_log.csv || true
+          git add data/history/real_money_clv_snapshots.csv || true
+          git add data/history/market_odds_history.csv || true
+          git add data/history/prediction_history.csv || true
+          git add data/history/market_comparison_history.csv || true
           git add -f data/processed/market_odds_latest.csv
           git add -f data/processed/market_comparison_latest.csv
           git add -f data/processed/daily_predictions_latest.csv
@@ -63,8 +67,7 @@ jobs:
           name: pre-kickoff-clv
           path: |
             data/history/pre_kickoff_capture_log.csv
+            data/history/real_money_clv_snapshots.csv
             data/history/market_odds_history.csv
-            data/history/real_money_bet_ledger.csv
-            data/history/auto_bet_ledger.csv
           if-no-files-found: warn
           retention-days: 30

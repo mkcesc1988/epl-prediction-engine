@@ -39,6 +39,12 @@ jobs:
             python manual_result_settler.py
           fi
 
+      - name: Apply Football-Data EPL result fallback
+        run: |
+          if [ -f football_data_result_settler.py ]; then
+            python football_data_result_settler.py
+          fi
+
       - name: Reconcile finished fixtures and audit ledgers
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}

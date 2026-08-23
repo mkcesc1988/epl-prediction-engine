@@ -1,0 +1,3 @@
+RealBetID,Label,SnapshotUTC,KickoffUTC,HomeTeam,AwayTeam,MarketType,Selection,EntryOdds,EntryLine,BenchmarkClosingOdds,BenchmarkClosingLine,BenchmarkLineMove,BenchmarkSource,HoursBeforeKickoff,BenchmarkPriceCLV
+RM-20260822-NEVML,T15,2026-08-23T15:20:52.882344+00:00,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Moneyline,Newcastle,3.75,,3.75,,,consensus_median_8_quotes,0.1519771266666666,0.0
+RM-20260822-NEVML,T2,2026-08-23T15:28:00.008676+00:00,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Moneyline,Newcastle,3.75,,3.76,,,consensus_median_7_quotes,0.03333092333333333,-0.0026595744680850686

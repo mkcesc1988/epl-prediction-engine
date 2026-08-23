@@ -14,6 +14,7 @@ paper,efcd1a18f6804a01,2026-08-22T14:00:00+00:00,Ipswich Town,Sunderland,Total,U
 paper,d2da33b9d8d12b32,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Spread,Newcastle +0.5,0.5,,,,OPEN,OPEN,,INFO
 paper,fb295f121af5b392,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Moneyline,Fulham,,,,,OPEN,OPEN,,INFO
 paper,c4e1d6851bed9863,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Spread,Bournemouth +1.5,1.5,,,,OPEN,OPEN,,INFO
+paper,cae04a3feef36dd2,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Total,Over 2.5,2.5,,,,OPEN,OPEN,,INFO
 real_money,RM-20260821-COV15,2026-08-21T19:00:00+00:00,Arsenal,Coventry City,Spread,Coventry City +1.5,1.5,,,,OPEN,L,,INFO
 real_money,RM-20260822-IPSML,2026-08-22T14:00:00+00:00,Ipswich Town,Sunderland,Moneyline,Ipswich Town,,,,,OPEN,W,,INFO
 real_money,RM-20260822-LEE,2026-08-22T14:00:00+00:00,Nott'm Forest,Leeds,Moneyline,Leeds,,,0-1,API_FOOTBALL_ONLY,W,W,,INFO

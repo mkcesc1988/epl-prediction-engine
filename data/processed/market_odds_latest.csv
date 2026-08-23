@@ -1,424 +1,424 @@
 EventId,Date,KickoffUTC,HomeTeam,AwayTeam,Bookmaker,BookmakerKey,BookLastUpdate,Market,Outcome,Point,DecimalOdds
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Aston Villa,,3.2
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Brighton and Hove Albion,,2.2
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,3.5
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Aston Villa,,3.1
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Brighton and Hove Albion,,2.2
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Draw,,3.3
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetMGM,betmgm,2026-08-23T10:34:10Z,totals,Over,2.5,1.77
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetMGM,betmgm,2026-08-23T10:34:10Z,totals,Under,2.5,1.91
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Aston Villa,,3.15
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Brighton and Hove Albion,,2.25
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Draw,,3.5
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Aston Villa,,3.1
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Brighton and Hove Albion,,2.25
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,3.5
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.75
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,2.05
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Aston Villa,,3.34
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Brighton and Hove Albion,,2.18
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Draw,,3.61
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,spreads,Aston Villa,0.5,1.75
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,spreads,Brighton and Hove Albion,-0.5,2.18
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,totals,Over,2.5,1.85
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,totals,Under,2.5,2.02
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Aston Villa,,3.34
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Brighton and Hove Albion,,2.18
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Draw,,3.61
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,LowVig.ag,lowvig,2026-08-23T10:34:11Z,spreads,Aston Villa,0.5,1.75
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,LowVig.ag,lowvig,2026-08-23T10:34:11Z,spreads,Brighton and Hove Albion,-0.5,2.18
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,LowVig.ag,lowvig,2026-08-23T10:34:11Z,totals,Over,2.5,1.85
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,LowVig.ag,lowvig,2026-08-23T10:34:11Z,totals,Under,2.5,2.02
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Aston Villa,,3.2
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Brighton and Hove Albion,,2.25
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,3.45
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Aston Villa,0.25,1.89
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Brighton and Hove Albion,-0.25,1.93
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,2.5,1.83
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,2.5,2.0
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetUS,betus,2026-08-23T10:33:45Z,h2h,Aston Villa,,3.34
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetUS,betus,2026-08-23T10:33:45Z,h2h,Brighton and Hove Albion,,2.18
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetUS,betus,2026-08-23T10:33:45Z,h2h,Draw,,3.61
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetUS,betus,2026-08-23T10:33:45Z,spreads,Aston Villa,0.5,1.71
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetUS,betus,2026-08-23T10:33:45Z,spreads,Brighton and Hove Albion,-0.5,2.2
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetUS,betus,2026-08-23T10:33:45Z,totals,Over,2.5,1.8
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetUS,betus,2026-08-23T10:33:45Z,totals,Under,2.5,2.05
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Brighton and Hove Albion,,2.22
-f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Brighton and Hove Albion,-0.5,2.17
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Bournemouth,,6.5
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Manchester City,,1.45
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,4.8
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Bournemouth,,5.5
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Manchester City,,1.44
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Draw,,4.8
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetMGM,betmgm,2026-08-23T10:34:10Z,totals,Over,3.5,2.05
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetMGM,betmgm,2026-08-23T10:34:10Z,totals,Under,3.5,1.69
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Bournemouth,,6.0
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Manchester City,,1.48
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Draw,,4.9
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Bournemouth,,6.4
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Manchester City,,1.43
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,5.0
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,3.5,2.12
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,3.5,1.71
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Bournemouth,,6.4
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Manchester City,,1.48
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Draw,,4.95
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,spreads,Bournemouth,1.5,1.74
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,spreads,Manchester City,-1.5,2.19
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,totals,Over,3.5,2.11
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,totals,Under,3.5,1.79
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Bournemouth,,6.4
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Manchester City,,1.48
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Draw,,4.95
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,LowVig.ag,lowvig,2026-08-23T10:34:11Z,spreads,Bournemouth,1.5,1.74
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,LowVig.ag,lowvig,2026-08-23T10:34:11Z,spreads,Manchester City,-1.5,2.19
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,LowVig.ag,lowvig,2026-08-23T10:34:11Z,totals,Over,3.5,2.11
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,LowVig.ag,lowvig,2026-08-23T10:34:11Z,totals,Under,3.5,1.79
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Bournemouth,,6.0
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Manchester City,,1.48
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,4.9
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Bournemouth,1.25,1.89
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Manchester City,-1.25,1.93
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,3.5,2.13
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,3.5,1.74
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetUS,betus,2026-08-23T10:33:45Z,h2h,Bournemouth,,6.3
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetUS,betus,2026-08-23T10:33:45Z,h2h,Manchester City,,1.47
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetUS,betus,2026-08-23T10:33:45Z,h2h,Draw,,4.85
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetUS,betus,2026-08-23T10:33:45Z,spreads,Bournemouth,1.5,1.74
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetUS,betus,2026-08-23T10:33:45Z,spreads,Manchester City,-1.5,2.15
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetUS,betus,2026-08-23T10:33:45Z,totals,Over,3.5,2.07
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetUS,betus,2026-08-23T10:33:45Z,totals,Under,3.5,1.79
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Manchester City,,1.45
-87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Manchester City,-1.5,2.09
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Liverpool,,1.91
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Newcastle United,,3.8
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,3.7
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Liverpool,,1.91
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Newcastle United,,3.4
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Draw,,3.7
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetMGM,betmgm,2026-08-23T10:34:10Z,totals,Over,3.5,2.2
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetMGM,betmgm,2026-08-23T10:34:10Z,totals,Under,3.5,1.57
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Liverpool,,1.95
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Newcastle United,,3.65
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Draw,,3.85
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Liverpool,,1.93
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Newcastle United,,3.7
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,3.8
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,3.5,2.23
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,3.5,1.64
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Liverpool,,1.94
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Newcastle United,,3.85
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Draw,,3.85
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,spreads,Liverpool,-0.5,1.94
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,spreads,Newcastle United,0.5,1.91
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,totals,Over,3.0,1.85
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,totals,Under,3.0,2.02
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Liverpool,,1.94
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Newcastle United,,3.85
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Draw,,3.85
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T10:34:11Z,spreads,Liverpool,-0.5,1.94
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T10:34:11Z,spreads,Newcastle United,0.5,1.91
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T10:34:11Z,totals,Over,3.0,1.85
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T10:34:11Z,totals,Under,3.0,2.02
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Liverpool,,1.95
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Newcastle United,,3.7
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,3.8
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Liverpool,-0.5,1.93
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Newcastle United,0.5,1.89
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,3.5,2.28
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,3.5,1.65
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T10:33:45Z,h2h,Liverpool,,1.95
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T10:33:45Z,h2h,Newcastle United,,3.8
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T10:33:45Z,h2h,Draw,,3.8
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T10:33:45Z,spreads,Liverpool,-0.5,1.91
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T10:33:45Z,spreads,Newcastle United,0.5,1.91
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T10:33:45Z,totals,Over,3.0,1.85
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T10:33:45Z,totals,Under,3.0,1.98
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Newcastle United,,3.55
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Newcastle United,0.5,1.83
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,3.0,1.78
-ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,3.0,1.96
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Chelsea,,1.83
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Fulham,,4.0
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,3.8
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Chelsea,,1.87
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Fulham,,3.7
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetMGM,betmgm,2026-08-23T10:34:10Z,h2h,Draw,,3.6
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetMGM,betmgm,2026-08-23T10:34:10Z,totals,Over,2.5,1.61
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetMGM,betmgm,2026-08-23T10:34:10Z,totals,Under,2.5,2.2
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Chelsea,,1.87
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Fulham,,3.9
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Draw,,3.95
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Chelsea,,1.85
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Fulham,,4.1
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,3.75
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.64
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,2.23
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Chelsea,,1.88
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Fulham,,4.01
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,h2h,Draw,,3.92
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,spreads,Chelsea,-0.5,1.88
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,spreads,Fulham,0.5,1.97
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,totals,Over,3.0,2.1
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T10:34:13Z,totals,Under,3.0,1.79
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Chelsea,,1.88
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Fulham,,4.01
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T10:34:11Z,h2h,Draw,,3.92
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T10:34:11Z,spreads,Chelsea,-0.5,1.88
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T10:34:11Z,spreads,Fulham,0.5,1.97
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T10:34:11Z,totals,Over,3.0,2.1
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T10:34:11Z,totals,Under,3.0,1.79
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Chelsea,,1.83
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Fulham,,3.95
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,3.95
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Chelsea,-0.5,1.87
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Fulham,0.5,1.95
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,2.5,1.67
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,2.5,2.25
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T10:33:45Z,h2h,Chelsea,,1.86
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T10:33:45Z,h2h,Fulham,,3.85
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T10:33:45Z,h2h,Draw,,3.9
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T10:33:45Z,spreads,Chelsea,-0.5,1.86
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T10:33:45Z,spreads,Fulham,0.5,1.96
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T10:33:45Z,totals,Over,3.0,2.05
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T10:33:45Z,totals,Under,3.0,1.8
-4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,2.18
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Crystal Palace,,5.2
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Manchester City,,1.56
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Draw,,4.1
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Crystal Palace,0.5,2.3
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Manchester City,-0.5,1.55
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,2.5,1.61
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,2.18
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Crystal Palace,,5.5
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Manchester City,,1.53
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,4.2
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Crystal Palace,,5.5
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Manchester City,,1.56
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Draw,,4.3
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Crystal Palace,,5.4
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Manchester City,,1.57
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,4.25
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.63
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,2.25
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Crystal Palace,,5.4
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Manchester City,,1.57
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,4.3
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Crystal Palace,1.0,1.87
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Manchester City,-1.0,1.95
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,3.0,2.1
-373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,3.0,1.77
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Liverpool,,1.46
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Nottingham Forest,,5.8
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Draw,,4.5
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Liverpool,-1.5,2.19
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Nottingham Forest,1.5,1.6
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,2.5,1.56
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,2.27
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Liverpool,,1.42
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Nottingham Forest,,6.0
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,4.6
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Liverpool,,1.49
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Nottingham Forest,,5.75
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Draw,,4.6
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Liverpool,,1.5
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Nottingham Forest,,6.25
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,4.5
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.6
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,2.3
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Liverpool,,1.51
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Nottingham Forest,,6.0
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,4.6
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Liverpool,-1.25,2.02
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Nottingham Forest,1.25,1.82
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,3.0,2.0
-feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,3.0,1.83
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Bournemouth,,1.95
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Everton,,3.5
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,3.7
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Bournemouth,,1.92
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Everton,,3.65
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Draw,,3.5
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Bournemouth,-0.5,1.89
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Everton,0.5,1.81
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,2.5,1.79
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,1.93
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Bournemouth,,2.05
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Everton,,3.6
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Draw,,3.5
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Bournemouth,,1.97
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Everton,,3.7
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,3.6
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.78
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,2.0
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Bournemouth,,2.0
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Everton,,3.6
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,3.6
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Bournemouth,-0.5,1.95
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Everton,0.5,1.87
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,2.5,1.85
-ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,2.5,1.98
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Coventry City,,1.88
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Hull City,,3.75
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Draw,,3.55
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Coventry City,-0.5,1.85
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Hull City,0.5,1.85
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,2.5,1.69
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,2.04
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Coventry City,,1.83
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Hull City,,3.7
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,3.7
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Coventry City,,1.91
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Hull City,,4.3
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Draw,,3.35
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Coventry City,,1.92
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Hull City,,3.85
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,3.7
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.77
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,2.02
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Coventry City,,1.91
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Hull City,,4.2
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,3.5
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Coventry City,-0.5,1.89
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Hull City,0.5,1.93
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,2.5,1.75
-374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,2.5,2.12
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Newcastle United,,3.2
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Tottenham Hotspur,,2.1
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,3.7
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Newcastle United,,3.12
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Tottenham Hotspur,,2.12
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Draw,,3.46
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Newcastle United,0.5,1.67
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Tottenham Hotspur,-0.5,2.08
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,2.5,1.7
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,2.04
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Newcastle United,,3.3
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Tottenham Hotspur,,2.1
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,DraftKings,draftkings,2026-08-23T10:33:45Z,h2h,Draw,,3.55
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Newcastle United,,3.3
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Tottenham Hotspur,,2.12
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,3.6
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.72
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,2.1
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Newcastle United,,3.3
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Tottenham Hotspur,,2.1
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,3.65
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Newcastle United,0.25,1.95
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Tottenham Hotspur,-0.25,1.87
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,2.5,1.75
-7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,2.5,2.12
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Brentford,,2.7
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Leeds United,,2.5
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,3.4
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Brentford,,2.61
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Leeds United,,2.51
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Draw,,3.34
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Brentford,0.5,1.49
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Leeds United,-0.5,2.44
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,2.5,1.83
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,1.88
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Brentford,,2.75
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Leeds United,,2.5
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,3.45
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Brentford,0.0,1.95
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Leeds United,0.0,1.87
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,2.5,1.91
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,2.5,1.91
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Brentford,,2.75
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Leeds United,,2.55
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,3.4
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.85
-e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,1.93
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Brighton and Hove Albion,,3.4
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Chelsea,,2.0
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,3.7
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Brighton and Hove Albion,,3.6
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Chelsea,,1.9
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Draw,,3.6
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Brighton and Hove Albion,0.5,1.83
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Chelsea,-0.5,1.88
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,2.5,1.69
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,2.04
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Brighton and Hove Albion,,3.5
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Chelsea,,2.0
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,3.8
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Brighton and Hove Albion,0.5,1.87
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Chelsea,-0.5,1.95
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,2.5,1.75
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,2.5,2.12
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Brighton and Hove Albion,,3.65
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Chelsea,,2.0
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,3.65
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.73
-6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,2.08
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Fulham,,2.7
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Sunderland,,2.55
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,3.4
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Fulham,,2.54
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Sunderland,,2.66
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Draw,,3.22
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Fulham,-0.5,2.47
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Sunderland,0.5,1.48
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,2.5,1.96
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,1.76
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Fulham,,2.75
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Sunderland,,2.6
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,3.3
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,2.06
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,1.75
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Fulham,,2.8
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Sunderland,,2.6
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,3.3
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Fulham,0.0,1.87
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Sunderland,0.0,1.95
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,2.5,2.02
-9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,2.5,1.82
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Ipswich Town,,7.0
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Manchester United,,1.4
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Draw,,4.5
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Ipswich Town,1.5,1.69
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Manchester United,-1.5,2.05
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,2.5,1.58
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,2.23
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Ipswich Town,,7.0
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Manchester United,,1.37
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,5.1
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Ipswich Town,,7.0
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Manchester United,,1.43
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,5.0
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Ipswich Town,1.25,1.93
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Manchester United,-1.25,1.89
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,2.5,1.62
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,2.5,2.32
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Ipswich Town,,7.0
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Manchester United,,1.42
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,4.8
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.61
-5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,2.28
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Arsenal,,1.69
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Aston Villa,,4.5
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,FanDuel,fanduel,2026-08-23T10:34:31Z,h2h,Draw,,3.7
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Arsenal,,1.75
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Aston Villa,,4.4
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,h2h,Draw,,3.55
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Arsenal,-0.5,1.74
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,spreads,Aston Villa,0.5,1.99
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Over,2.5,1.85
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T10:33:28Z,totals,Under,2.5,1.85
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Arsenal,,1.74
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Aston Villa,,4.7
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T10:32:27Z,h2h,Draw,,3.85
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Arsenal,-0.75,1.95
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T10:32:27Z,spreads,Aston Villa,0.75,1.87
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T10:32:27Z,totals,Over,2.5,1.91
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T10:32:27Z,totals,Under,2.5,1.91
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Arsenal,,1.73
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Aston Villa,,4.8
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetRivers,betrivers,2026-08-23T10:33:46Z,h2h,Draw,,3.75
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Over,2.5,1.85
-2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetRivers,betrivers,2026-08-23T10:33:46Z,totals,Under,2.5,1.92
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Aston Villa,,23.0
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Brighton and Hove Albion,,1.07
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,9.5
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Aston Villa,,23.0
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Brighton and Hove Albion,,1.09
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,9.75
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,3.5,1.57
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,3.5,2.25
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Aston Villa,,51.0
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Brighton and Hove Albion,,1.01
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Draw,,21.0
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Aston Villa,,26.0
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Brighton and Hove Albion,,1.08
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,10.0
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Aston Villa,2.25,1.77
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Brighton and Hove Albion,-2.25,2.1
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,3.5,1.62
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,3.5,2.32
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Brighton and Hove Albion,,1.09
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Aston Villa,2.5,1.55
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Brighton and Hove Albion,-2.5,2.35
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,3.5,1.6
+f5086c74d4a767e3ad7ea69bd4a66b76,2026-08-23,2026-08-23T13:00:00+00:00,Brighton,Aston Villa,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,3.5,2.3
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,FanDuel,fanduel,2026-08-23T13:28:27Z,h2h,Bournemouth,,8.0
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,FanDuel,fanduel,2026-08-23T13:28:27Z,h2h,Manchester City,,1.37
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,FanDuel,fanduel,2026-08-23T13:28:27Z,h2h,Draw,,4.5
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.95
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,1.74
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Bournemouth,,2.9
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Manchester City,,2.3
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Draw,,3.65
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T13:26:58Z,h2h,Bournemouth,,7.0
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T13:26:58Z,h2h,Manchester City,,1.5
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T13:26:58Z,h2h,Draw,,4.0
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T13:26:58Z,spreads,Bournemouth,1.0,2.02
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T13:26:58Z,spreads,Manchester City,-1.0,1.82
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T13:26:58Z,totals,Over,2.5,1.91
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,Bovada,bovada,2026-08-23T13:26:58Z,totals,Under,2.5,1.91
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,MyBookie.ag,mybookieag,2026-08-23T13:27:16Z,h2h,Manchester City,,1.4
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,MyBookie.ag,mybookieag,2026-08-23T13:27:16Z,spreads,Manchester City,-1.5,2.15
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,MyBookie.ag,mybookieag,2026-08-23T13:27:16Z,totals,Over,2.5,1.75
+87c7c9bfd5e3072bded20c702f553c63,2026-08-23,2026-08-23T13:00:00+00:00,Man City,Bournemouth,MyBookie.ag,mybookieag,2026-08-23T13:27:16Z,totals,Under,2.5,2.0
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Liverpool,,1.87
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Newcastle United,,4.0
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,3.8
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Liverpool,,1.87
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Newcastle United,,3.5
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,3.7
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,3.5,2.25
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,3.5,1.57
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Liverpool,,1.87
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Newcastle United,,3.9
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Draw,,3.9
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Liverpool,,1.91
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Newcastle United,,3.75
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,3.8
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,3.5,2.23
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,3.5,1.64
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,h2h,Liverpool,,1.88
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,h2h,Newcastle United,,4.0
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,h2h,Draw,,3.97
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,spreads,Liverpool,-0.5,1.88
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,spreads,Newcastle United,0.5,1.98
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,totals,Over,3.0,1.85
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,totals,Under,3.0,2.02
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T13:29:36Z,h2h,Liverpool,,1.88
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T13:29:36Z,h2h,Newcastle United,,4.0
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T13:29:36Z,h2h,Draw,,3.97
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T13:29:36Z,spreads,Liverpool,-0.5,1.88
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T13:29:36Z,spreads,Newcastle United,0.5,1.98
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T13:29:36Z,totals,Over,3.0,1.85
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,LowVig.ag,lowvig,2026-08-23T13:29:36Z,totals,Under,3.0,2.02
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Liverpool,,1.88
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Newcastle United,,3.9
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,3.85
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Liverpool,-0.5,1.85
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Newcastle United,0.5,1.98
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,3.5,2.32
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,3.5,1.62
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T13:29:13Z,h2h,Liverpool,,1.87
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T13:29:13Z,h2h,Newcastle United,,3.95
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T13:29:13Z,h2h,Draw,,3.85
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T13:29:13Z,spreads,Liverpool,-0.5,1.83
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T13:29:13Z,spreads,Newcastle United,0.5,2.0
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T13:29:13Z,totals,Over,3.0,1.83
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,BetUS,betus,2026-08-23T13:29:13Z,totals,Under,3.0,2.0
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Newcastle United,,3.85
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Newcastle United,0.5,1.92
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,3.0,1.81
+ea0bacc4c23f813c6af97ec9b306a850,2026-08-23,2026-08-23T15:30:00+00:00,Newcastle,Liverpool,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,3.0,1.94
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Chelsea,,1.87
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Fulham,,3.8
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,4.0
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Chelsea,,1.87
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Fulham,,3.7
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,3.6
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.61
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,2.2
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Chelsea,,1.87
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Fulham,,3.9
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Draw,,3.95
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Chelsea,,1.85
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Fulham,,4.1
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,3.7
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,1.66
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,2.18
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,h2h,Chelsea,,1.88
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,h2h,Fulham,,4.01
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,h2h,Draw,,3.92
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,spreads,Chelsea,-0.5,1.88
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,spreads,Fulham,0.5,1.97
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,totals,Over,3.0,2.1
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetOnline.ag,betonlineag,2026-08-23T13:29:34Z,totals,Under,3.0,1.79
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T13:29:36Z,h2h,Chelsea,,1.88
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T13:29:36Z,h2h,Fulham,,4.01
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T13:29:36Z,h2h,Draw,,3.92
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T13:29:36Z,spreads,Chelsea,-0.5,1.88
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T13:29:36Z,spreads,Fulham,0.5,1.97
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T13:29:36Z,totals,Over,3.0,2.1
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,LowVig.ag,lowvig,2026-08-23T13:29:36Z,totals,Under,3.0,1.79
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Chelsea,,1.83
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Fulham,,4.0
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,3.95
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Chelsea,-0.5,1.85
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Fulham,0.5,1.98
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,2.5,1.67
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,2.5,2.25
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T13:29:13Z,h2h,Chelsea,,1.83
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T13:29:13Z,h2h,Fulham,,3.91
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T13:29:13Z,h2h,Draw,,3.9
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T13:29:13Z,spreads,Chelsea,-0.5,1.83
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T13:29:13Z,spreads,Fulham,0.5,2.0
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T13:29:13Z,totals,Over,3.0,2.05
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,BetUS,betus,2026-08-23T13:29:13Z,totals,Under,3.0,1.8
+4e4a813bf4218cc527e6f8ef2351170d,2026-08-24,2026-08-24T19:00:00+00:00,Fulham,Chelsea,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,2.18
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Crystal Palace,,5.1
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Manchester City,,1.56
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Draw,,4.1
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Crystal Palace,0.5,2.29
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Manchester City,-0.5,1.56
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,2.5,1.61
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,2.18
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Crystal Palace,,5.5
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Manchester City,,1.53
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,4.3
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Crystal Palace,,5.5
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Manchester City,,1.56
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Draw,,4.3
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Crystal Palace,,5.4
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Manchester City,,1.57
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,4.25
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,1.63
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,2.25
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Crystal Palace,,5.4
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Manchester City,,1.59
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,4.3
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Crystal Palace,1.0,1.87
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Manchester City,-1.0,1.95
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,3.0,2.1
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,3.0,1.77
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Crystal Palace,,4.8
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Manchester City,,1.53
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,3.9
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.62
+373cc6e2fb57f471cd2deab9a28a6edb,2026-08-28,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,2.15
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Liverpool,,1.47
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Nottingham Forest,,5.7
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Draw,,4.5
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Liverpool,-1.5,2.21
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Nottingham Forest,1.5,1.6
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,2.5,1.56
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,2.27
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Liverpool,,1.42
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Nottingham Forest,,6.0
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,4.6
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Liverpool,,1.49
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Nottingham Forest,,5.75
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Draw,,4.6
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Liverpool,,1.5
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Nottingham Forest,,6.25
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,4.5
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,1.6
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,2.3
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Liverpool,,1.51
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Nottingham Forest,,6.0
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,4.6
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Liverpool,-1.25,2.02
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Nottingham Forest,1.25,1.82
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,3.0,2.0
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,3.0,1.83
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Liverpool,,1.44
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Nottingham Forest,,5.5
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,4.2
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.57
+feafb731d0307bc91a58e18187aa2eab,2026-08-29,2026-08-29T11:30:00+00:00,Liverpool,Nott'm Forest,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,2.25
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Bournemouth,,1.95
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Everton,,3.5
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,3.7
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Bournemouth,,1.92
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Everton,,3.65
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Draw,,3.5
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Bournemouth,-0.5,1.89
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Everton,0.5,1.81
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,2.5,1.79
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,1.93
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Bournemouth,,2.05
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Everton,,3.6
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Draw,,3.5
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Bournemouth,,1.97
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Everton,,3.7
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,3.6
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,1.78
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,2.0
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Bournemouth,,2.0
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Everton,,3.65
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,3.65
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Bournemouth,-0.5,1.95
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Everton,0.5,1.87
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,2.5,1.82
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,2.5,2.02
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Bournemouth,,1.85
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Everton,,3.5
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,3.4
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.77
+ff4818bd73fa63c0a1e4c98e50c7a2e5,2026-08-29,2026-08-29T14:00:00+00:00,Bournemouth,Everton,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,1.91
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Coventry City,,1.88
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Hull City,,3.75
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Draw,,3.55
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Coventry City,-0.5,1.85
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Hull City,0.5,1.85
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,2.5,1.69
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,2.04
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Coventry City,,1.83
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Hull City,,3.7
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,3.7
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Coventry City,,1.91
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Hull City,,4.3
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Draw,,3.35
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Coventry City,,1.92
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Hull City,,3.85
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,3.7
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,1.77
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,2.02
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Coventry City,,1.91
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Hull City,,4.0
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,3.55
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Coventry City,-0.5,1.89
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Hull City,0.5,1.93
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,2.5,1.77
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,2.5,2.1
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Coventry City,,1.87
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Hull City,,3.4
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,3.4
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.69
+374dd92785cc06d6514d275515219c44,2026-08-29,2026-08-29T14:00:00+00:00,Coventry City,Hull City,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,2.05
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Newcastle United,,3.2
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Tottenham Hotspur,,2.1
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,3.7
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Newcastle United,,3.06
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Tottenham Hotspur,,2.16
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Draw,,3.46
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Newcastle United,0.5,1.65
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Tottenham Hotspur,-0.5,2.12
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,2.5,1.7
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,2.03
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Newcastle United,,3.2
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Tottenham Hotspur,,2.15
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,DraftKings,draftkings,2026-08-23T13:29:57Z,h2h,Draw,,3.6
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Newcastle United,,3.3
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Tottenham Hotspur,,2.12
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,3.6
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,1.72
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,2.1
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Newcastle United,,3.2
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Tottenham Hotspur,,2.15
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,3.65
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Newcastle United,0.25,1.93
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Tottenham Hotspur,-0.25,1.89
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,2.5,1.75
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,2.5,2.12
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Newcastle United,,2.95
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Tottenham Hotspur,,2.05
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,3.4
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.69
+7a8746a45dc76378359a7d9cc5474bc8,2026-08-29,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,2.05
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Brentford,,2.7
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Leeds United,,2.5
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,3.4
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Brentford,,2.61
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Leeds United,,2.51
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Draw,,3.34
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Brentford,0.5,1.49
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Leeds United,-0.5,2.44
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,2.5,1.83
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,1.87
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Brentford,,2.75
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Leeds United,,2.55
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,3.45
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Brentford,0.0,1.95
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Leeds United,0.0,1.87
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,2.5,1.89
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,2.5,1.93
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Brentford,,2.75
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Leeds United,,2.55
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,3.4
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,1.85
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,1.93
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Brentford,,2.5
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Leeds United,,2.4
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,3.2
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.83
+e479c08421b8549c6959c2b84f6f3f79,2026-08-30,2026-08-30T13:00:00+00:00,Leeds,Brentford,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,1.87
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Brighton and Hove Albion,,3.4
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Chelsea,,2.0
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,3.7
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Brighton and Hove Albion,,3.55
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Chelsea,,1.92
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Draw,,3.6
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Brighton and Hove Albion,0.5,1.81
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Chelsea,-0.5,1.89
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,2.5,1.7
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,2.04
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Brighton and Hove Albion,,3.5
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Chelsea,,2.0
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,3.75
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Brighton and Hove Albion,0.5,1.87
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Chelsea,-0.5,1.95
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,2.5,1.76
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,2.5,2.11
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Brighton and Hove Albion,,3.65
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Chelsea,,2.0
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,3.65
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,1.73
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,2.08
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Brighton and Hove Albion,,3.25
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Chelsea,,1.91
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,3.4
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.69
+6a4c946a61ddb5ef4703eb4528ccdef1,2026-08-30,2026-08-30T13:00:00+00:00,Chelsea,Brighton,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,2.0
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Fulham,,2.7
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Sunderland,,2.55
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,3.4
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Fulham,,2.57
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Sunderland,,2.64
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Draw,,3.2
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Fulham,-0.5,2.5
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Sunderland,0.5,1.47
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,2.5,1.96
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,1.76
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Fulham,,2.75
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Sunderland,,2.6
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,3.3
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,2.06
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,1.75
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Fulham,,2.75
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Sunderland,,2.6
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,3.3
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Fulham,0.0,1.87
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Sunderland,0.0,1.95
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,2.5,2.05
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,2.5,1.8
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Fulham,,2.55
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Sunderland,,2.45
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,3.1
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.98
+9becb395ad634de55caec620f9d713fa,2026-08-30,2026-08-30T13:00:00+00:00,Sunderland,Fulham,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,1.74
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Ipswich Town,,6.9
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Manchester United,,1.41
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Draw,,4.5
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Ipswich Town,1.5,1.68
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Manchester United,-1.5,2.06
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,2.5,1.58
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,2.23
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Ipswich Town,,7.0
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Manchester United,,1.37
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,5.1
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Ipswich Town,,6.75
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Manchester United,,1.43
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,4.9
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Ipswich Town,1.25,1.93
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Manchester United,-1.25,1.89
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,2.5,1.62
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,2.5,2.34
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Ipswich Town,,7.0
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Manchester United,,1.42
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,4.8
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,1.61
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,2.28
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Ipswich Town,,6.0
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Manchester United,,1.36
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,4.4
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.57
+5759167055d94ba38e145ab92188abbf,2026-08-30,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,2.25
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Arsenal,,1.69
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Aston Villa,,4.5
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,FanDuel,fanduel,2026-08-23T13:29:56Z,h2h,Draw,,3.7
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Arsenal,,1.75
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Aston Villa,,4.4
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,h2h,Draw,,3.55
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Arsenal,-0.5,1.74
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,spreads,Aston Villa,0.5,1.99
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Over,2.5,1.85
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,MyBookie.ag,mybookieag,2026-08-23T13:29:34Z,totals,Under,2.5,1.85
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Arsenal,,1.76
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Aston Villa,,4.7
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T13:29:16Z,h2h,Draw,,3.8
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Arsenal,-0.75,1.95
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T13:29:16Z,spreads,Aston Villa,0.75,1.87
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T13:29:16Z,totals,Over,2.5,1.91
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Bovada,bovada,2026-08-23T13:29:16Z,totals,Under,2.5,1.91
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Arsenal,,1.73
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Aston Villa,,4.8
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetRivers,betrivers,2026-08-23T13:29:35Z,h2h,Draw,,3.75
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Over,2.5,1.85
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetRivers,betrivers,2026-08-23T13:29:35Z,totals,Under,2.5,1.92
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Arsenal,,1.69
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Aston Villa,,4.2
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetMGM,betmgm,2026-08-23T13:29:34Z,h2h,Draw,,3.4
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Over,2.5,1.85
+2c49e9d1ef855f62962b915e773f906d,2026-08-31,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,BetMGM,betmgm,2026-08-23T13:29:34Z,totals,Under,2.5,1.85
 manual-0,2026-08-21,,Arsenal,Coventry City,MyBookie.ag,mybookie_manual,screenshot_2026-08-17,h2h,Arsenal,,1.1669449082
 manual-1,2026-08-21,,Arsenal,Coventry City,MyBookie.ag,mybookie_manual,screenshot_2026-08-17,h2h,Draw,,6.7
 manual-2,2026-08-21,,Arsenal,Coventry City,MyBookie.ag,mybookie_manual,screenshot_2026-08-17,h2h,Coventry City,,14.0

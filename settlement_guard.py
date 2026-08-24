@@ -77,17 +77,7 @@ def _settle_row(row: pd.Series, score: tuple[int, int], stake_col: str, odds_col
     return result, f"{hg}-{ag}", profit
 
 
-def _audit_ledger(
-    ledger: pd.DataFrame,
-    ledger_name: str,
-    id_col: str,
-    stake_col: str,
-    odds_col: str,
-    profit_col: str,
-    fpl: dict,
-    api: dict,
-    now: pd.Timestamp,
-) -> tuple[pd.DataFrame, list[dict]]:
+def _audit_ledger(ledger: pd.DataFrame, ledger_name: str, id_col: str, stake_col: str, odds_col: str, profit_col: str, fpl: dict, api: dict, now: pd.Timestamp) -> tuple[pd.DataFrame, list[dict]]:
     rows: list[dict] = []
     if ledger.empty:
         return ledger, rows
@@ -105,10 +95,7 @@ def _audit_ledger(
         kickoff = pd.to_datetime(bet.get("KickoffUTC"), utc=True, errors="coerce")
         status = str(bet.get("Result", "OPEN"))
         expected_status = "OPEN"
-        issue = ""
-        severity = "INFO"
-        verified_score = None
-        source = ""
+        issue = ""; severity = "INFO"; verified_score = None; source = ""
 
         if fpl_score is not None and api_score is not None:
             if fpl_score != api_score:
@@ -136,7 +123,7 @@ def _audit_ledger(
             issue, severity = "OVERDUE_OPEN_NO_RESULT", "ERROR"
 
         if status in {"W", "L", "PUSH"}:
-            final_score = str(bet.get("FinalScore", ledger.at[idx, "FinalScore"] if "FinalScore" in ledger.columns else ""))
+            final_score = str(ledger.at[idx, "FinalScore"] if "FinalScore" in ledger.columns else bet.get("FinalScore", ""))
             if not final_score or final_score.lower() in {"nan", "<na>"}:
                 issue, severity = "SETTLED_MISSING_FINAL_SCORE", "ERROR"
             actual_profit = pd.to_numeric(ledger.at[idx, profit_col] if profit_col in ledger.columns else np.nan, errors="coerce")
@@ -147,23 +134,7 @@ def _audit_ledger(
         if verified_score is not None and status in {"W", "L", "PUSH"} and expected_status != status:
             issue, severity = "SETTLEMENT_RESULT_MISMATCH", "ERROR"
 
-        rows.append({
-            "Ledger": ledger_name,
-            "BetID": bet_id,
-            "KickoffUTC": bet.get("KickoffUTC"),
-            "HomeTeam": h,
-            "AwayTeam": a,
-            "MarketType": bet.get("MarketType"),
-            "Selection": bet.get("Selection"),
-            "Line": bet.get("Line"),
-            "FPLScore": "" if fpl_score is None else f"{fpl_score[0]}-{fpl_score[1]}",
-            "APIFootballScore": "" if api_score is None else f"{api_score[0]}-{api_score[1]}",
-            "VerifiedSource": source,
-            "ExpectedStatus": expected_status,
-            "ActualStatus": status,
-            "IssueType": issue,
-            "Severity": severity,
-        })
+        rows.append({"Ledger": ledger_name, "BetID": bet_id, "KickoffUTC": bet.get("KickoffUTC"), "HomeTeam": h, "AwayTeam": a, "MarketType": bet.get("MarketType"), "Selection": bet.get("Selection"), "Line": bet.get("Line"), "FPLScore": "" if fpl_score is None else f"{fpl_score[0]}-{fpl_score[1]}", "APIFootballScore": "" if api_score is None else f"{api_score[0]}-{api_score[1]}", "VerifiedSource": source, "ExpectedStatus": expected_status, "ActualStatus": status, "IssueType": issue, "Severity": severity})
     return ledger, rows
 
 
@@ -194,7 +165,7 @@ def reconcile() -> int:
 
     audit = pd.DataFrame(p_rows + r_rows)
     if source_errors:
-        extra = pd.DataFrame([{"Ledger": "SYSTEM", "BetID": "", "HomeTeam": "", "AwayTeam": "", "IssueType": "RESULT_SOURCE_ERROR", "Severity": "ERROR", "ActualStatus": " | ".join(source_errors)}])
+        extra = pd.DataFrame([{"Ledger": "SYSTEM", "BetID": "", "HomeTeam": "", "AwayTeam": "", "IssueType": "RESULT_SOURCE_WARNING", "Severity": "WARNING", "ActualStatus": " | ".join(source_errors)}])
         audit = pd.concat([audit, extra], ignore_index=True, sort=False)
     audit.to_csv(AUDIT_PATH, index=False)
 

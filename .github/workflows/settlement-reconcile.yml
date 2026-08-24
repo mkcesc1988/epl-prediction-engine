@@ -2,6 +2,16 @@ name: EPL settlement reconciliation
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'settlement_guard.py'
+      - 'fixture_lifecycle_guard.py'
+      - 'manual_result_settler.py'
+      - 'football_data_result_settler.py'
+      - 'settlement_summaries.py'
+      - 'data/manual_results.csv'
+      - '.github/workflows/settlement-reconcile.yml'
   schedule:
     - cron: '*/30 10-23 * * *'
 

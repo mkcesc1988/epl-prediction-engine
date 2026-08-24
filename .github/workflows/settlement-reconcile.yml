@@ -33,6 +33,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Enforce frozen fixture lifecycle
+        run: python fixture_lifecycle_guard.py
+
       - name: Apply verified exceptional results
         run: |
           if [ -f manual_result_settler.py ]; then

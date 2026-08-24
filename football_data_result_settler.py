@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from io import StringIO
 from pathlib import Path
 
 import pandas as pd
@@ -22,18 +23,68 @@ def _season_code(date_value: object) -> str:
 
 
 def _fetch_results(season_codes: set[str]) -> dict[tuple[str, str], tuple[int, int]]:
+    """Best-effort Football-Data fallback.
+
+    This source is supplementary only. A bad/missing/malformed season file must never
+    abort settlement because manual results, FPL, and API-Football are independent
+    sources used later in the workflow.
+    """
     out: dict[tuple[str, str], tuple[int, int]] = {}
+    needed = {"HomeTeam", "AwayTeam", "FTHG", "FTAG"}
+
     for code in sorted(c for c in season_codes if c):
-        r = requests.get(FD_URL.format(season=code), timeout=45)
-        r.raise_for_status()
-        from io import StringIO
-        df = pd.read_csv(StringIO(r.text))
-        needed = {"HomeTeam", "AwayTeam", "FTHG", "FTAG"}
-        if not needed.issubset(df.columns):
+        url = FD_URL.format(season=code)
+        try:
+            r = requests.get(
+                url,
+                timeout=45,
+                headers={"User-Agent": "Mozilla/5.0 EPL prediction engine"},
+            )
+            r.raise_for_status()
+
+            text = r.text or ""
+            content_type = str(r.headers.get("content-type", "")).lower()
+            first_line = text.splitlines()[0] if text.splitlines() else ""
+
+            # Football-Data occasionally returns an HTML/error page with HTTP 200.
+            if not text.strip():
+                print(f"WARNING: Football-Data {code} returned an empty response; skipping")
+                continue
+            if "<html" in text[:500].lower() or "<!doctype" in text[:500].lower():
+                print(f"WARNING: Football-Data {code} returned HTML instead of CSV; skipping")
+                continue
+            if "," not in first_line and "text/csv" not in content_type and "application/csv" not in content_type:
+                print(f"WARNING: Football-Data {code} response does not look like CSV; skipping")
+                continue
+
+            try:
+                df = pd.read_csv(StringIO(text))
+            except (pd.errors.ParserError, pd.errors.EmptyDataError, UnicodeDecodeError, ValueError) as exc:
+                print(f"WARNING: Football-Data {code} CSV could not be parsed: {exc}; skipping")
+                continue
+
+            if not needed.issubset(df.columns):
+                print(
+                    f"WARNING: Football-Data {code} missing expected columns "
+                    f"{sorted(needed - set(df.columns))}; skipping"
+                )
+                continue
+
+            for _, row in df.dropna(subset=["FTHG", "FTAG"]).iterrows():
+                try:
+                    h, a = _norm(row["HomeTeam"]), _norm(row["AwayTeam"])
+                    out[(h, a)] = (int(row["FTHG"]), int(row["FTAG"]))
+                except (TypeError, ValueError):
+                    continue
+
+        except requests.RequestException as exc:
+            print(f"WARNING: Football-Data {code} unavailable: {exc}; skipping")
             continue
-        for _, row in df.dropna(subset=["FTHG", "FTAG"]).iterrows():
-            h, a = _norm(row["HomeTeam"]), _norm(row["AwayTeam"])
-            out[(h, a)] = (int(row["FTHG"]), int(row["FTAG"]))
+        except Exception as exc:
+            # This is a tertiary fallback. Never block the primary settlement pipeline.
+            print(f"WARNING: Football-Data {code} unexpected error: {exc}; skipping")
+            continue
+
     return out
 
 
@@ -81,11 +132,16 @@ def main() -> None:
     frames = []
     for path in [PAPER_LEDGER, REAL_LEDGER]:
         if path.exists():
-            frames.append(pd.read_csv(path))
+            try:
+                frames.append(pd.read_csv(path))
+            except (pd.errors.ParserError, pd.errors.EmptyDataError) as exc:
+                print(f"WARNING: could not read {path}: {exc}")
+
     codes: set[str] = set()
     for df in frames:
         if "Date" in df.columns:
             codes.update(_season_code(v) for v in df["Date"].dropna())
+
     results = _fetch_results(codes)
     paper = _settle_ledger(PAPER_LEDGER, "BetID", "StakeUnits", "EntryOdds", "ProfitUnits", results)
     real = _settle_ledger(REAL_LEDGER, "RealBetID", "StakeUSD", "EntryOdds", "ProfitUSD", results)

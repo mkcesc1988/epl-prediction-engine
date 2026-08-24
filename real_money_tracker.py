@@ -12,11 +12,52 @@ LEDGER_PATH = HISTORY / "real_money_bet_ledger.csv"
 ODDS_HISTORY_PATH = HISTORY / "market_odds_history.csv"
 SUMMARY_PATH = HISTORY / "real_money_performance_summary.csv"
 
+NUMERIC_LEDGER_COLUMNS = [
+    "EntryAmericanOdds",
+    "EntryOdds",
+    "StakeUSD",
+    "PotentialProfitUSD",
+    "ModelProbability",
+    "V2Probability",
+    "ClosingOdds",
+    "ClosingLine",
+    "LineMove",
+    "SameLineClosingOdds",
+    "SameLinePriceCLV",
+    "HoursBeforeKickoff",
+    "PriceCLV",
+    "ProfitUSD",
+    "BenchmarkClosingOdds",
+    "BenchmarkClosingLine",
+    "BenchmarkLineMove",
+    "BenchmarkHoursBeforeKickoff",
+    "BenchmarkPriceCLV",
+    "Line",
+]
+
+
+def _enforce_ledger_schema(ledger: pd.DataFrame) -> pd.DataFrame:
+    """Make numeric ledger fields numeric before assigning float values.
+
+    CSV inference can load all-empty numeric columns as Arrow/string dtype. Pandas 2.x
+    then raises when a float such as 0.0 is assigned into that column. Explicitly
+    coercing known numeric fields makes tracker writes deterministic across pandas
+    versions and regardless of how many blanks a CSV currently contains.
+    """
+    if ledger.empty:
+        return ledger
+    ledger = ledger.copy()
+    for col in NUMERIC_LEDGER_COLUMNS:
+        if col in ledger.columns:
+            ledger[col] = pd.to_numeric(ledger[col], errors="coerce").astype("float64")
+    return ledger
+
 
 def _update_closing(ledger: pd.DataFrame, odds_history: pd.DataFrame) -> pd.DataFrame:
     if ledger.empty or odds_history.empty:
         return ledger
 
+    ledger = _enforce_ledger_schema(ledger)
     odds = odds_history.copy()
     odds["SnapshotUTC"] = pd.to_datetime(odds["SnapshotUTC"], utc=True, errors="coerce")
     odds["DecimalOdds"] = pd.to_numeric(odds["DecimalOdds"], errors="coerce")
@@ -72,6 +113,7 @@ def _update_closing(ledger: pd.DataFrame, odds_history: pd.DataFrame) -> pd.Data
 def _settle(ledger: pd.DataFrame, results: pd.DataFrame) -> pd.DataFrame:
     if ledger.empty or results.empty:
         return ledger
+    ledger = _enforce_ledger_schema(ledger)
     for idx, bet in ledger[ledger["Result"].astype(str) == "OPEN"].iterrows():
         r = results[(results["HomeTeam"].map(_norm) == _norm(bet["HomeTeam"])) & (results["AwayTeam"].map(_norm) == _norm(bet["AwayTeam"]))]
         if r.empty:
@@ -118,6 +160,7 @@ def _summary(ledger: pd.DataFrame) -> pd.DataFrame:
 def main() -> None:
     HISTORY.mkdir(parents=True, exist_ok=True)
     ledger = pd.read_csv(LEDGER_PATH) if LEDGER_PATH.exists() else pd.DataFrame()
+    ledger = _enforce_ledger_schema(ledger)
     odds_history = pd.read_csv(ODDS_HISTORY_PATH) if ODDS_HISTORY_PATH.exists() else pd.DataFrame()
     ledger = _update_closing(ledger, odds_history)
     try:

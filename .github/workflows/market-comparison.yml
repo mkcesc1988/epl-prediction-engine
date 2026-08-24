@@ -66,7 +66,9 @@ jobs:
         run: python closing_line_tracker.py
 
       - name: Update automatic paper-bet ledger and analytics
-        run: python bet_tracker.py
+        run: |
+          python bet_tracker.py
+          python fixture_lifecycle_guard.py
 
       - name: Update separate real-money execution ledger
         run: python real_money_tracker.py
@@ -74,7 +76,13 @@ jobs:
       - name: Apply verified manual exceptional results
         run: python manual_result_settler.py
 
-      - name: Reconcile settlements with two result sources
+      - name: Apply Football-Data EPL result fallback
+        run: |
+          if [ -f football_data_result_settler.py ]; then
+            python football_data_result_settler.py
+          fi
+
+      - name: Reconcile settlements with independent result sources
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
         run: python settlement_guard.py
@@ -82,6 +90,7 @@ jobs:
       - name: Rebuild analytics after settlement reconciliation
         run: |
           python bet_tracker.py
+          python fixture_lifecycle_guard.py
           python real_money_tracker.py
 
       - name: Publish history and latest dashboard outputs

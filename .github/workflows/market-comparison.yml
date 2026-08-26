@@ -116,6 +116,15 @@ jobs:
             echo "No dashboard/history changes to commit"
           else
             git commit -m "data: publish latest EPL dashboard outputs [skip ci]"
+
+            # All desired generated outputs are now safely committed. The runner may
+            # still contain temporary/untracked files created by model and settlement
+            # steps; Git will refuse to rebase a dirty worktree. Because this is an
+            # ephemeral Actions checkout, discard only those leftover files before
+            # syncing the committed dashboard update with main.
+            git reset --hard HEAD
+            git clean -fd
+
             git fetch origin main
             git rebase -X theirs origin/main
             git push origin HEAD:main

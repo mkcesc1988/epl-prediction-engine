@@ -55,7 +55,7 @@ jobs:
         run: python v2_shadow_predictions.py
 
       - name: Build conservative paper portfolio
-        run: python portfolio_manager.py
+        run: python safe_portfolio_manager.py
 
       - name: Apply historical moneyline calibration sizing
         run: python portfolio_calibration_gate.py

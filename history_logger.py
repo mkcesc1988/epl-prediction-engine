@@ -3,27 +3,31 @@ from __future__ import annotations
 from pathlib import Path
 
 import pandas as pd
+from pandas.errors import EmptyDataError
 
 
 HISTORY_DIR = Path("data/history")
 PROCESSED_DIR = Path("data/processed")
 
 
-def _append_snapshot(source: Path, destination: Path, snapshot_utc: str) -> int:
-    if not source.exists():
-        return 0
+def _read_csv_or_empty(path: Path) -> pd.DataFrame:
+    if not path.exists() or path.stat().st_size == 0:
+        return pd.DataFrame()
+    try:
+        return pd.read_csv(path)
+    except EmptyDataError:
+        return pd.DataFrame()
 
-    current = pd.read_csv(source)
+
+def _append_snapshot(source: Path, destination: Path, snapshot_utc: str) -> int:
+    current = _read_csv_or_empty(source)
     if current.empty:
         return 0
 
     current.insert(0, "SnapshotUTC", snapshot_utc)
 
-    if destination.exists():
-        old = pd.read_csv(destination)
-        combined = pd.concat([old, current], ignore_index=True, sort=False)
-    else:
-        combined = current
+    old = _read_csv_or_empty(destination)
+    combined = pd.concat([old, current], ignore_index=True, sort=False) if not old.empty else current
 
     # A workflow retry at the same snapshot time should not duplicate rows.
     dedupe_cols = [c for c in [

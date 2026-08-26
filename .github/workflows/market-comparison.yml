@@ -44,7 +44,9 @@ jobs:
           # Ordinary development pushes must not spend Odds API credits. Scheduled
           # and manually dispatched runs may use the live consensus feed.
           THE_ODDS_API_LIVE: ${{ github.event_name != 'push' }}
-        run: python market_comparison.py
+        run: |
+          python prepare_manual_mybookie.py
+          python market_comparison.py
 
       - name: Rank MyBookie gameweek markets
         run: python gameweek_rankings.py

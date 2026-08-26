@@ -55,12 +55,26 @@ def _load_manual_mybookie() -> pd.DataFrame:
     ]]
 
 
+def _live_odds_allowed() -> bool:
+    value = os.getenv("THE_ODDS_API_LIVE", "true").strip().lower()
+    return value not in {"0", "false", "no", "off"}
+
+
 def fetch_market_odds(cfg: dict) -> pd.DataFrame:
+    manual = _load_manual_mybookie()
     key = os.getenv("THE_ODDS_API_KEY", "").strip()
+
+    # Development/push runs deliberately avoid the paid live feed. They still
+    # generate rankings from the user's manually captured MyBookie prices.
+    if not _live_odds_allowed():
+        print("Odds API live pull disabled for this run; using manual MyBookie prices only.")
+        return manual
+
+    # A missing key should degrade gracefully rather than blocking the whole
+    # prediction and paper-ledger pipeline.
     if not key:
-        raise RuntimeError(
-            "THE_ODDS_API_KEY is not configured. Add it as a GitHub Actions secret to enable live market comparison."
-        )
+        print("WARNING: THE_ODDS_API_KEY is not configured; using manual MyBookie prices only.")
+        return manual
 
     mc = cfg.get("market_comparison", {})
     sport_key = str(mc.get("odds_api_sport", "soccer_epl"))
@@ -68,21 +82,36 @@ def fetch_market_odds(cfg: dict) -> pd.DataFrame:
     markets = str(mc.get("markets", "h2h,totals"))
 
     url = f"{ODDS_API_BASE}/sports/{sport_key}/odds"
-    response = requests.get(
-        url,
-        params={
-            "apiKey": key,
-            "regions": regions,
-            "markets": markets,
-            "oddsFormat": "decimal",
-            "dateFormat": "iso",
-        },
-        timeout=45,
-    )
-    response.raise_for_status()
+    try:
+        response = requests.get(
+            url,
+            params={
+                "apiKey": key,
+                "regions": regions,
+                "markets": markets,
+                "oddsFormat": "decimal",
+                "dateFormat": "iso",
+            },
+            timeout=45,
+        )
+        response.raise_for_status()
+        payload = response.json() or []
+    except requests.RequestException as exc:
+        status = getattr(getattr(exc, "response", None), "status_code", None)
+        remaining = None
+        if getattr(exc, "response", None) is not None:
+            remaining = exc.response.headers.get("x-requests-remaining")
+        detail = f"HTTP {status}" if status is not None else exc.__class__.__name__
+        if remaining is not None:
+            detail += f", requests remaining={remaining}"
+        print(f"WARNING: Odds API unavailable ({detail}); using manual MyBookie prices only.")
+        return manual
+    except ValueError as exc:
+        print(f"WARNING: Odds API returned invalid JSON ({exc}); using manual MyBookie prices only.")
+        return manual
 
     rows: list[dict] = []
-    for event in response.json() or []:
+    for event in payload:
         kickoff = pd.to_datetime(event.get("commence_time"), utc=True, errors="coerce")
         if pd.isna(kickoff):
             continue
@@ -111,10 +140,8 @@ def fetch_market_odds(cfg: dict) -> pd.DataFrame:
                     })
 
     live = pd.DataFrame(rows)
-    manual = _load_manual_mybookie()
     if manual.empty:
         return live
-
     if live.empty:
         return manual
 

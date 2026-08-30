@@ -2,6 +2,11 @@ name: EPL post-match process audit
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'post_match_process_audit.py'
+      - '.github/workflows/post-match-process-audit.yml'
   schedule:
     - cron: '15 18-23 * * *'
     - cron: '15 0 * * *'

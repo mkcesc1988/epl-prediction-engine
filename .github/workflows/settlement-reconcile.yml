@@ -10,6 +10,8 @@ on:
       - 'manual_result_settler.py'
       - 'football_data_result_settler.py'
       - 'settlement_summaries.py'
+      - 'bet_tracker.py'
+      - 'pipeline.py'
       - 'data/manual_results.csv'
       - '.github/workflows/settlement-reconcile.yml'
   schedule:

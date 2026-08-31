@@ -24,6 +24,9 @@ TEAM_MAP = {
     "Leicester City": "Leicester",
     "Leeds United": "Leeds",
     "Norwich City": "Norwich",
+    "Ipswich": "Ipswich Town",
+    "Hull": "Hull City",
+    "Coventry": "Coventry City",
 }
 
 FD_BASE = "https://www.football-data.co.uk/mmz4281/{code}/{division}.csv"
@@ -65,8 +68,6 @@ def fetch_football_data(start_year: int, division: str, raw_dir: str) -> pd.Data
     df["HomeTeam"] = df["HomeTeam"].map(normalize_team)
     df["AwayTeam"] = df["AwayTeam"].map(normalize_team)
 
-    # Preserve both total-goals and 1X2 prices. The 1X2 fields are required for
-    # historical calibration/ROI audits by market-implied underdog bucket.
     wanted = [
         "Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG",
         "B365H", "B365D", "B365A", "PSH", "PSD", "PSA",

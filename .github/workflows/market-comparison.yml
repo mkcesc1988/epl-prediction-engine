@@ -44,9 +44,6 @@ jobs:
       - name: Generate model-market comparison
         env:
           THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
-          # This workflow now runs only on its daily schedule, manual dispatch,
-          # or market-specific changes. Live odds are therefore safe to refresh
-          # on every run and cannot be clobbered by unrelated repository pushes.
           THE_ODDS_API_LIVE: 'true'
         run: |
           python prepare_manual_mybookie.py
@@ -120,14 +117,55 @@ jobs:
             echo "No dashboard/history changes to commit"
           else
             git commit -m "data: publish latest EPL dashboard outputs [skip ci]"
-
             git reset --hard HEAD
             git clean -fd
-
             git fetch origin main
             git rebase -X theirs origin/main
             git push origin HEAD:main
           fi
+
+      - name: Fail if current-gameweek market coverage is missing
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import pandas as pd
+          from pandas.errors import EmptyDataError
+
+          pred_path = Path('data/processed/daily_predictions_latest.csv')
+          odds_path = Path('data/processed/market_odds_latest.csv')
+          rank_path = Path('data/processed/gameweek_rankings_latest.csv')
+
+          preds = pd.read_csv(pred_path)
+          if preds.empty:
+              raise SystemExit('MARKET_HEALTH_FAIL: prediction file is empty')
+
+          fixture_keys = set(zip(preds['Date'].astype(str), preds['HomeTeam'].astype(str), preds['AwayTeam'].astype(str)))
+
+          try:
+              odds = pd.read_csv(odds_path)
+          except EmptyDataError:
+              odds = pd.DataFrame()
+          current_odds = 0
+          if not odds.empty and {'Date','HomeTeam','AwayTeam'}.issubset(odds.columns):
+              current_odds = sum(
+                  (str(r.Date), str(r.HomeTeam), str(r.AwayTeam)) in fixture_keys
+                  for r in odds[['Date','HomeTeam','AwayTeam']].itertuples(index=False)
+              )
+
+          try:
+              rankings = pd.read_csv(rank_path)
+          except EmptyDataError:
+              rankings = pd.DataFrame()
+
+          print(f'Prediction fixtures: {len(preds)}')
+          print(f'Current-gameweek market rows: {current_odds}')
+          print(f'Ranked selections: {len(rankings)}')
+
+          if current_odds == 0:
+              raise SystemExit('MARKET_HEALTH_FAIL: predictions exist but there are zero current-gameweek market rows. Check live odds credentials or add current MyBookie prices.')
+          if rankings.empty:
+              raise SystemExit('MARKET_HEALTH_FAIL: current-gameweek odds exist but rankings are empty. Check bookmaker/team/market matching.')
+          PY
 
       - name: Fail workflow if settlement integrity is not clean
         run: python settlement_guard.py --assert-clean

@@ -3,9 +3,12 @@ name: EPL market comparison
 on:
   push:
     branches: [main]
-    paths-ignore:
-      - 'data/history/**'
-      - 'data/processed/*_latest.csv'
+    paths:
+      - '.github/workflows/market-comparison.yml'
+      - 'market_comparison.py'
+      - 'gameweek_rankings.py'
+      - 'prepare_manual_mybookie.py'
+      - 'data/manual_mybookie_odds*.csv'
   workflow_dispatch:
   schedule:
     - cron: '0 13 * * *'
@@ -41,9 +44,10 @@ jobs:
       - name: Generate model-market comparison
         env:
           THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
-          # Ordinary development pushes must not spend Odds API credits. Scheduled
-          # and manually dispatched runs may use the live consensus feed.
-          THE_ODDS_API_LIVE: ${{ github.event_name != 'push' }}
+          # This workflow now runs only on its daily schedule, manual dispatch,
+          # or market-specific changes. Live odds are therefore safe to refresh
+          # on every run and cannot be clobbered by unrelated repository pushes.
+          THE_ODDS_API_LIVE: 'true'
         run: |
           python prepare_manual_mybookie.py
           python market_comparison.py
@@ -117,11 +121,6 @@ jobs:
           else
             git commit -m "data: publish latest EPL dashboard outputs [skip ci]"
 
-            # All desired generated outputs are now safely committed. The runner may
-            # still contain temporary/untracked files created by model and settlement
-            # steps; Git will refuse to rebase a dirty worktree. Because this is an
-            # ephemeral Actions checkout, discard only those leftover files before
-            # syncing the committed dashboard update with main.
             git reset --hard HEAD
             git clean -fd
 

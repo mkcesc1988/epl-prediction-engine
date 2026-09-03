@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/market-comparison.yml'
       - 'market_comparison.py'
+      - 'api_football_odds_fallback.py'
       - 'gameweek_rankings.py'
       - 'prepare_manual_mybookie.py'
       - 'data/manual_mybookie_odds*.csv'
@@ -44,10 +45,12 @@ jobs:
       - name: Generate model-market comparison
         env:
           THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           THE_ODDS_API_LIVE: 'true'
         run: |
           python prepare_manual_mybookie.py
           python market_comparison.py
+          python api_football_odds_fallback.py
 
       - name: Rank MyBookie gameweek markets
         run: python gameweek_rankings.py
@@ -162,9 +165,9 @@ jobs:
           print(f'Ranked selections: {len(rankings)}')
 
           if current_odds == 0:
-              raise SystemExit('MARKET_HEALTH_FAIL: predictions exist but there are zero current-gameweek market rows. Check live odds credentials or add current MyBookie prices.')
+              raise SystemExit('MARKET_HEALTH_FAIL: predictions exist but there are zero current-gameweek market rows. Check live odds credentials or API-Football fallback coverage, or add current MyBookie prices.')
           if rankings.empty:
-              raise SystemExit('MARKET_HEALTH_FAIL: current-gameweek odds exist but rankings are empty. Check bookmaker/team/market matching.')
+              raise SystemExit('MARKET_HEALTH_FAIL: current-gameweek odds exist but rankings are empty. Check whether MyBookie is present or add current MyBookie prices.')
           PY
 
       - name: Fail workflow if settlement integrity is not clean

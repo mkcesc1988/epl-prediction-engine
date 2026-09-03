@@ -4,6 +4,10 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '30 10 * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/v2-shadow.yml'
 
 permissions:
   contents: write
@@ -27,11 +31,25 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+          cache: 'pip'
 
       - name: Install dependencies
+        shell: bash
         run: |
+          set -euo pipefail
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          for attempt in 1 2 3; do
+            echo "Dependency install attempt ${attempt}/3"
+            if python -m pip install --index-url https://pypi.org/simple --timeout 60 --retries 5 -r requirements.txt; then
+              exit 0
+            fi
+            if [ "$attempt" -lt 3 ]; then
+              echo "PyPI install failed; waiting before retry..."
+              sleep $((attempt * 15))
+            fi
+          done
+          echo "Dependency installation failed after 3 attempts"
+          exit 1
 
       - name: Run V2 shadow predictions
         env:

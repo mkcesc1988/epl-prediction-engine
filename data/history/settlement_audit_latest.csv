@@ -22,6 +22,10 @@ paper,9958b4bd65d18eae,2026-08-28T19:00:00+00:00,Crystal Palace,Man City,Spread,
 paper,c88cd34ea652f4a2,2026-08-30T13:00:00+00:00,Leeds,Brentford,Total,Over 2.5,2.5,1-1,1-1,FPL+API_FOOTBALL,L,L,,INFO
 paper,e9ca5fd1eda99c43,2026-08-29T14:00:00+00:00,Coventry City,Hull City,Moneyline,Hull City,,0-1,0-1,FPL+API_FOOTBALL,W,W,,INFO
 paper,808df9865b2648eb,2026-08-31T19:00:00+00:00,Aston Villa,Arsenal,Spread,Aston Villa +1.5,1.5,0-1,0-1,FPL+API_FOOTBALL,W,W,,INFO
+paper,0e4bc3bb838adf40,2026-09-05T16:30:00+00:00,Hull City,Aston Villa,Moneyline,Hull City,,,,,OPEN,OPEN,,INFO
+paper,e75c787289fcf534,2026-09-04T19:00:00+00:00,Ipswich Town,Liverpool,Spread,Liverpool -1.5,-1.5,,,,OPEN,OPEN,,INFO
+paper,e46433e5d5e43ed8,2026-09-04T19:00:00+00:00,Ipswich Town,Liverpool,Total,Over 3.5,3.5,,,,OPEN,OPEN,,INFO
+paper,598c0c6e8e97db3f,2026-09-05T16:30:00+00:00,Hull City,Aston Villa,Spread,Hull City +0.5,0.5,,,,OPEN,OPEN,,INFO
 real_money,RM-20260821-COV15,2026-08-21T19:00:00+00:00,Arsenal,Coventry City,Spread,Coventry City +1.5,1.5,3-0,3-0,FPL+API_FOOTBALL,L,L,,INFO
 real_money,RM-20260822-IPSML,2026-08-22T14:00:00+00:00,Ipswich Town,Sunderland,Moneyline,Ipswich Town,,2-1,2-1,FPL+API_FOOTBALL,W,W,,INFO
 real_money,RM-20260822-LEE,2026-08-22T14:00:00+00:00,Nott'm Forest,Leeds,Moneyline,Leeds,,0-1,0-1,FPL+API_FOOTBALL,W,W,,INFO

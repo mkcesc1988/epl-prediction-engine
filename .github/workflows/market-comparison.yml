@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/market-comparison.yml'
       - 'market_comparison.py'
+      - 'safe_market_comparison.py'
       - 'api_football_odds_fallback.py'
       - 'gameweek_rankings.py'
       - 'pre_kickoff_adjustment.py'
@@ -52,7 +53,7 @@ jobs:
           THE_ODDS_API_LIVE: 'true'
         run: |
           python prepare_manual_mybookie.py
-          python market_comparison.py
+          python safe_market_comparison.py
           python api_football_odds_fallback.py
 
       - name: Rank MyBookie gameweek markets

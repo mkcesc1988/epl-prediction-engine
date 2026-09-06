@@ -27,7 +27,7 @@ paper,e75c787289fcf534,2026-09-04T19:00:00+00:00,Ipswich Town,Liverpool,Spread,L
 paper,e46433e5d5e43ed8,2026-09-04T19:00:00+00:00,Ipswich Town,Liverpool,Total,Over 3.5,3.5,,0-2,API_FOOTBALL_ONLY,L,L,,INFO
 paper,598c0c6e8e97db3f,2026-09-05T16:30:00+00:00,Hull City,Aston Villa,Spread,Hull City +0.5,0.5,,0-0,API_FOOTBALL_ONLY,W,W,,INFO
 paper,473229765dcc23c6,2026-09-04T19:00:00+00:00,Ipswich Town,Liverpool,Moneyline,Liverpool,,,0-2,API_FOOTBALL_ONLY,W,W,,INFO
-paper,fb40474ee275ece1,2026-09-06T15:30:00+00:00,Arsenal,Chelsea,Moneyline,Arsenal,,,,,OPEN,OPEN,,INFO
+paper,fb40474ee275ece1,2026-09-06T15:30:00+00:00,Arsenal,Chelsea,Moneyline,Arsenal,,,2-1,API_FOOTBALL_ONLY,W,W,,INFO
 paper,7f572f395fac37e2,2026-09-05T14:00:00+00:00,Man City,Coventry City,Spread,Man City -1.5,-1.5,,1-0,API_FOOTBALL_ONLY,OPEN,EXCLUDED_LATE_ENTRY,,INFO
 real_money,RM-20260821-COV15,2026-08-21T19:00:00+00:00,Arsenal,Coventry City,Spread,Coventry City +1.5,1.5,3-0,3-0,FPL+API_FOOTBALL,L,L,,INFO
 real_money,RM-20260822-IPSML,2026-08-22T14:00:00+00:00,Ipswich Town,Sunderland,Moneyline,Ipswich Town,,2-1,2-1,FPL+API_FOOTBALL,W,W,,INFO

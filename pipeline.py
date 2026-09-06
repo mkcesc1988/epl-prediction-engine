@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 
 import pandas as pd
@@ -52,11 +53,27 @@ def ensure_dirs(cfg: dict) -> None:
 
 def fetch_football_data(start_year: int, division: str, raw_dir: str) -> pd.DataFrame:
     url = FD_BASE.format(code=season_code(start_year), division=division)
-    response = requests.get(url, timeout=45)
-    response.raise_for_status()
-
     out = Path(raw_dir) / f"football_data_{division}_{season_code(start_year)}.csv"
-    out.write_bytes(response.content)
+    last_exc: Exception | None = None
+
+    for attempt in range(1, 4):
+        try:
+            response = requests.get(url, timeout=45)
+            response.raise_for_status()
+            if not response.content:
+                raise RuntimeError("Football-Data returned an empty response")
+            out.write_bytes(response.content)
+            break
+        except (requests.RequestException, RuntimeError) as exc:
+            last_exc = exc
+            print(f"WARNING: Football-Data fetch failed for {season_label(start_year)} on attempt {attempt}/3: {exc}")
+            if attempt < 3:
+                time.sleep(5 * attempt)
+    else:
+        if out.exists() and out.stat().st_size > 0:
+            print(f"WARNING: using cached Football-Data file for {season_label(start_year)} after live fetch failed: {out}")
+        else:
+            raise RuntimeError(f"Football-Data unavailable for {season_label(start_year)} and no cached file exists") from last_exc
 
     df = pd.read_csv(out)
     required = ["Date", "HomeTeam", "AwayTeam", "FTHG", "FTAG"]

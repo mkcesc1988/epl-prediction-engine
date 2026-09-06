@@ -9,6 +9,7 @@ on:
       - 'api_football_odds_fallback.py'
       - 'gameweek_rankings.py'
       - 'pre_kickoff_adjustment.py'
+      - 'decision_focus.py'
       - 'prepare_manual_mybookie.py'
       - 'data/manual_mybookie_odds*.csv'
       - 'data/manual_availability_adjustments.csv'
@@ -65,6 +66,9 @@ jobs:
       - name: Build pre-kickoff adjusted shadow probabilities
         run: python pre_kickoff_adjustment.py
 
+      - name: Build focused decision layer
+        run: python decision_focus.py
+
       - name: Build conservative paper portfolio
         run: python safe_portfolio_manager.py
 
@@ -117,6 +121,7 @@ jobs:
           git add -f data/processed/gameweek_rankings_latest.csv
           git add -f data/processed/v2_shadow_predictions_latest.csv
           git add -f data/processed/pre_kickoff_adjusted_latest.csv
+          git add -f data/processed/decision_focus_latest.csv
           git add -f data/processed/v1_v2_agreement_audit_latest.csv
           git add -f data/processed/extreme_edge_audit_latest.csv
           git add -f data/processed/moneyline_calibration_gate_latest.csv
@@ -191,6 +196,7 @@ jobs:
             data/processed/gameweek_rankings_latest.csv
             data/processed/v2_shadow_predictions_latest.csv
             data/processed/pre_kickoff_adjusted_latest.csv
+            data/processed/decision_focus_latest.csv
             data/processed/v1_v2_agreement_audit_latest.csv
             data/processed/extreme_edge_audit_latest.csv
             data/processed/moneyline_calibration_gate_latest.csv

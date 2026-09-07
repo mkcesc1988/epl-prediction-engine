@@ -34,6 +34,14 @@ def _comparison_frame(base: pd.DataFrame, candidate: pd.DataFrame, candidate_lab
     return out
 
 
+def _historical_market_odds_available(frame: pd.DataFrame) -> bool:
+    cols = [c for c in [
+        "Pinnacle_Home", "Pinnacle_Draw", "Pinnacle_Away",
+        "B365_Home", "B365_Draw", "B365_Away",
+    ] if c in frame.columns]
+    return bool(cols) and frame[cols].notna().any(axis=None)
+
+
 def main() -> None:
     cfg = load_config()
 
@@ -79,10 +87,13 @@ def main() -> None:
     evaluated_v12.to_csv(Path(cfg["paths"]["processed_dir"]) / "walkforward_predictions_v12.csv", index=False)
 
     print("\n=== 8. AUDIT V1.2 UNDERDOG CALIBRATION AND ROI ===")
-    underdog_detail, underdog_summary = save_underdog_audit(candidate_v12, cfg["paths"]["processed_dir"])
-    print(f"Historical quoted home/away sides audited: {len(underdog_detail)}")
-    if not underdog_summary.empty:
-        print(underdog_summary.to_string(index=False))
+    if _historical_market_odds_available(candidate_v12):
+        underdog_detail, underdog_summary = save_underdog_audit(candidate_v12, cfg["paths"]["processed_dir"])
+        print(f"Historical quoted home/away sides audited: {len(underdog_detail)}")
+        if not underdog_summary.empty:
+            print(underdog_summary.to_string(index=False))
+    else:
+        print("Historical bookmaker odds unavailable in this fallback run. Preserving last published underdog audit outputs.")
 
     print("\n=== 9. COMPARE V1.0 VS V1.2 ===")
     comparison_v12 = _comparison_frame(summary, summary_v12, "V12")

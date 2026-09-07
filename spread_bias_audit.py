@@ -35,9 +35,13 @@ def fetch_handicap_history(cfg: dict) -> pd.DataFrame:
     frames = []
     for year in range(int(cfg["start_season"]), int(cfg["end_season"]) + 1):
         url = FD_BASE.format(code=season_code(year), division=cfg["football_data_division"])
-        resp = requests.get(url, timeout=45)
-        resp.raise_for_status()
-        raw = pd.read_csv(BytesIO(resp.content))
+        try:
+            resp = requests.get(url, timeout=45)
+            resp.raise_for_status()
+            raw = pd.read_csv(BytesIO(resp.content))
+        except Exception as exc:
+            print(f"WARNING: historical spread source unavailable for {season_label(year)}: {exc}")
+            return pd.DataFrame()
         if "AHh" not in raw.columns:
             continue
         cols = [c for c in [
@@ -149,8 +153,14 @@ def main() -> None:
         raise RuntimeError("Run V1.2 historical predictions first")
     predictions = pd.read_csv(pred_path)
     handicap = fetch_handicap_history(cfg)
-    detail, summary = build_spread_audit(predictions, handicap, cfg)
     out = Path(cfg["paths"]["processed_dir"])
+    if handicap.empty:
+        print("Historical spread source unavailable. Preserving the last published spread audit outputs.")
+        return
+    detail, summary = build_spread_audit(predictions, handicap, cfg)
+    if detail.empty:
+        print("No supported historical spread rows. Preserving the last published spread audit outputs.")
+        return
     detail.to_csv(out / "spread_bias_detail_v12.csv", index=False)
     summary.to_csv(out / "spread_bias_summary_v12.csv", index=False)
     print(summary.to_string(index=False) if not summary.empty else "No supported historical spread rows")

@@ -32,6 +32,14 @@ TEAM_MAP = {
 
 FD_BASE = "https://www.football-data.co.uk/mmz4281/{code}/{division}.csv"
 
+ODDS_COLUMNS = [
+    "B365_Home", "B365_Draw", "B365_Away",
+    "Pinnacle_Home", "Pinnacle_Draw", "Pinnacle_Away",
+    "B365_Over2_5", "B365_Under2_5",
+    "Pinnacle_Over2_5", "Pinnacle_Under2_5",
+    "Pinnacle_Close_Over2_5", "Pinnacle_Close_Under2_5",
+]
+
 
 def normalize_team(name: object) -> str:
     value = str(name).strip()
@@ -174,24 +182,53 @@ def fetch_understat_xg(start_year: int, raw_dir: str) -> pd.DataFrame:
     return df
 
 
+def _football_data_from_understat(xg: pd.DataFrame, start_year: int) -> pd.DataFrame:
+    """Construct the minimum historical match frame needed by the model when Football-Data is down.
+
+    Understat remains the source for scores and xG. Historical bookmaker columns are left missing,
+    so market-specific audits can be skipped rather than fabricating odds.
+    """
+    fd = xg[["Season", "Date", "HomeTeam", "AwayTeam", "Understat_FTHG", "Understat_FTAG"]].copy()
+    fd = fd.rename(columns={"Understat_FTHG": "FTHG", "Understat_FTAG": "FTAG"})
+    fd["FTHG"] = pd.to_numeric(fd["FTHG"], errors="coerce")
+    fd["FTAG"] = pd.to_numeric(fd["FTAG"], errors="coerce")
+    for col in ODDS_COLUMNS:
+        fd[col] = pd.NA
+    fd["TotalGoals"] = fd["FTHG"] + fd["FTAG"]
+    fd["Over2_5_Result"] = (fd["TotalGoals"] >= 3).astype("Int64")
+    print(
+        f"WARNING: Football-Data unavailable for {season_label(start_year)}; "
+        "using Understat scores/xG for model training. Historical bookmaker odds are unavailable for this run."
+    )
+    return fd
+
+
 def build_master(cfg: dict) -> pd.DataFrame:
     ensure_dirs(cfg)
     fd_frames = []
     xg_frames = []
+    fallback_seasons: list[str] = []
 
     for year in range(int(cfg["start_season"]), int(cfg["end_season"]) + 1):
-        print(f"Football-Data {season_label(year)}")
-        fd_frames.append(fetch_football_data(year, cfg["football_data_division"], cfg["paths"]["raw_dir"]))
-
         print(f"Understat {season_label(year)}")
-        xg_frames.append(fetch_understat_xg(year, cfg["paths"]["raw_dir"]))
+        xg_year = fetch_understat_xg(year, cfg["paths"]["raw_dir"])
+        xg_frames.append(xg_year)
+
+        print(f"Football-Data {season_label(year)}")
+        try:
+            fd_year = fetch_football_data(year, cfg["football_data_division"], cfg["paths"]["raw_dir"])
+        except RuntimeError as exc:
+            print(f"WARNING: {exc}")
+            fd_year = _football_data_from_understat(xg_year, year)
+            fallback_seasons.append(season_label(year))
+        fd_frames.append(fd_year)
 
     fd = pd.concat(fd_frames, ignore_index=True)
     xg = pd.concat(xg_frames, ignore_index=True)
     key = ["Season", "Date", "HomeTeam", "AwayTeam"]
 
     if fd.duplicated(key).any():
-        raise RuntimeError("Duplicate Football-Data match keys detected")
+        raise RuntimeError("Duplicate historical match keys detected")
     if xg.duplicated(key).any():
         raise RuntimeError("Duplicate Understat match keys detected")
 
@@ -212,6 +249,8 @@ def build_master(cfg: dict) -> pd.DataFrame:
         "xg_complete": int((master["Home_xG"].notna() & master["Away_xG"].notna()).sum()),
         "missing_xg": int((master["Home_xG"].isna() | master["Away_xG"].isna()).sum()),
         "score_mismatches": int(master["score_source_mismatch"].sum()),
+        "football_data_fallback_seasons": fallback_seasons,
+        "historical_market_odds_complete": len(fallback_seasons) == 0,
         "by_season": {},
     }
     for season, g in master.groupby("Season"):

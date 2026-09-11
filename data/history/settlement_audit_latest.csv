@@ -33,6 +33,8 @@ paper,bfcf86938ed6eb87,2026-09-12T14:00:00+00:00,Crystal Palace,Ipswich Town,Mon
 paper,bbbc43ac7a5f9838,2026-09-12T14:00:00+00:00,Crystal Palace,Ipswich Town,Spread,Crystal Palace -0.5,-0.5,,,,OPEN,OPEN,,INFO
 paper,fb24a5624369eb79,2026-09-13T13:00:00+00:00,Coventry City,Brighton,Spread,Coventry City +0.5,0.5,,,,OPEN,OPEN,,INFO
 paper,0445b5b884bcbcef,2026-09-12T14:00:00+00:00,Chelsea,Hull City,Spread,Hull City +1.5,1.5,,,,OPEN,OPEN,,INFO
+paper,b5853bbe0fd1d13e,2026-09-12T14:00:00+00:00,Chelsea,Hull City,Spread,Hull City +2,2.0,,,,OPEN,EXCLUDED_CONFLICTING_SIGNAL,,INFO
+paper,adef0682a38dc8db,2026-09-12T14:00:00+00:00,Bournemouth,Brentford,Moneyline,Bournemouth,,,,,OPEN,OPEN,,INFO
 real_money,RM-20260821-COV15,2026-08-21T19:00:00+00:00,Arsenal,Coventry City,Spread,Coventry City +1.5,1.5,3-0,3-0,FPL+API_FOOTBALL,L,L,,INFO
 real_money,RM-20260822-IPSML,2026-08-22T14:00:00+00:00,Ipswich Town,Sunderland,Moneyline,Ipswich Town,,2-1,2-1,FPL+API_FOOTBALL,W,W,,INFO
 real_money,RM-20260822-LEE,2026-08-22T14:00:00+00:00,Nott'm Forest,Leeds,Moneyline,Leeds,,0-1,0-1,FPL+API_FOOTBALL,W,W,,INFO

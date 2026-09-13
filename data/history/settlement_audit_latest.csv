@@ -38,7 +38,7 @@ paper,adef0682a38dc8db,2026-09-12T14:00:00+00:00,Bournemouth,Brentford,Moneyline
 paper,e02532dcf8b2799a,2026-09-12T14:00:00+00:00,Chelsea,Hull City,Total,Under 4.5,4.5,,2-2,API_FOOTBALL_ONLY,OPEN,EXCLUDED_LATE_ENTRY,,INFO
 paper,61d45158ce467e04,2026-09-13T13:00:00+00:00,Coventry City,Brighton,Moneyline,Coventry City,,,0-5,API_FOOTBALL_ONLY,L,L,,INFO
 paper,c748cfce00163eaf,2026-09-12T14:00:00+00:00,Aston Villa,Nott'm Forest,Total,Over 3.5,3.5,,1-2,API_FOOTBALL_ONLY,OPEN,EXCLUDED_LATE_ENTRY,,INFO
-paper,01265f7c3b2e7dab,2026-09-13T15:30:00+00:00,Man United,Man City,Spread,Man City +0.5,0.5,,,,OPEN,EXCLUDED_LATE_ENTRY,,INFO
+paper,01265f7c3b2e7dab,2026-09-13T15:30:00+00:00,Man United,Man City,Spread,Man City +0.5,0.5,,0-1,API_FOOTBALL_ONLY,OPEN,EXCLUDED_LATE_ENTRY,,INFO
 real_money,RM-20260821-COV15,2026-08-21T19:00:00+00:00,Arsenal,Coventry City,Spread,Coventry City +1.5,1.5,3-0,3-0,FPL+API_FOOTBALL,L,L,,INFO
 real_money,RM-20260822-IPSML,2026-08-22T14:00:00+00:00,Ipswich Town,Sunderland,Moneyline,Ipswich Town,,2-1,2-1,FPL+API_FOOTBALL,W,W,,INFO
 real_money,RM-20260822-LEE,2026-08-22T14:00:00+00:00,Nott'm Forest,Leeds,Moneyline,Leeds,,0-1,0-1,FPL+API_FOOTBALL,W,W,,INFO

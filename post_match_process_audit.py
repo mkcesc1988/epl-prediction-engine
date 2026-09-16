@@ -11,6 +11,8 @@ import requests
 PREDICTIONS = Path("data/processed/daily_predictions_latest.csv")
 LATEST = Path("data/processed/post_match_process_latest.csv")
 HISTORY = Path("data/history/post_match_process_history.csv")
+SKIPPED_LATEST = Path("data/processed/post_match_process_skipped_latest.csv")
+SKIPPED_HISTORY = Path("data/history/post_match_process_skipped_history.csv")
 API_BASE = "https://v3.football.api-sports.io"
 
 ALIASES = {
@@ -97,6 +99,49 @@ def fetch_date(date: str) -> list[dict]:
     return rows
 
 
+def _is_plan_date_access_error(exc: Exception) -> bool:
+    msg = str(exc).lower()
+    return (
+        "free plans do not have access to this date" in msg
+        or ("api-football error" in msg and "plan" in msg and "date" in msg)
+    )
+
+
+def fetch_date_safe(date: str) -> tuple[list[dict], dict | None]:
+    print(f"[audit] requesting API-Football date={date}")
+    try:
+        return fetch_date(date), None
+    except RuntimeError as exc:
+        if not _is_plan_date_access_error(exc):
+            raise
+        error = str(exc)
+        print(f"[audit] AUDIT_SKIPPED date={date} reason=DATA_UNAVAILABLE error={error}")
+        return [], {
+            "Date": date,
+            "AuditStatus": "AUDIT_SKIPPED",
+            "Reason": "DATA_UNAVAILABLE",
+            "APIError": error,
+            "AuditUTC": pd.Timestamp.now(tz="UTC").isoformat(),
+        }
+
+
+def _save_skipped(rows: list[dict]) -> None:
+    if not rows:
+        return
+    skipped = pd.DataFrame(rows)
+    SKIPPED_LATEST.parent.mkdir(parents=True, exist_ok=True)
+    SKIPPED_HISTORY.parent.mkdir(parents=True, exist_ok=True)
+    skipped.to_csv(SKIPPED_LATEST, index=False)
+    if SKIPPED_HISTORY.exists():
+        hist = pd.read_csv(SKIPPED_HISTORY)
+        out = pd.concat([hist, skipped], ignore_index=True, sort=False).drop_duplicates(
+            subset=["Date", "AuditStatus", "Reason"], keep="last"
+        )
+    else:
+        out = skipped
+    out.sort_values(["Date", "AuditUTC"]).to_csv(SKIPPED_HISTORY, index=False)
+
+
 def grade(row: pd.Series) -> str:
     if pd.isna(row["ActualHomeXG"]) or pd.isna(row["ActualAwayXG"]):
         return "RESULT_ONLY_NO_XG"
@@ -115,10 +160,28 @@ def main() -> None:
     pred = pd.read_csv(PREDICTIONS)
     pred["HomeKey"] = pred["HomeTeam"].map(norm_team)
     pred["AwayKey"] = pred["AwayTeam"].map(norm_team)
-    actual = pd.DataFrame([r for date in sorted(set(pred["Date"].astype(str))) for r in fetch_date(date)])
+
+    actual_rows: list[dict] = []
+    skipped_rows: list[dict] = []
+    requested_dates = sorted(set(pred["Date"].astype(str)))
+    print(f"[audit] prediction dates={requested_dates}")
+
+    for date in requested_dates:
+        rows, skipped = fetch_date_safe(date)
+        actual_rows.extend(rows)
+        if skipped is not None:
+            skipped_rows.append(skipped)
+
+    _save_skipped(skipped_rows)
+
+    actual = pd.DataFrame(actual_rows)
     if actual.empty:
-        print("No finished EPL fixtures found for prediction dates")
+        if skipped_rows:
+            print(f"No finished EPL fixtures audited; skipped {len(skipped_rows)} inaccessible prediction date(s)")
+        else:
+            print("No finished EPL fixtures found for prediction dates")
         return
+
     merged = pred.merge(actual, on=["Date", "HomeKey", "AwayKey"], how="inner")
     merged["ActualTotalGoals"] = merged["HomeGoals"] + merged["AwayGoals"]
     merged["ActualTotalXG"] = merged["ActualHomeXG"] + merged["ActualAwayXG"]

@@ -248,13 +248,13 @@ with perf_tab:
         st.markdown("### Open tracked bets")
         if open_bets.empty: st.info("No open bets.")
         else:
-            cols = ["Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "EntryOdds", "ModelProbability", "ProbabilityEdge", "StakeUnits", "ClosingOdds", "PriceCLV", "ConfidenceBucket", "EdgeBucket", "Grade"]; st.dataframe(open_bets[[c for c in cols if c in open_bets.columns]], use_container_width=True, hide_index=True)
+            cols = ["TrackingSource", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "EntryOdds", "ModelProbability", "ProbabilityEdge", "StakeUnits", "ClosingOdds", "PriceCLV", "ConfidenceBucket", "EdgeBucket", "Grade"]; st.dataframe(open_bets[[c for c in cols if c in open_bets.columns]], use_container_width=True, hide_index=True)
         if settled.empty:
             st.info("No EPL tracked bets have settled yet. ROI, win rate and Brier score will populate automatically after results are available.")
         else:
             settled = settled.copy(); settled["SettledOrder"] = pd.to_datetime(settled.get("SettledUTC"), errors="coerce"); settled = settled.sort_values(["SettledOrder", "Date"], na_position="last"); settled["CumulativeUnits"] = num_series(settled, "ProfitUnits").fillna(0).cumsum(); st.markdown("### Cumulative units"); chart = settled[["CumulativeUnits"]].copy(); chart.index = range(1, len(chart) + 1); st.line_chart(chart)
             st.markdown("### Settled bets"); cols = ["Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "EntryOdds", "ClosingOdds", "StakeUnits", "Result", "FinalScore", "ProfitUnits", "PriceCLV", "BrierScore", "ConfidenceBucket", "EdgeBucket"]; st.dataframe(settled[[c for c in cols if c in settled.columns]], use_container_width=True, hide_index=True)
-            for group_col, title in [("ConfidenceBucket", "Performance by confidence"), ("EdgeBucket", "Performance by edge"), ("MarketType", "Performance by market")]:
+            for group_col, title in [("TrackingSource", "Performance by tracking cohort"), ("ConfidenceBucket", "Performance by confidence"), ("EdgeBucket", "Performance by edge"), ("MarketType", "Performance by market")]:
                 breakdown = performance_breakdown(settled, group_col)
                 if not breakdown.empty:
                     st.markdown(f"### {title}"); display = breakdown.copy(); display["WinRate"] = display["WinRate"].map(lambda x: f"{x:.1%}"); display["ROI"] = display["ROI"].map(lambda x: f"{x:.1%}"); display["AvgPriceCLV"] = display["AvgPriceCLV"].map(lambda x: "–" if pd.isna(x) else f"{x:.1%}"); st.dataframe(display, use_container_width=True, hide_index=True)

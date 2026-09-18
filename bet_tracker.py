@@ -12,6 +12,7 @@ from pipeline import load_config, normalize_team
 PROCESSED = Path("data/processed")
 HISTORY = Path("data/history")
 PORTFOLIO_PATH = PROCESSED / "paper_portfolio_latest.csv"
+ADJUSTED_PORTFOLIO_PATH = PROCESSED / "adjusted_top5_portfolio.csv"
 ODDS_HISTORY_PATH = HISTORY / "market_odds_history.csv"
 LEDGER_PATH = HISTORY / "auto_bet_ledger.csv"
 SUMMARY_PATH = HISTORY / "bet_performance_summary.csv"
@@ -77,7 +78,7 @@ def _new_entries(portfolio: pd.DataFrame, existing: pd.DataFrame) -> pd.DataFram
             "Bookmaker": r.get("Bookmaker"), "EntryOdds": r.get("MyBookieOdds"), "ModelProbability": p, "PushProbability": r.get("PushProbability", 0.0),
             "ModelFairOdds": r.get("ModelFairOdds"), "EntryImpliedProbability": r.get("MyBookieImpliedProbability"), "ProbabilityEdge": edge, "ExpectedReturnPerUnit": r.get("ExpectedReturnPerUnit"),
             "BetQualityScore": quality, "ProfitabilityScore": r.get("ProfitabilityScore"), "OverallRankScore": r.get("OverallRankScore"), "Grade": r.get("Grade"),
-            "ValidationStatus": r.get("ValidationStatus"), "StakeUnits": r.get("PaperStakeUnits"), "StakeAmount": r.get("PaperStakeAmount"), "ModelVersion": r.get("ModelVersion", "V1.2"),
+            "ValidationStatus": r.get("ValidationStatus"), "StakeUnits": r.get("PaperStakeUnits"), "StakeAmount": r.get("PaperStakeAmount"), "ModelVersion": r.get("ModelVersion", "V1.2"), "TrackingSource": r.get("TrackingSource", "AutoPortfolio"), "TrackingNote": r.get("TrackingNote", pd.NA),
             "ConfidenceBucket": _confidence_bucket(quality), "EdgeBucket": _edge_bucket(edge), "ClosingOdds": np.nan, "ClosingLine": np.nan, "LineMove": np.nan,
             "SameLineClosingOdds": np.nan, "SameLinePriceCLV": np.nan, "LineAwareCLVStatus": pd.NA,
             "ClosingSnapshotUTC": pd.NA, "HoursBeforeKickoff": np.nan, "ClosingQuality": pd.NA, "PriceCLV": np.nan, "ImpliedProbabilityCLV": np.nan,
@@ -194,7 +195,7 @@ def _summary(ledger: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
-    HISTORY.mkdir(parents=True, exist_ok=True); portfolio = pd.read_csv(PORTFOLIO_PATH) if PORTFOLIO_PATH.exists() else pd.DataFrame(); ledger = pd.read_csv(LEDGER_PATH) if LEDGER_PATH.exists() else pd.DataFrame(); ledger = _ensure_columns(ledger); new = _new_entries(portfolio, ledger)
+    HISTORY.mkdir(parents=True, exist_ok=True); portfolio_path = ADJUSTED_PORTFOLIO_PATH if ADJUSTED_PORTFOLIO_PATH.exists() else PORTFOLIO_PATH; portfolio = pd.read_csv(portfolio_path) if portfolio_path.exists() else pd.DataFrame(); ledger = pd.read_csv(LEDGER_PATH) if LEDGER_PATH.exists() else pd.DataFrame(); ledger = _ensure_columns(ledger); new = _new_entries(portfolio, ledger)
     if not new.empty: ledger = pd.concat([ledger, new], ignore_index=True, sort=False) if not ledger.empty else new
     odds_history = pd.read_csv(ODDS_HISTORY_PATH) if ODDS_HISTORY_PATH.exists() else pd.DataFrame(); ledger = _update_closing(ledger, odds_history)
     try: ledger = _settle(ledger, _fetch_results())

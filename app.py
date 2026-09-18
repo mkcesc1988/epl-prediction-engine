@@ -114,6 +114,7 @@ if focus.empty and not rankings.empty:
         st.warning(f"Decision Focus could not be built from current rankings: {exc}")
 
 adjusted_top5 = load_csv("adjusted_top5_portfolio.csv")
+favorite_watch = load_csv("favorite_watch_portfolio.csv")
 portfolio = adjusted_top5 if not adjusted_top5.empty else load_csv("paper_portfolio_latest.csv")
 market = load_csv("market_comparison_latest.csv")
 pred_history = load_history("prediction_history.csv")
@@ -209,6 +210,11 @@ with portfolio_tab:
         c1.metric("Selections", len(portfolio)); c2.metric("Exposure", f"{exposure:.2f}u"); c3.metric("Expected profit", f"{exp_profit:.2f}u")
         preferred = ["PortfolioRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "MyBookieOdds", "ModelWinProbability", "BetQualityScore", "ExpectedReturnPerUnit", "PaperStakeUnits", "TrackingSource", "TrackingNote"]
         st.dataframe(portfolio[[c for c in preferred if c in portfolio.columns]], use_container_width=True, hide_index=True)
+    if not favorite_watch.empty:
+        st.markdown("### Favorite Watch cohort")
+        st.caption("Contextual favorite leans tracked separately from the Adjusted Top 5 so their performance can be compared without contaminating the core strategy.")
+        fav_cols = ["FavoriteRank", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "EntryOdds", "AdjustedProbability", "EntryImpliedProbability", "AdjustedEV", "PaperStakeUnits", "TrackingNote"]
+        st.dataframe(favorite_watch[[c for c in fav_cols if c in favorite_watch.columns]], use_container_width=True, hide_index=True)
 
 with market_tab:
     st.subheader("Model vs market")

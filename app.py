@@ -123,6 +123,7 @@ market_history = load_history("market_comparison_history.csv")
 clv = load_history("clv_report.csv")
 ledger = load_history("auto_bet_ledger.csv")
 perf_summary = load_history("bet_performance_summary.csv")
+parlay_watch = load_history("parlay_bet_ledger.csv")
 backtest_summary = load_csv("backtest_summary_v12.csv")
 model_comparison = load_csv("model_comparison_v12.csv")
 
@@ -264,6 +265,15 @@ with perf_tab:
                 breakdown = performance_breakdown(settled, group_col)
                 if not breakdown.empty:
                     st.markdown(f"### {title}"); display = breakdown.copy(); display["WinRate"] = display["WinRate"].map(lambda x: f"{x:.1%}"); display["ROI"] = display["ROI"].map(lambda x: f"{x:.1%}"); display["AvgPriceCLV"] = display["AvgPriceCLV"].map(lambda x: "–" if pd.isna(x) else f"{x:.1%}"); st.dataframe(display, use_container_width=True, hide_index=True)
+    if not parlay_watch.empty:
+        st.markdown("### Parlay Watch")
+        st.caption("Tracked separately from singles. A parlay wins only if every non-push leg wins.")
+        pcols = ["Label", "LegCount", "EntryOdds", "ModelProbability", "ExpectedReturnPerUnit", "StakeUnits", "Status", "ProfitUnits", "LegResults"]
+        st.dataframe(parlay_watch[[c for c in pcols if c in parlay_watch.columns]], use_container_width=True, hide_index=True)
+        settled_p = parlay_watch[parlay_watch.get("Status", pd.Series(dtype=str)).astype(str).isin(["W","L","PUSH"])].copy()
+        if not settled_p.empty:
+            pstake = num_series(settled_p, "StakeUnits").sum(); pprofit = num_series(settled_p, "ProfitUnits").sum(); proi = pprofit / pstake if pstake > 0 else None
+            a, b, d = st.columns(3); a.metric("Parlays settled", len(settled_p)); b.metric("Parlay units", f"{pprofit:+.2f}u"); d.metric("Parlay ROI", pct(proi) if proi is not None else "Waiting")
     if not perf_summary.empty:
         st.markdown("### Latest tracker summary"); st.dataframe(perf_summary, use_container_width=True, hide_index=True)
     with st.expander("Historical V1.2 backtest (research only)"):

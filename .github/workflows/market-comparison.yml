@@ -85,6 +85,7 @@ jobs:
       - name: Update automatic paper-bet ledger and analytics
         run: |
           python bet_tracker.py
+          python parlay_tracker.py
           python fixture_lifecycle_guard.py
 
       - name: Update separate real-money execution ledger
@@ -107,6 +108,7 @@ jobs:
       - name: Rebuild analytics after settlement reconciliation
         run: |
           python bet_tracker.py
+          python parlay_tracker.py
           python fixture_lifecycle_guard.py
           python real_money_tracker.py
 

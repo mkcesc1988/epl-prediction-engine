@@ -67,6 +67,7 @@ jobs:
 
       - name: Rebuild settlement performance summaries
         run: python settlement_summaries.py
+          python parlay_tracker.py
 
       - name: Assert settlement integrity
         run: python settlement_guard.py --assert-clean
@@ -81,6 +82,7 @@ jobs:
           git add data/history/bet_performance_summary.csv
           git add data/history/real_money_performance_summary.csv
           git add data/history/settlement_audit_latest.csv
+          git add data/history/parlay_bet_ledger.csv
 
           if git diff --cached --quiet; then
             echo "No settlement changes to publish"

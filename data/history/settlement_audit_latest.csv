@@ -44,6 +44,11 @@ paper,4de62029efb75bd0,2026-09-18T19:00:00+00:00,Brentford,Chelsea,Moneyline,Bre
 paper,ee386b87aa0261b7,2026-09-20T13:00:00+00:00,Bournemouth,Liverpool,Moneyline,Bournemouth,,,,,OPEN,OPEN,,INFO
 paper,fddbe6461127aa3c,2026-09-20T15:30:00+00:00,Fulham,Man United,Moneyline,Fulham,,,,,OPEN,OPEN,,INFO
 paper,6219aed22568e5e9,2026-09-19T14:00:00+00:00,Newcastle,Hull City,Spread,Hull City +0.5,0.5,,,,OPEN,OPEN,,INFO
+paper,adjtop5-cov-05,2026-09-19T16:30:00+00:00,Nott'm Forest,Coventry City,Spread,Coventry City +0.5,0.5,,,,OPEN,OPEN,,INFO
+paper,adjtop5-bre-ml,2026-09-18T19:00:00+00:00,Brentford,Chelsea,Moneyline,Brentford,,,,,OPEN,OPEN,,INFO
+paper,adjtop5-hul-05,2026-09-19T14:00:00+00:00,Newcastle,Hull City,Spread,Hull City +0.5,0.5,,,,OPEN,OPEN,,INFO
+paper,adjtop5-sun-15,2026-09-20T13:00:00+00:00,Man City,Sunderland,Spread,Sunderland +1.5,1.5,,,,OPEN,OPEN,,INFO
+paper,adjtop5-ful-05,2026-09-20T15:30:00+00:00,Fulham,Man United,Spread,Fulham +0.5,0.5,,,,OPEN,OPEN,,INFO
 real_money,RM-20260821-COV15,2026-08-21T19:00:00+00:00,Arsenal,Coventry City,Spread,Coventry City +1.5,1.5,3-0,,FPL_ONLY,L,L,,INFO
 real_money,RM-20260822-IPSML,2026-08-22T14:00:00+00:00,Ipswich Town,Sunderland,Moneyline,Ipswich Town,,2-1,,FPL_ONLY,W,W,,INFO
 real_money,RM-20260822-LEE,2026-08-22T14:00:00+00:00,Nott'm Forest,Leeds,Moneyline,Leeds,,0-1,,FPL_ONLY,W,W,,INFO

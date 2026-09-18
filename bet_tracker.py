@@ -14,6 +14,7 @@ HISTORY = Path("data/history")
 PORTFOLIO_PATH = PROCESSED / "paper_portfolio_latest.csv"
 ADJUSTED_PORTFOLIO_PATH = PROCESSED / "adjusted_top5_portfolio.csv"
 FAVORITE_WATCH_PATH = PROCESSED / "favorite_watch_portfolio.csv"
+STRONG_TOTALS_PATH = PROCESSED / "strong_totals_portfolio.csv"
 ODDS_HISTORY_PATH = HISTORY / "market_odds_history.csv"
 LEDGER_PATH = HISTORY / "auto_bet_ledger.csv"
 SUMMARY_PATH = HISTORY / "bet_performance_summary.csv"
@@ -196,7 +197,7 @@ def _summary(ledger: pd.DataFrame) -> pd.DataFrame:
 
 
 def main() -> None:
-    HISTORY.mkdir(parents=True, exist_ok=True); base_portfolio = pd.read_csv(ADJUSTED_PORTFOLIO_PATH) if ADJUSTED_PORTFOLIO_PATH.exists() else (pd.read_csv(PORTFOLIO_PATH) if PORTFOLIO_PATH.exists() else pd.DataFrame()); favorite_watch = pd.read_csv(FAVORITE_WATCH_PATH) if FAVORITE_WATCH_PATH.exists() else pd.DataFrame(); portfolio = pd.concat([base_portfolio, favorite_watch], ignore_index=True, sort=False) if not favorite_watch.empty else base_portfolio; ledger = pd.read_csv(LEDGER_PATH) if LEDGER_PATH.exists() else pd.DataFrame(); ledger = _ensure_columns(ledger); new = _new_entries(portfolio, ledger)
+    HISTORY.mkdir(parents=True, exist_ok=True); base_portfolio = pd.read_csv(ADJUSTED_PORTFOLIO_PATH) if ADJUSTED_PORTFOLIO_PATH.exists() else (pd.read_csv(PORTFOLIO_PATH) if PORTFOLIO_PATH.exists() else pd.DataFrame()); favorite_watch = pd.read_csv(FAVORITE_WATCH_PATH) if FAVORITE_WATCH_PATH.exists() else pd.DataFrame(); strong_totals = pd.read_csv(STRONG_TOTALS_PATH) if STRONG_TOTALS_PATH.exists() else pd.DataFrame(); frames = [x for x in [base_portfolio, favorite_watch, strong_totals] if not x.empty]; portfolio = pd.concat(frames, ignore_index=True, sort=False) if frames else pd.DataFrame(); ledger = pd.read_csv(LEDGER_PATH) if LEDGER_PATH.exists() else pd.DataFrame(); ledger = _ensure_columns(ledger); new = _new_entries(portfolio, ledger)
     if not new.empty: ledger = pd.concat([ledger, new], ignore_index=True, sort=False) if not ledger.empty else new
     odds_history = pd.read_csv(ODDS_HISTORY_PATH) if ODDS_HISTORY_PATH.exists() else pd.DataFrame(); ledger = _update_closing(ledger, odds_history)
     try: ledger = _settle(ledger, _fetch_results())

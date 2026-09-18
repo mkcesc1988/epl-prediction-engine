@@ -156,7 +156,7 @@ else:
 
 if not settled.empty:
     st.markdown("### Performance breakdowns")
-    dimensions = [c for c in ["MarketType", "ConfidenceBucket", "EdgeBucket", "Grade"] if c in settled.columns]
+    dimensions = [c for c in ["TrackingSource", "MarketType", "ConfidenceBucket", "EdgeBucket", "Grade"] if c in settled.columns]
     if dimensions:
         dimension = st.selectbox("Break down by", dimensions)
         breakdown = summary_by(settled, dimension)

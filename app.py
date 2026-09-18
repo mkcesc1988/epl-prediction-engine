@@ -115,6 +115,7 @@ if focus.empty and not rankings.empty:
 
 adjusted_top5 = load_csv("adjusted_top5_portfolio.csv")
 favorite_watch = load_csv("favorite_watch_portfolio.csv")
+strong_totals = load_csv("strong_totals_portfolio.csv")
 portfolio = adjusted_top5 if not adjusted_top5.empty else load_csv("paper_portfolio_latest.csv")
 market = load_csv("market_comparison_latest.csv")
 pred_history = load_history("prediction_history.csv")
@@ -210,6 +211,11 @@ with portfolio_tab:
         c1.metric("Selections", len(portfolio)); c2.metric("Exposure", f"{exposure:.2f}u"); c3.metric("Expected profit", f"{exp_profit:.2f}u")
         preferred = ["PortfolioRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "MyBookieOdds", "ModelWinProbability", "BetQualityScore", "ExpectedReturnPerUnit", "PaperStakeUnits", "TrackingSource", "TrackingNote"]
         st.dataframe(portfolio[[c for c in preferred if c in portfolio.columns]], use_container_width=True, hide_index=True)
+    if not strong_totals.empty:
+        st.markdown("### Strong Totals cohort")
+        st.caption("Calibrated O/U 2.5 selections tracked separately so total-market performance can be measured cleanly.")
+        total_cols = ["TotalRank", "Date", "HomeTeam", "AwayTeam", "Selection", "EntryOdds", "ModelWinProbability", "ModelFairOdds", "ProbabilityEdge", "ExpectedReturnPerUnit", "PaperStakeUnits", "TrackingNote"]
+        st.dataframe(strong_totals[[c for c in total_cols if c in strong_totals.columns]], use_container_width=True, hide_index=True)
     if not favorite_watch.empty:
         st.markdown("### Favorite Watch cohort")
         st.caption("Contextual favorite leans tracked separately from the Adjusted Top 5 so their performance can be compared without contaminating the core strategy.")

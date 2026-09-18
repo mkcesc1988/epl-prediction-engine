@@ -113,7 +113,8 @@ if focus.empty and not rankings.empty:
     except Exception as exc:
         st.warning(f"Decision Focus could not be built from current rankings: {exc}")
 
-portfolio = load_csv("paper_portfolio_latest.csv")
+adjusted_top5 = load_csv("adjusted_top5_portfolio.csv")
+portfolio = adjusted_top5 if not adjusted_top5.empty else load_csv("paper_portfolio_latest.csv")
 market = load_csv("market_comparison_latest.csv")
 pred_history = load_history("prediction_history.csv")
 market_history = load_history("market_comparison_history.csv")
@@ -201,12 +202,12 @@ with rank_tab:
                     for reason in pick_explanation(row): st.write(f"• {reason}")
 
 with portfolio_tab:
-    st.subheader("Conservative paper portfolio")
-    if portfolio.empty: st.info("No paper portfolio is available yet.")
+    st.subheader("Adjusted Top 5 tracking portfolio" if not adjusted_top5.empty else "Conservative paper portfolio")
+    if portfolio.empty: st.info("No tracking portfolio is available yet.")
     else:
         exposure = num_series(portfolio, "PaperStakeUnits").sum(); exp_profit = num_series(portfolio, "ExpectedPaperProfit").sum(); c1, c2, c3 = st.columns(3)
         c1.metric("Selections", len(portfolio)); c2.metric("Exposure", f"{exposure:.2f}u"); c3.metric("Expected profit", f"{exp_profit:.2f}u")
-        preferred = ["PortfolioRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "MyBookieOdds", "ModelWinProbability", "BetQualityScore", "ExpectedReturnPerUnit", "PaperStakeUnits", "ExpectedPaperProfit"]
+        preferred = ["PortfolioRank", "Grade", "Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "MyBookieOdds", "ModelWinProbability", "BetQualityScore", "ExpectedReturnPerUnit", "PaperStakeUnits", "TrackingSource", "TrackingNote"]
         st.dataframe(portfolio[[c for c in preferred if c in portfolio.columns]], use_container_width=True, hide_index=True)
 
 with market_tab:

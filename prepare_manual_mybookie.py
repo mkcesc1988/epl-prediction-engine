@@ -37,14 +37,22 @@ def main() -> None:
     merged["DecimalOdds"] = pd.to_numeric(merged.get("DecimalOdds"), errors="coerce")
     merged = merged.dropna(subset=["Date", "HomeTeam", "AwayTeam", "Market", "Outcome", "DecimalOdds"])
 
+    captured = pd.to_datetime(
+        merged.get("CapturedAt", pd.Series(index=merged.index, dtype=object)),
+        utc=True,
+        errors="coerce",
+    )
+    merged["_captured_sort"] = captured
+    merged = merged.sort_values(["_captured_sort", "_source_file"], na_position="first", kind="stable")
+
     dedupe_keys = [c for c in KEYS if c in merged.columns]
     if dedupe_keys:
         merged = merged.drop_duplicates(subset=dedupe_keys, keep="last")
 
-    merged = merged.drop(columns=["_source_file"], errors="ignore")
+    merged = merged.drop(columns=["_source_file", "_captured_sort"], errors="ignore")
     preferred = [
         "Date", "HomeTeam", "AwayTeam", "Bookmaker", "BookmakerKey",
-        "Market", "Outcome", "Point", "DecimalOdds", "ManualSource",
+        "Market", "Outcome", "Point", "DecimalOdds", "ManualSource", "CapturedAt",
     ]
     cols = [c for c in preferred if c in merged.columns] + [c for c in merged.columns if c not in preferred]
     merged = merged[cols].sort_values(["Date", "HomeTeam", "AwayTeam", "Market", "Outcome"], kind="stable")

@@ -41,17 +41,25 @@ def _load_manual_mybookie() -> pd.DataFrame:
     manual = pd.read_csv(MANUAL_MYBOOKIE_PATH)
     if manual.empty:
         return manual
+
     manual["HomeTeam"] = manual["HomeTeam"].map(_norm)
     manual["AwayTeam"] = manual["AwayTeam"].map(_norm)
     manual["Date"] = manual["Date"].astype(str)
     manual["Bookmaker"] = manual.get("Bookmaker", "MyBookie.ag")
     manual["BookmakerKey"] = manual.get("BookmakerKey", "mybookie_manual")
-    manual["BookLastUpdate"] = manual.get("ManualSource", "manual_screenshot")
+
+    captured_raw = manual.get("CapturedAt", pd.Series(index=manual.index, dtype=object))
+    captured = pd.to_datetime(captured_raw, utc=True, errors="coerce")
+    manual["QuoteCapturedAt"] = captured
+    manual["BookLastUpdate"] = captured
+    manual["PriceSource"] = "manual_screenshot"
     manual["KickoffUTC"] = pd.NA
     manual["EventId"] = "manual-" + manual.index.astype(str)
+
     return manual[[
         "EventId", "Date", "KickoffUTC", "HomeTeam", "AwayTeam", "Bookmaker",
-        "BookmakerKey", "BookLastUpdate", "Market", "Outcome", "Point", "DecimalOdds"
+        "BookmakerKey", "BookLastUpdate", "QuoteCapturedAt", "PriceSource",
+        "Market", "Outcome", "Point", "DecimalOdds"
     ]]
 
 
@@ -60,42 +68,28 @@ def _live_odds_allowed() -> bool:
     return value not in {"0", "false", "no", "off"}
 
 
-def fetch_market_odds(cfg: dict) -> pd.DataFrame:
-    manual = _load_manual_mybookie()
-    key = os.getenv("THE_ODDS_API_KEY", "").strip()
+def _quote_timestamp(df: pd.DataFrame) -> pd.Series:
+    last_update = pd.to_datetime(
+        df.get("BookLastUpdate", pd.Series(index=df.index, dtype=object)),
+        utc=True,
+        errors="coerce",
+    )
+    captured = pd.to_datetime(
+        df.get("QuoteCapturedAt", pd.Series(index=df.index, dtype=object)),
+        utc=True,
+        errors="coerce",
+    )
+    return last_update.fillna(captured)
 
-    # Development/push runs deliberately avoid the paid live feed. They still
-    # generate rankings from the user's manually captured MyBookie prices.
-    if not _live_odds_allowed():
-        print("Odds API live pull disabled for this run; using manual MyBookie prices only.")
-        return manual
 
-    # A missing key should degrade gracefully rather than blocking the whole
-    # prediction and paper-ledger pipeline.
-    if not key:
-        print("WARNING: THE_ODDS_API_KEY is not configured; using manual MyBookie prices only.")
-        return manual
-
-    mc = cfg.get("market_comparison", {})
-    sport_key = str(mc.get("odds_api_sport", "soccer_epl"))
-    regions = str(mc.get("regions", "us"))
-    markets = str(mc.get("markets", "h2h,totals"))
-
-    url = f"{ODDS_API_BASE}/sports/{sport_key}/odds"
+def _fetch_odds_payload(url: str, params: dict, label: str) -> list[dict]:
     try:
-        response = requests.get(
-            url,
-            params={
-                "apiKey": key,
-                "regions": regions,
-                "markets": markets,
-                "oddsFormat": "decimal",
-                "dateFormat": "iso",
-            },
-            timeout=45,
-        )
+        response = requests.get(url, params=params, timeout=45)
         response.raise_for_status()
         payload = response.json() or []
+        if not isinstance(payload, list):
+            raise ValueError("odds payload is not a list")
+        return payload
     except requests.RequestException as exc:
         status = getattr(getattr(exc, "response", None), "status_code", None)
         remaining = None
@@ -104,72 +98,128 @@ def fetch_market_odds(cfg: dict) -> pd.DataFrame:
         detail = f"HTTP {status}" if status is not None else exc.__class__.__name__
         if remaining is not None:
             detail += f", requests remaining={remaining}"
-        print(f"WARNING: Odds API unavailable ({detail}); using manual MyBookie prices only.")
-        return manual
+        print(f"WARNING: {label} unavailable ({detail})")
+        return []
     except ValueError as exc:
-        print(f"WARNING: Odds API returned invalid JSON ({exc}); using manual MyBookie prices only.")
+        print(f"WARNING: {label} returned invalid JSON ({exc})")
+        return []
+
+
+def fetch_market_odds(cfg: dict) -> pd.DataFrame:
+    manual = _load_manual_mybookie()
+    key = os.getenv("THE_ODDS_API_KEY", "").strip()
+
+    if not _live_odds_allowed():
+        print("Odds API live pull disabled for this run; using manual MyBookie prices only.")
         return manual
 
-    rows: list[dict] = []
-    for event in payload:
-        kickoff = pd.to_datetime(event.get("commence_time"), utc=True, errors="coerce")
-        if pd.isna(kickoff):
-            continue
-        home = _norm(event.get("home_team"))
-        away = _norm(event.get("away_team"))
+    if not key:
+        print("WARNING: THE_ODDS_API_KEY is not configured; using manual MyBookie prices only.")
+        return manual
 
-        for book in event.get("bookmakers", []) or []:
-            for market in book.get("markets", []) or []:
-                for outcome in market.get("outcomes", []) or []:
-                    price = outcome.get("price")
-                    if price is None:
-                        continue
-                    rows.append({
-                        "EventId": event.get("id"),
-                        "Date": kickoff.tz_convert(None).strftime("%Y-%m-%d"),
-                        "KickoffUTC": kickoff.isoformat(),
-                        "HomeTeam": home,
-                        "AwayTeam": away,
-                        "Bookmaker": book.get("title") or book.get("key"),
-                        "BookmakerKey": book.get("key"),
-                        "BookLastUpdate": book.get("last_update"),
-                        "Market": market.get("key"),
-                        "Outcome": outcome.get("name"),
-                        "Point": outcome.get("point"),
-                        "DecimalOdds": float(price),
-                    })
+    mc = cfg.get("market_comparison", {})
+    sport_key = str(mc.get("odds_api_sport", "soccer_epl"))
+    regions = str(mc.get("regions", "us"))
+    markets = str(mc.get("markets", "h2h,spreads,totals"))
+    mybookie_key = str(mc.get("mybookie_bookmaker_key", "mybookieag")).strip() or "mybookieag"
+
+    url = f"{ODDS_API_BASE}/sports/{sport_key}/odds"
+    common = {
+        "apiKey": key,
+        "markets": markets,
+        "oddsFormat": "decimal",
+        "dateFormat": "iso",
+    }
+
+    broad_payload = _fetch_odds_payload(
+        url,
+        {**common, "regions": regions},
+        "Odds API regional market feed",
+    )
+    mybookie_payload = _fetch_odds_payload(
+        url,
+        {**common, "bookmakers": mybookie_key},
+        f"Odds API explicit MyBookie feed ({mybookie_key})",
+    )
+
+    if not broad_payload and not mybookie_payload:
+        print("WARNING: all live odds requests failed or returned no events; using manual MyBookie prices only.")
+        return manual
+
+    captured_at = pd.Timestamp.now(tz="UTC").isoformat()
+    rows: list[dict] = []
+
+    for source, payload in [
+        ("odds_api_region", broad_payload),
+        ("odds_api_mybookie_direct", mybookie_payload),
+    ]:
+        for event in payload:
+            kickoff = pd.to_datetime(event.get("commence_time"), utc=True, errors="coerce")
+            if pd.isna(kickoff):
+                continue
+            home = _norm(event.get("home_team"))
+            away = _norm(event.get("away_team"))
+
+            for book in event.get("bookmakers", []) or []:
+                for market in book.get("markets", []) or []:
+                    for outcome in market.get("outcomes", []) or []:
+                        price = outcome.get("price")
+                        if price is None:
+                            continue
+                        rows.append({
+                            "EventId": event.get("id"),
+                            "Date": kickoff.tz_convert(None).strftime("%Y-%m-%d"),
+                            "KickoffUTC": kickoff.isoformat(),
+                            "HomeTeam": home,
+                            "AwayTeam": away,
+                            "Bookmaker": book.get("title") or book.get("key"),
+                            "BookmakerKey": book.get("key"),
+                            "BookLastUpdate": book.get("last_update"),
+                            "QuoteCapturedAt": captured_at,
+                            "PriceSource": source,
+                            "Market": market.get("key"),
+                            "Outcome": outcome.get("name"),
+                            "Point": outcome.get("point"),
+                            "DecimalOdds": float(price),
+                        })
 
     live = pd.DataFrame(rows)
-    if manual.empty:
-        return live
     if live.empty:
         return manual
 
-    # Keep the broader live market, but replace matching MyBookie quotes with the
-    # user's current screenshot prices. This lets rankings use the actual book the
-    # user can access while preserving other books for market benchmarking.
-    live = live.copy()
     live["Date"] = live["Date"].astype(str)
     live["HomeTeam"] = live["HomeTeam"].map(_norm)
     live["AwayTeam"] = live["AwayTeam"].map(_norm)
+    live["_QuoteTimestamp"] = _quote_timestamp(live)
+    live["_SourcePriority"] = live["PriceSource"].eq("odds_api_mybookie_direct").astype(int)
 
-    manual_keys = set()
-    for _, r in manual.iterrows():
-        point = pd.to_numeric(r.get("Point"), errors="coerce")
-        point_key = None if pd.isna(point) else round(float(point), 4)
-        manual_keys.add((r["Date"], r["HomeTeam"], r["AwayTeam"], str(r["Market"]), str(r["Outcome"]), point_key))
+    dedupe = [
+        "Date", "HomeTeam", "AwayTeam", "BookmakerKey",
+        "Market", "Outcome", "Point",
+    ]
+    live = (
+        live.sort_values(
+            ["_QuoteTimestamp", "_SourcePriority"],
+            ascending=[True, True],
+            na_position="first",
+        )
+        .drop_duplicates(dedupe, keep="last")
+        .drop(columns=["_QuoteTimestamp", "_SourcePriority"])
+        .reset_index(drop=True)
+    )
 
-    keep_mask = []
-    for _, r in live.iterrows():
-        if not _is_mybookie(r):
-            keep_mask.append(True)
-            continue
-        point = pd.to_numeric(r.get("Point"), errors="coerce")
-        point_key = None if pd.isna(point) else round(float(point), 4)
-        key_tuple = (r["Date"], r["HomeTeam"], r["AwayTeam"], str(r["Market"]), str(r["Outcome"]), point_key)
-        keep_mask.append(key_tuple not in manual_keys)
+    direct_mybookie_rows = int(
+        live["PriceSource"].eq("odds_api_mybookie_direct").sum()
+    )
+    print(f"Explicit MyBookie live rows fetched: {direct_mybookie_rows}")
 
-    return pd.concat([live.loc[keep_mask], manual], ignore_index=True, sort=False)
+    if manual.empty:
+        return live
+
+    # Keep both live and manual quotes. Downstream executable ranking chooses the
+    # freshest MyBookie quote, so an old screenshot can never overwrite a newer
+    # live API price. Manual screenshots remain a fallback and an audit trail.
+    return pd.concat([live, manual], ignore_index=True, sort=False)
 
 
 def compare_totals_25(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataFrame:
@@ -196,8 +246,16 @@ def compare_totals_25(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataF
 
     mybookie = totals[totals["IsMyBookie"]].copy()
     if not mybookie.empty:
-        my_idx = mybookie.groupby(group_cols)["DecimalOdds"].idxmax()
-        mybookie = mybookie.loc[my_idx].copy().reset_index(drop=True)
+        mybookie["_QuoteTimestamp"] = _quote_timestamp(mybookie)
+        mybookie = (
+            mybookie.sort_values(
+                ["_QuoteTimestamp", "DecimalOdds"],
+                ascending=[False, False],
+                na_position="last",
+            )
+            .drop_duplicates(group_cols, keep="first")
+            .reset_index(drop=True)
+        )
         mybookie = mybookie[group_cols + ["Bookmaker", "BookmakerKey", "BookLastUpdate", "DecimalOdds"]]
         mybookie = mybookie.rename(columns={
             "Bookmaker": "MyBookieBookmaker",

@@ -72,6 +72,8 @@ market_comparison:
   odds_api_sport: soccer_epl
   regions: us
   markets: h2h,spreads,totals
+  mybookie_bookmaker_key: mybookieag
+  executable_quote_max_age_minutes: 240
 
 ranking:
   primary_book: mybookie

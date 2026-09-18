@@ -17,6 +17,66 @@ def _is_mybookie(df: pd.DataFrame) -> pd.Series:
     return title.str.contains("mybookie", na=False) | key.str.contains("mybookie", na=False)
 
 
+def _quote_timestamp(df: pd.DataFrame) -> pd.Series:
+    last_update = pd.to_datetime(
+        df.get("BookLastUpdate", pd.Series(index=df.index, dtype=object)),
+        utc=True,
+        errors="coerce",
+    )
+    captured = pd.to_datetime(
+        df.get("QuoteCapturedAt", pd.Series(index=df.index, dtype=object)),
+        utc=True,
+        errors="coerce",
+    )
+    return last_update.fillna(captured)
+
+
+def _fresh_mybookie_quotes(df: pd.DataFrame, cfg: dict, now_utc: pd.Timestamp | None = None) -> pd.DataFrame:
+    if df.empty:
+        return df.copy()
+
+    out = df.copy()
+    max_age = float(
+        cfg.get("market_comparison", {}).get("executable_quote_max_age_minutes", 240)
+    )
+    now = pd.Timestamp.now(tz="UTC") if now_utc is None else pd.Timestamp(now_utc)
+    if now.tzinfo is None:
+        now = now.tz_localize("UTC")
+    else:
+        now = now.tz_convert("UTC")
+
+    quote_time = _quote_timestamp(out)
+    age_minutes = (now - quote_time).dt.total_seconds() / 60.0
+    fresh_mask = quote_time.notna() & age_minutes.ge(-5.0) & age_minutes.le(max_age)
+
+    out["PriceTimestampUTC"] = quote_time
+    out["PriceAgeMinutes"] = age_minutes
+    out["PriceFreshnessStatus"] = np.where(fresh_mask, "FRESH", "STALE")
+    out = out.loc[fresh_mask].copy()
+    if out.empty:
+        return out
+
+    source = out.get("PriceSource", pd.Series(index=out.index, dtype=object)).astype(str)
+    out["_SourcePriority"] = source.map({
+        "odds_api_mybookie_direct": 2,
+        "odds_api_region": 1,
+        "manual_screenshot": 0,
+    }).fillna(0)
+
+    dedupe = ["Date", "HomeTeam", "AwayTeam", "Market", "Outcome", "Point"]
+    out = (
+        out.sort_values(
+            ["PriceTimestampUTC", "_SourcePriority", "DecimalOdds"],
+            ascending=[False, False, False],
+            na_position="last",
+        )
+        .drop_duplicates(dedupe, keep="first")
+        .drop(columns=["_SourcePriority"])
+        .reset_index(drop=True)
+    )
+    return out
+
+
 def _norm(name: object) -> str:
     mapping = {
         "Manchester City": "Man City",
@@ -162,7 +222,11 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
     if predictions.empty or odds.empty:
         return pd.DataFrame()
 
-    my = odds[_is_mybookie(odds)].copy()
+    all_my = odds[_is_mybookie(odds)].copy()
+    if all_my.empty:
+        return pd.DataFrame()
+
+    my = _fresh_mybookie_quotes(all_my, cfg)
     if my.empty:
         return pd.DataFrame()
 
@@ -182,11 +246,16 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
 
     rows: list[dict] = []
     max_goal = int(cfg.get("model_v12", {}).get("max_goal", 10))
+    now_utc = pd.Timestamp.now(tz="UTC")
 
     for _, q in my.iterrows():
         key = (q["Date"], q["HomeTeam"], q["AwayTeam"])
         pred = pred_map.get(key)
         if pred is None:
+            continue
+
+        kickoff = pd.to_datetime(pred.get("KickoffUTC"), utc=True, errors="coerce")
+        if pd.notna(kickoff) and kickoff <= now_utc:
             continue
 
         market = str(q.get("Market", ""))
@@ -262,6 +331,13 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
             "Selection": selection,
             "Line": point if pd.notna(point) else np.nan,
             "Bookmaker": q.get("Bookmaker"),
+            "BookmakerKey": q.get("BookmakerKey"),
+            "BookLastUpdate": q.get("BookLastUpdate"),
+            "QuoteCapturedAt": q.get("QuoteCapturedAt"),
+            "PriceSource": q.get("PriceSource"),
+            "PriceTimestampUTC": q.get("PriceTimestampUTC"),
+            "PriceAgeMinutes": q.get("PriceAgeMinutes"),
+            "PriceFreshnessStatus": q.get("PriceFreshnessStatus"),
             "MyBookieOdds": odds_price,
             "ModelWinProbability": p_win,
             "PushProbability": p_push,

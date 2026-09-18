@@ -7,6 +7,7 @@ on:
       - '.github/workflows/market-comparison.yml'
       - 'market_comparison.py'
       - 'safe_market_comparison.py'
+      - 'config.yaml'
       - 'api_football_odds_fallback.py'
       - 'gameweek_rankings.py'
       - 'pre_kickoff_adjustment.py'
@@ -16,7 +17,12 @@ on:
       - 'data/manual_availability_adjustments.csv'
   workflow_dispatch:
   schedule:
-    - cron: '0 13 * * *'
+    # Weekend/Friday/Monday EPL windows, hourly (UTC).
+    - cron: '0 10-23 * * 0,1,5,6'
+    # Midweek EPL windows, hourly (UTC).
+    - cron: '0 17-23 * * 2-4'
+    # One additional daytime refresh on Tue-Thu.
+    - cron: '0 13 * * 2-4'
 
 concurrency:
   group: epl-data-publisher
@@ -156,12 +162,18 @@ jobs:
           if preds.empty:
               raise SystemExit('MARKET_HEALTH_FAIL: prediction file is empty')
 
-          fixture_keys = set(zip(preds['Date'].astype(str), preds['HomeTeam'].astype(str), preds['AwayTeam'].astype(str)))
+          from pipeline import load_config
+
+          now = pd.Timestamp.now(tz='UTC')
+          kickoff = pd.to_datetime(preds.get('KickoffUTC'), utc=True, errors='coerce')
+          upcoming_preds = preds.loc[kickoff.isna() | (kickoff > now)].copy()
+          fixture_keys = set(zip(upcoming_preds['Date'].astype(str), upcoming_preds['HomeTeam'].astype(str), upcoming_preds['AwayTeam'].astype(str)))
 
           try:
               odds = pd.read_csv(odds_path)
           except EmptyDataError:
               odds = pd.DataFrame()
+
           current_odds = pd.DataFrame()
           if not odds.empty and {'Date','HomeTeam','AwayTeam'}.issubset(odds.columns):
               current_mask = [
@@ -170,33 +182,39 @@ jobs:
               ]
               current_odds = odds.loc[current_mask].copy()
 
-          current_mybookie = 0
+          current_mybookie = pd.DataFrame()
+          fresh_mybookie = pd.DataFrame()
           if not current_odds.empty:
               title = current_odds.get('Bookmaker', pd.Series(index=current_odds.index, dtype=object)).astype(str).str.lower()
               key = current_odds.get('BookmakerKey', pd.Series(index=current_odds.index, dtype=object)).astype(str).str.lower()
-              current_mybookie = int((title.str.contains('mybookie', na=False) | key.str.contains('mybookie', na=False)).sum())
+              my_mask = title.str.contains('mybookie', na=False) | key.str.contains('mybookie', na=False)
+              current_mybookie = current_odds.loc[my_mask].copy()
+
+              last = pd.to_datetime(current_mybookie.get('BookLastUpdate'), utc=True, errors='coerce')
+              captured = pd.to_datetime(current_mybookie.get('QuoteCapturedAt'), utc=True, errors='coerce')
+              quote_time = last.fillna(captured)
+              max_age = float(load_config().get('market_comparison', {}).get('executable_quote_max_age_minutes', 240))
+              age = (now - quote_time).dt.total_seconds() / 60.0
+              fresh_mybookie = current_mybookie.loc[quote_time.notna() & age.ge(-5.0) & age.le(max_age)].copy()
 
           try:
               rankings = pd.read_csv(rank_path)
           except EmptyDataError:
               rankings = pd.DataFrame()
 
-          print(f'Prediction fixtures: {len(preds)}')
+          print(f'Upcoming prediction fixtures: {len(upcoming_preds)}')
           print(f'Current-gameweek market rows: {len(current_odds)}')
-          print(f'Current-gameweek MyBookie rows: {current_mybookie}')
+          print(f'Current-gameweek MyBookie rows: {len(current_mybookie)}')
+          print(f'Fresh executable MyBookie rows: {len(fresh_mybookie)}')
           print(f'Ranked selections: {len(rankings)}')
 
           if current_odds.empty:
               raise SystemExit('MARKET_HEALTH_FAIL: predictions exist but there are zero current-gameweek market rows. Check live odds credentials or API-Football fallback coverage.')
 
-          # Rankings are intentionally executable-price rankings, currently scoped to MyBookie.
-          # If the live market is healthy but MyBookie is absent, that is a data-availability
-          # condition, not a model/workflow failure. Keep the run green and leave rankings empty
-          # rather than fabricating an executable price from another sportsbook.
-          if rankings.empty and current_mybookie == 0:
-              print('MARKET_HEALTH_WARN: live current-gameweek odds are healthy, but no current MyBookie prices are available. Rankings remain empty by design.')
+          if rankings.empty and fresh_mybookie.empty:
+              print('MARKET_HEALTH_WARN: the general market feed is healthy, but no fresh executable MyBookie price is available. Rankings remain empty by design.')
           elif rankings.empty:
-              raise SystemExit('MARKET_HEALTH_FAIL: current MyBookie prices exist but rankings are empty. This indicates a ranking/matching bug.')
+              raise SystemExit('MARKET_HEALTH_FAIL: fresh current MyBookie prices exist but rankings are empty. This indicates a ranking/matching bug.')
           PY
 
       - name: Fail workflow if settlement integrity is not clean

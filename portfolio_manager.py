@@ -116,7 +116,7 @@ def apply_v2_agreement_gate(rankings: pd.DataFrame, v2_shadow: pd.DataFrame, cfg
 
         p2, push2 = _v2_probability(r, shadow, cfg)
         odds = float(pd.to_numeric(r.get("MyBookieOdds"), errors="coerce"))
-        p1 = float(pd.to_numeric(r.get("ModelWinProbability"), errors="coerce"))
+        p1 = float(pd.to_numeric(r.get("RawModelWinProbability", r.get("ModelWinProbability")), errors="coerce"))
         ev2 = _ev_with_push(float(p2), float(push2), odds) if pd.notna(p2) else np.nan
         gap = abs(float(p2) - p1) if pd.notna(p2) else np.nan
 
@@ -298,7 +298,7 @@ def apply_extreme_edge_gate(admitted: pd.DataFrame, odds: pd.DataFrame, cfg: dic
         consensus = _consensus_metrics(r, odds) if extreme else {
             "books": 0, "median_odds": np.nan, "median_implied": np.nan, "price_deviation": np.nan
         }
-        p1 = float(pd.to_numeric(r.get("ModelWinProbability"), errors="coerce"))
+        p1 = float(pd.to_numeric(r.get("RawModelWinProbability", r.get("ModelWinProbability")), errors="coerce"))
         vgap = float(pd.to_numeric(r.get("V1V2ProbabilityGap"), errors="coerce")) if pd.notna(r.get("V1V2ProbabilityGap")) else np.nan
         market_gap = abs(p1 - consensus["median_implied"]) if pd.notna(consensus["median_implied"]) else np.nan
 
@@ -327,11 +327,11 @@ def apply_extreme_edge_gate(admitted: pd.DataFrame, odds: pd.DataFrame, cfg: dic
             "ExtremeEdgeFlag": extreme,
             "ExtremeEdgeThreshold": threshold,
             "ExtremeLinePairValid": line_ok,
-            "ConsensusBookCount": consensus["books"],
-            "ConsensusMedianOdds": consensus["median_odds"],
-            "ConsensusMedianImpliedProbability": consensus["median_implied"],
-            "ModelConsensusProbabilityGap": market_gap,
-            "MyBookieConsensusPriceDeviationPct": consensus["price_deviation"],
+            "ExtremeConsensusBookCount": consensus["books"],
+            "ExtremeConsensusMedianOdds": consensus["median_odds"],
+            "ExtremeConsensusMedianImpliedProbability": consensus["median_implied"],
+            "ExtremeRawModelConsensusProbabilityGap": market_gap,
+            "ExtremeMyBookieConsensusPriceDeviationPct": consensus["price_deviation"],
             "ExtremeEdgeSanityPass": passed,
             "ExtremeEdgeSanityStatus": status,
         })
@@ -359,15 +359,18 @@ def build_portfolio(rankings: pd.DataFrame, cfg: dict) -> pd.DataFrame:
 
     df = rankings.copy()
     for col in [
-        "ModelWinProbability", "PushProbability", "MyBookieOdds",
-        "ExpectedReturnPerUnit", "BetQualityScore", "ProfitabilityScore",
-        "OverallRankScore", "V2WinProbability", "V2ExpectedReturnPerUnit",
+        "RawModelWinProbability", "ModelWinProbability", "PushProbability", "MyBookieOdds",
+        "ExpectedReturnPerUnit", "RawExpectedReturnPerUnit", "ProbabilityEdge",
+        "BetQualityScore", "ProfitabilityScore", "OverallRankScore",
+        "V2WinProbability", "V2ExpectedReturnPerUnit",
     ]:
         if col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")
 
+    decision_status = df.get("DecisionStatus", pd.Series("NO_BET", index=df.index)).astype(str)
     eligible = df[
-        (df["ExpectedReturnPerUnit"] >= min_ev)
+        decision_status.eq("BET_ELIGIBLE")
+        & (df["ExpectedReturnPerUnit"] >= min_ev)
         & (df["BetQualityScore"] >= min_quality)
         & (df["MyBookieOdds"] > 1.0)
     ].copy()
@@ -421,7 +424,7 @@ def build_portfolio(rankings: pd.DataFrame, cfg: dict) -> pd.DataFrame:
             "PaperStakeAmount": stake,
             "ExpectedPaperProfit": stake * float(r["ExpectedReturnPerUnit"]),
             "PortfolioExposurePct": used_total / paper_bankroll if paper_bankroll > 0 else 0.0,
-            "SizingNote": f"paper only; V1.2 sizing; V2.3 agreement + extreme-edge sanity gates; capped fractional Kelly; minimum {min_stake_units:g}u",
+            "SizingNote": f"paper only; market-anchored probability; >=5pp decision edge gate; V2.3 agreement + extreme-edge sanity gates; capped fractional Kelly; minimum {min_stake_units:g}u",
         })
         rows.append(out)
 
@@ -477,10 +480,11 @@ def main() -> None:
     if not portfolio.empty:
         cols = [
             "PortfolioRank", "HomeTeam", "AwayTeam", "MarketType", "Selection",
-            "MyBookieOdds", "ModelWinProbability", "V2WinProbability",
+            "MyBookieOdds", "RawModelWinProbability", "ModelWinProbability",
+            "ConsensusFairProbability", "ProbabilityEdge", "DecisionStatus", "V2WinProbability",
             "ExpectedReturnPerUnit", "V2ExpectedReturnPerUnit", "V1V2ProbabilityGap",
-            "ExtremeEdgeFlag", "ConsensusBookCount", "ConsensusMedianOdds",
-            "ModelConsensusProbabilityGap", "MyBookieConsensusPriceDeviationPct",
+            "ExtremeEdgeFlag", "ConsensusBookCount", "ExtremeConsensusMedianOdds",
+            "ExtremeRawModelConsensusProbabilityGap", "ExtremeMyBookieConsensusPriceDeviationPct",
             "PaperStakeUnits", "ExpectedPaperProfit", "ExtremeEdgeSanityStatus",
         ]
         print(portfolio[[c for c in cols if c in portfolio.columns]].to_string(index=False))

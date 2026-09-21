@@ -93,6 +93,158 @@ def _norm(name: object) -> str:
     return normalize_team(mapping.get(value, value))
 
 
+def _book_id(df: pd.DataFrame) -> pd.Series:
+    key = df.get("BookmakerKey", pd.Series(index=df.index, dtype=object)).astype(str).str.strip()
+    title = df.get("Bookmaker", pd.Series(index=df.index, dtype=object)).astype(str).str.strip()
+    return key.where(key.ne(""), title)
+
+
+def _consensus_no_vig_probability(q: pd.Series, odds: pd.DataFrame) -> tuple[float, int, str]:
+    """Median no-vig probability for the quoted selection across available books.
+
+    For 1X2 we normalize the three implied probabilities within each book.
+    For totals and spreads we normalize the two opposing sides at the same line.
+    Non-MyBookie books are preferred so the executable price is not also the
+    primary prior. If none are available, a de-vigged MyBookie pair is used.
+    """
+    if odds.empty:
+        return np.nan, 0, "unavailable"
+
+    work = odds.copy()
+    work["Date"] = work["Date"].astype(str)
+    work["HomeTeam"] = work["HomeTeam"].map(_norm)
+    work["AwayTeam"] = work["AwayTeam"].map(_norm)
+    work["_BookId"] = _book_id(work)
+    work["_Price"] = pd.to_numeric(work.get("DecimalOdds"), errors="coerce")
+    work["_Point"] = pd.to_numeric(work.get("Point"), errors="coerce")
+    work = work[
+        work["Date"].eq(str(q.get("Date", "")))
+        & work["HomeTeam"].eq(_norm(q.get("HomeTeam")))
+        & work["AwayTeam"].eq(_norm(q.get("AwayTeam")))
+        & work["Market"].astype(str).eq(str(q.get("Market", "")))
+        & work["_Price"].gt(1.0)
+    ].copy()
+    if work.empty:
+        return np.nan, 0, "unavailable"
+
+    target_outcome = str(q.get("Outcome", ""))
+    target_norm = _norm(target_outcome)
+    point_raw = pd.to_numeric(q.get("Point"), errors="coerce")
+    point = float(point_raw) if pd.notna(point_raw) else np.nan
+    market = str(q.get("Market", ""))
+    home = _norm(q.get("HomeTeam"))
+    away = _norm(q.get("AwayTeam"))
+
+    def collect(pool: pd.DataFrame) -> list[float]:
+        probs: list[float] = []
+        for _, g in pool.groupby("_BookId", dropna=False):
+            if market == "h2h":
+                prices: dict[str, float] = {}
+                for _, r in g.iterrows():
+                    label = str(r.get("Outcome", ""))
+                    key = "draw" if label.lower() == "draw" else _norm(label)
+                    prices[key] = float(r["_Price"])
+                needed = [home, away, "draw"]
+                if not all(k in prices for k in needed):
+                    continue
+                implied = {k: 1.0 / prices[k] for k in needed}
+                denom = sum(implied.values())
+                target_key = "draw" if target_outcome.lower() == "draw" else target_norm
+                if target_key in implied and denom > 0:
+                    probs.append(implied[target_key] / denom)
+
+            elif market == "totals" and pd.notna(point):
+                same = g[np.isclose(g["_Point"], point, atol=1e-9, equal_nan=False)].copy()
+                prices = {str(r.get("Outcome", "")).title(): float(r["_Price"]) for _, r in same.iterrows()}
+                if "Over" not in prices or "Under" not in prices:
+                    continue
+                implied_over, implied_under = 1.0 / prices["Over"], 1.0 / prices["Under"]
+                denom = implied_over + implied_under
+                side = target_outcome.title()
+                if denom > 0 and side in {"Over", "Under"}:
+                    probs.append((implied_over if side == "Over" else implied_under) / denom)
+
+            elif market == "spreads" and pd.notna(point):
+                opponent = away if target_norm == home else home if target_norm == away else ""
+                if not opponent:
+                    continue
+                selected = g[
+                    g["Outcome"].map(_norm).eq(target_norm)
+                    & np.isclose(g["_Point"], point, atol=1e-9, equal_nan=False)
+                ]
+                opposite = g[
+                    g["Outcome"].map(_norm).eq(opponent)
+                    & np.isclose(g["_Point"], -point, atol=1e-9, equal_nan=False)
+                ]
+                if selected.empty or opposite.empty:
+                    continue
+                p1 = 1.0 / float(selected.iloc[-1]["_Price"])
+                p2 = 1.0 / float(opposite.iloc[-1]["_Price"])
+                if p1 + p2 > 0:
+                    probs.append(p1 / (p1 + p2))
+        return probs
+
+    non_my = work.loc[~_is_mybookie(work)].copy()
+    probs = collect(non_my)
+    source = "consensus_non_mybookie"
+    if not probs:
+        probs = collect(work.loc[_is_mybookie(work)].copy())
+        source = "mybookie_devig_fallback"
+    if not probs:
+        return np.nan, 0, "unavailable"
+    return float(np.median(probs)), int(len(probs)), source
+
+
+def _decision_probability(
+    p_win: float,
+    p_push: float,
+    market_prior: float,
+    market_label: str,
+    cfg: dict,
+) -> tuple[float, float]:
+    """Shrink model probability toward the no-vig market prior.
+
+    For push-capable lines, the blend is performed on the win probability
+    conditional on the bet not pushing, then converted back to unconditional
+    win probability for EV/Kelly calculations.
+    """
+    dc = cfg.get("decision", {})
+    if not bool(dc.get("market_anchor_enabled", True)) or not np.isfinite(market_prior):
+        effective = p_win / max(1e-12, 1.0 - p_push)
+        return float(p_win), float(effective)
+
+    weights = {
+        "Moneyline": float(dc.get("market_anchor_weight_moneyline", 0.45)),
+        "Spread": float(dc.get("market_anchor_weight_spread", 0.40)),
+        "Total": float(dc.get("market_anchor_weight_total", 0.35)),
+    }
+    weight = float(np.clip(weights.get(market_label, 0.40), 0.0, 1.0))
+    nonpush_mass = max(1e-12, 1.0 - p_push)
+    raw_effective = float(np.clip(p_win / nonpush_mass, 0.0, 1.0))
+    prior = float(np.clip(market_prior, 0.0, 1.0))
+    decision_effective = (1.0 - weight) * raw_effective + weight * prior
+    decision_win = decision_effective * nonpush_mass
+    return float(decision_win), float(decision_effective)
+
+
+def _decision_status(edge: float, consensus_books: int, raw_gap: float, cfg: dict) -> str:
+    dc = cfg.get("decision", {})
+    no_bet = float(dc.get("no_bet_edge", 0.03))
+    eligible = float(dc.get("bet_eligible_edge", 0.05))
+    min_books = int(dc.get("min_consensus_books", 2))
+    max_raw_gap = float(dc.get("max_raw_model_market_gap", 0.18))
+
+    if not np.isfinite(edge) or edge < no_bet:
+        return "NO_BET"
+    if edge < eligible:
+        return "REVIEW"
+    if consensus_books < min_books:
+        return "REVIEW_LOW_MARKET_SUPPORT"
+    if np.isfinite(raw_gap) and raw_gap > max_raw_gap:
+        return "REVIEW_MODEL_MARKET_DISAGREEMENT"
+    return "BET_ELIGIBLE"
+
+
 def _binary_fair_odds(p_win: float, p_push: float = 0.0) -> float:
     if p_win <= 0:
         return np.inf
@@ -313,11 +465,29 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
 
         p_win = float(p_win)
         p_push = float(p_push)
-        fair_odds = _binary_fair_odds(p_win, p_push)
+        raw_fair_odds = _binary_fair_odds(p_win, p_push)
+        raw_ev = _ev_with_push(p_win, p_push, odds_price)
+        raw_effective = p_win / max(1e-12, 1.0 - p_push)
         implied = 1.0 / odds_price
-        ev = _ev_with_push(p_win, p_push, odds_price)
+
+        market_prior, consensus_books, market_prior_source = _consensus_no_vig_probability(q, odds)
+        if not np.isfinite(market_prior):
+            # Conservative fallback when a proper paired market is unavailable.
+            market_prior = implied
+            market_prior_source = "raw_mybookie_implied_fallback"
+            consensus_books = 0
+
+        decision_p_win, decision_effective = _decision_probability(
+            p_win, p_push, market_prior, market_label, cfg
+        )
+        fair_odds = _binary_fair_odds(decision_p_win, p_push)
+        ev = _ev_with_push(decision_p_win, p_push, odds_price)
+        decision_edge = decision_effective - float(market_prior)
+        raw_market_gap = abs(raw_effective - float(market_prior))
+        decision_status = _decision_status(decision_edge, consensus_books, raw_market_gap, cfg)
+
         validation_factor, validation_label = _validation_factor(market_label, selection)
-        quality = _bet_quality_score(p_win, ev, validation_factor, cfg)
+        quality = _bet_quality_score(decision_p_win, ev, validation_factor, cfg)
         profitability = _profitability_score(ev, cfg)
         overall = _overall_score(quality, profitability, cfg)
 
@@ -339,11 +509,21 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
             "PriceAgeMinutes": q.get("PriceAgeMinutes"),
             "PriceFreshnessStatus": q.get("PriceFreshnessStatus"),
             "MyBookieOdds": odds_price,
-            "ModelWinProbability": p_win,
+            "RawModelWinProbability": p_win,
+            "RawModelEffectiveProbability": raw_effective,
+            "RawModelFairOdds": raw_fair_odds,
+            "RawExpectedReturnPerUnit": raw_ev,
+            "ModelWinProbability": decision_p_win,
+            "DecisionEffectiveProbability": decision_effective,
             "PushProbability": p_push,
             "ModelFairOdds": fair_odds,
             "MyBookieImpliedProbability": implied,
-            "ProbabilityEdge": p_win - implied,
+            "ConsensusFairProbability": market_prior,
+            "ConsensusBookCount": consensus_books,
+            "MarketPriorSource": market_prior_source,
+            "RawModelMarketGap": raw_market_gap,
+            "ProbabilityEdge": decision_edge,
+            "DecisionStatus": decision_status,
             "ExpectedReturnPerUnit": ev,
             "ExpectedProfitPer100": ev * 100.0,
             "ValidationFactor": validation_factor,
@@ -388,9 +568,10 @@ def main() -> None:
     if not ranked.empty:
         display = ranked[[
             "GameweekRank", "HomeTeam", "AwayTeam", "MarketType", "Selection",
-            "MyBookieOdds", "ModelWinProbability", "ModelFairOdds",
-            "ExpectedReturnPerUnit", "ExpectedProfitPer100", "BetQualityScore",
-            "ProfitabilityScore", "OverallRankScore", "Grade", "ValidationStatus"
+            "MyBookieOdds", "RawModelWinProbability", "ModelWinProbability", "ConsensusFairProbability",
+            "ProbabilityEdge", "DecisionStatus", "ModelFairOdds", "ExpectedReturnPerUnit",
+            "ExpectedProfitPer100", "BetQualityScore", "ProfitabilityScore",
+            "OverallRankScore", "Grade", "ValidationStatus"
         ]]
         pd.set_option("display.max_columns", None)
         print(display.to_string(index=False))

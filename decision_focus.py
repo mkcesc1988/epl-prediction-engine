@@ -106,14 +106,18 @@ def _validation_score(value: object) -> float:
         return 0.5
 
 
-def _tier(score: float, ev: float, agreement: str, modal: float) -> str:
-    if ev <= 0:
-        return "PASS"
+def _tier(score: float, ev: float, agreement: str, modal: float, decision_status: str) -> str:
+    if decision_status == "NO_BET" or ev <= 0:
+        return "NO_BET"
+    if decision_status.startswith("REVIEW"):
+        return "REVIEW"
+    if decision_status != "BET_ELIGIBLE":
+        return "REVIEW"
     if score >= 78 and agreement == "STRONG_AGREEMENT" and modal >= 0.5:
         return "STRONG_FOCUS"
     if score >= 66:
-        return "REVIEW"
-    return "LOW_PRIORITY"
+        return "BET_CANDIDATE"
+    return "REVIEW"
 
 
 def main() -> None:
@@ -142,6 +146,7 @@ def main() -> None:
         validation_component = _validation_score(r.get("ValidationFactor"))
         ev = pd.to_numeric(r.get("ExpectedReturnPerUnit"), errors="coerce")
         ev_value = 0.0 if pd.isna(ev) else float(ev)
+        decision_status = str(r.get("DecisionStatus", "NO_BET"))
 
         focus_score = 100.0 * (
             0.50 * overall_component
@@ -149,13 +154,13 @@ def main() -> None:
             + 0.15 * modal_component
             + 0.15 * validation_component
         )
-        tier = _tier(focus_score, ev_value, agreement, modal_component)
+        tier = _tier(focus_score, ev_value, agreement, modal_component, decision_status)
 
         adjusted_pick = a.get("AdjustedPick") if a is not None else pd.NA
         adjusted_pick_p = a.get("AdjustedPickProbability") if a is not None else pd.NA
         market_status = a.get("MarketStatus") if a is not None else pd.NA
 
-        reasons = []
+        reasons = [f"Decision gate: {decision_status}"]
         if agreement == "STRONG_AGREEMENT":
             reasons.append("V1.2, V2 context and adjusted direction agree")
         elif agreement == "PARTIAL_AGREEMENT":
@@ -172,6 +177,7 @@ def main() -> None:
         row.update({
             "DecisionFocusScore": focus_score,
             "DecisionTier": tier,
+            "DecisionGateStatus": decision_status,
             "Agreement": agreement,
             "ModalSupport": modal_component,
             "ModalSupportNote": modal_note,
@@ -184,13 +190,13 @@ def main() -> None:
         rows.append(row)
 
     out = pd.DataFrame(rows)
-    tier_order = {"STRONG_FOCUS": 0, "REVIEW": 1, "LOW_PRIORITY": 2, "PASS": 3}
+    tier_order = {"STRONG_FOCUS": 0, "BET_CANDIDATE": 1, "REVIEW": 2, "NO_BET": 3}
     out["_tier_order"] = out["DecisionTier"].map(tier_order).fillna(9)
     out = out.sort_values(["_tier_order", "DecisionFocusScore", "ExpectedReturnPerUnit"], ascending=[True, False, False]).drop(columns=["_tier_order"])
     out.to_csv(OUT_PATH, index=False)
 
     print(f"Decision focus rows: {len(out)}")
-    display = [c for c in ["DecisionTier", "DecisionFocusScore", "HomeTeam", "AwayTeam", "MarketType", "Selection", "ModelWinProbability", "ExpectedReturnPerUnit", "Agreement", "ModalSupportNote"] if c in out.columns]
+    display = [c for c in ["DecisionTier", "DecisionGateStatus", "DecisionFocusScore", "HomeTeam", "AwayTeam", "MarketType", "Selection", "RawModelWinProbability", "ModelWinProbability", "ConsensusFairProbability", "ProbabilityEdge", "ExpectedReturnPerUnit", "Agreement", "ModalSupportNote"] if c in out.columns]
     print(out[display].head(15).to_string(index=False))
     print(f"Saved: {OUT_PATH}")
 

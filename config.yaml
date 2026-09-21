@@ -75,6 +75,16 @@ market_comparison:
   mybookie_bookmaker_key: mybookieag
   executable_quote_max_age_minutes: 240
 
+decision:
+  market_anchor_enabled: true
+  market_anchor_weight_moneyline: 0.45
+  market_anchor_weight_spread: 0.40
+  market_anchor_weight_total: 0.35
+  min_consensus_books: 2
+  no_bet_edge: 0.03
+  bet_eligible_edge: 0.05
+  max_raw_model_market_gap: 0.18
+
 ranking:
   primary_book: mybookie
   min_expected_return: 0.00

@@ -4,7 +4,11 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+
+concurrency:
+  group: epl-data-publisher
+  cancel-in-progress: false
 
 jobs:
   sweep:
@@ -16,6 +20,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -29,6 +35,20 @@ jobs:
 
       - name: Run multi-season home advantage sweep
         run: python home_advantage_sweep.py
+
+      - name: Publish sweep summary
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/processed/home_advantage_sweep_summary.csv
+          if git diff --cached --quiet; then
+            echo "No sweep summary changes to commit"
+          else
+            git commit -m "data: publish home advantage sweep summary [skip ci]"
+            git fetch origin main
+            git rebase -X theirs origin/main
+            git push origin HEAD:main
+          fi
 
       - name: Upload sweep results
         if: always()

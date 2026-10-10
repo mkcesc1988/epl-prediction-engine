@@ -96,7 +96,7 @@ def _modal_support(row: pd.Series) -> tuple[float, str]:
 
 def _agreement_score(value: object) -> float:
     label = str(value)
-    return {"STRONG_AGREEMENT": 1.0, "PARTIAL_AGREEMENT": 0.65, "DISAGREEMENT": 0.20}.get(label, 0.5)
+    return {"SHARED_BASELINE": 0.5, "STRONG_AGREEMENT": 0.65, "PARTIAL_AGREEMENT": 0.5, "DISAGREEMENT": 0.20}.get(label, 0.5)
 
 
 def _validation_score(value: object) -> float:
@@ -113,7 +113,7 @@ def _tier(score: float, ev: float, agreement: str, modal: float, decision_status
         return "REVIEW"
     if decision_status != "BET_ELIGIBLE":
         return "REVIEW"
-    if score >= 78 and agreement == "STRONG_AGREEMENT" and modal >= 0.5:
+    if score >= 80 and ev >= 0.05 and agreement == "STRONG_AGREEMENT":
         return "STRONG_FOCUS"
     if score >= 66:
         return "BET_CANDIDATE"
@@ -148,12 +148,9 @@ def main() -> None:
         ev_value = 0.0 if pd.isna(ev) else float(ev)
         decision_status = str(r.get("DecisionStatus", "NO_BET"))
 
-        focus_score = 100.0 * (
-            0.50 * overall_component
-            + 0.20 * agreement_component
-            + 0.15 * modal_component
-            + 0.15 * validation_component
-        )
+        # Do not award an independent-signal bonus for shared V1/V2 forecasts.
+        # A single modal score also provides no reliable independent evidence.
+        focus_score = 100.0 * (0.70 * overall_component + 0.30 * validation_component)
         tier = _tier(focus_score, ev_value, agreement, modal_component, decision_status)
 
         adjusted_pick = a.get("AdjustedPick") if a is not None else pd.NA
@@ -161,7 +158,9 @@ def main() -> None:
         market_status = a.get("MarketStatus") if a is not None else pd.NA
 
         reasons = [f"Decision gate: {decision_status}"]
-        if agreement == "STRONG_AGREEMENT":
+        if agreement == "SHARED_BASELINE":
+            reasons.append("V1/V2 probabilities effectively identical; no independent confidence bonus")
+        elif agreement == "STRONG_AGREEMENT":
             reasons.append("V1.2, V2 context and adjusted direction agree")
         elif agreement == "PARTIAL_AGREEMENT":
             reasons.append("Partial model agreement")
@@ -185,7 +184,7 @@ def main() -> None:
             "AdjustedPickProbability": adjusted_pick_p,
             "AdjustedMarketStatus": market_status,
             "DecisionReason": "; ".join(reasons),
-            "DecisionRule": "Focus score = 50% existing rank + 20% V1/V2/adjusted agreement + 15% modal-score support + 15% validation. Research decision aid, not a guarantee.",
+            "DecisionRule": "Focus score = 70% existing rank + 30% validation, no modal-score or copied-V2 bonus. Research only.",
         })
         rows.append(row)
 

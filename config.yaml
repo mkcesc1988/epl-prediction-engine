@@ -31,6 +31,9 @@ model_v12:
   fit_window_matches: 1140
   min_history_matches: 200
   regularization: 0.20
+  # Fraction of the fitted home advantage to remove (0 = off, 1 = none).
+  # Leave at 0 until home_advantage_sweep.py shows a multi-season gain.
+  home_advantage_shrink: 0.0
   lambda_floor: 0.15
   lambda_cap: 4.5
   max_goal: 10
@@ -137,3 +140,8 @@ paths:
   comparison_v11: data/processed/model_comparison_v11.csv
   comparison_v12: data/processed/model_comparison_v12.csv
   validation: data/processed/validation_report.json
+
+home_advantage_sweep:
+  shrink_grid: [0.0, 0.15, 0.3, 0.45, 0.6]
+  # Seasons to score (all earlier seasons are still used as training history).
+  eval_last_n_seasons: 3

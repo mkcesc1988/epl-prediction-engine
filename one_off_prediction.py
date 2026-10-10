@@ -10,7 +10,7 @@ import pandas as pd
 from backtest import _fit_platt, _logit, _sigmoid
 from daily_predictions import fetch_current_understat_completed, _build_training_history, _fit_live_over25_calibrator
 from model_v11 import _derived_markets, _score_matrix
-from model_v12 import _estimate_rho_from_history, _fit_strengths
+from model_v12 import _estimate_rho_from_history, _fit_strengths, effective_home_advantage
 from pipeline import load_config, normalize_team
 
 
@@ -43,7 +43,7 @@ def predict_one_off(home_team: str, away_team: str, match_date: str, neutral: bo
     aa = fit.attack.get(away, 0.0)
     da = fit.defense.get(away, 0.0)
 
-    home_adv = 0.0 if neutral else fit.home_advantage
+    home_adv = 0.0 if neutral else effective_home_advantage(fit, cfg)
     lam_h = math.exp(np.clip(fit.intercept + home_adv + ah - da, -4.0, 3.0))
     lam_a = math.exp(np.clip(fit.intercept + aa - dh, -4.0, 3.0))
     lam_h = max(floor, min(float(lam_h), cap))

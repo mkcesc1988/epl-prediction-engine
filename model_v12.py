@@ -19,6 +19,17 @@ class StrengthFit:
     intercept: float
 
 
+def effective_home_advantage(fit: StrengthFit, cfg: dict) -> float:
+    """Fitted home advantage (log scale) after the configured shrink.
+
+    ``model_v12.home_advantage_shrink`` is a fraction in [0, 1]: 0 keeps the
+    fitted value unchanged (default), 1 removes home advantage entirely.
+    """
+    shrink = float(cfg.get("model_v12", {}).get("home_advantage_shrink", 0.0) or 0.0)
+    shrink = min(max(shrink, 0.0), 1.0)
+    return float(fit.home_advantage) * (1.0 - shrink)
+
+
 def _weights(dates: pd.Series, reference_date: pd.Timestamp, half_life_days: float) -> np.ndarray:
     age_days = (reference_date - pd.to_datetime(dates)).dt.days.clip(lower=0).to_numpy(dtype=float)
     if half_life_days <= 0:
@@ -105,6 +116,7 @@ def _estimate_rho_from_history(history: pd.DataFrame, fit: StrengthFit, cfg: dic
         return fallback
 
     recent = history.tail(int(mc.get("rho_window_matches", 760))).copy()
+    home_adv = effective_home_advantage(fit, cfg)
     rows = []
     for _, r in recent.iterrows():
         h, a = str(r["HomeTeam"]), str(r["AwayTeam"])
@@ -112,7 +124,7 @@ def _estimate_rho_from_history(history: pd.DataFrame, fit: StrengthFit, cfg: dic
         dh = fit.defense.get(h, 0.0)
         aa = fit.attack.get(a, 0.0)
         da = fit.defense.get(a, 0.0)
-        lam_h = math.exp(np.clip(fit.intercept + fit.home_advantage + ah - da, -4.0, 3.0))
+        lam_h = math.exp(np.clip(fit.intercept + home_adv + ah - da, -4.0, 3.0))
         lam_a = math.exp(np.clip(fit.intercept + aa - dh, -4.0, 3.0))
         if pd.notna(r.get("FTHG")) and pd.notna(r.get("FTAG")):
             rows.append((lam_h, lam_a, int(r["FTHG"]), int(r["FTAG"])))
@@ -174,6 +186,7 @@ def build_predictions_v12(master: pd.DataFrame, cfg: dict) -> pd.DataFrame:
     for match_date, day_games in df.groupby("Date", sort=True):
         fit = _fit_strengths(history, pd.Timestamp(match_date), cfg)
         rho = _estimate_rho_from_history(history, fit, cfg) if fit is not None else np.nan
+        home_adv = effective_home_advantage(fit, cfg) if fit is not None else np.nan
 
         for _, r in day_games.iterrows():
             row = dict(r)
@@ -186,7 +199,7 @@ def build_predictions_v12(master: pd.DataFrame, cfg: dict) -> pd.DataFrame:
                 dh = fit.defense.get(h, 0.0)
                 aa = fit.attack.get(a, 0.0)
                 da = fit.defense.get(a, 0.0)
-                lam_h = math.exp(np.clip(fit.intercept + fit.home_advantage + ah - da, -4.0, 3.0))
+                lam_h = math.exp(np.clip(fit.intercept + home_adv + ah - da, -4.0, 3.0))
                 lam_a = math.exp(np.clip(fit.intercept + aa - dh, -4.0, 3.0))
                 lam_h = max(floor, min(float(lam_h), cap))
                 lam_a = max(floor, min(float(lam_a), cap))
@@ -209,6 +222,7 @@ def build_predictions_v12(master: pd.DataFrame, cfg: dict) -> pd.DataFrame:
                     "AwayAttackRating": fit.attack.get(a, 0.0),
                     "AwayDefenseRating": fit.defense.get(a, 0.0),
                     "HomeAdvantageLog": fit.home_advantage,
+                    "HomeAdvantageUsed": home_adv,
                 })
                 row.update(markets)
             else:
@@ -217,7 +231,7 @@ def build_predictions_v12(master: pd.DataFrame, cfg: dict) -> pd.DataFrame:
                     "DixonColes_Rho", "RawP_Over2_5_xG", "RawP_Under2_5_xG",
                     "FairOdds_Over2_5_xG", "FairOdds_Under2_5_xG",
                     "HomeAttackRating", "HomeDefenseRating", "AwayAttackRating",
-                    "AwayDefenseRating", "HomeAdvantageLog",
+                    "AwayDefenseRating", "HomeAdvantageLog", "HomeAdvantageUsed",
                 ]:
                     row[key] = np.nan
             outputs.append(row)

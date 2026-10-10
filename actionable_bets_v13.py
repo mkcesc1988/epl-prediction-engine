@@ -11,6 +11,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+from scenario_v13 import scenario_probability, OUTPUT_PATH as SCENARIO_PATH
+
 DATA_DIR = Path("data/processed")
 LINEUP_PATH = Path("data/lineup_confirmations_v13.csv")
 OUT_PATH = DATA_DIR / "actionable_decisions_v13_latest.csv"
@@ -98,6 +100,7 @@ def build_decisions(
     rankings: pd.DataFrame,
     adjusted: pd.DataFrame | None = None,
     lineups: pd.DataFrame | None = None,
+    scenarios: pd.DataFrame | None = None,
     now_utc: pd.Timestamp | None = None,
     policy: dict | None = None,
 ) -> pd.DataFrame:
@@ -114,6 +117,11 @@ def build_decisions(
     now = pd.Timestamp.now(tz="UTC") if now_utc is None else pd.Timestamp(now_utc)
     now = now.tz_localize("UTC") if now.tzinfo is None else now.tz_convert("UTC")
     verified = _lineup_lookup(lineups if lineups is not None else pd.DataFrame())
+    smap = {}
+    if scenarios is not None and not scenarios.empty:
+        for _, sr in scenarios.iterrows():
+            skey = (str(sr.get("Date"))[:10], _norm(sr.get("HomeTeam")), _norm(sr.get("AwayTeam")))
+            smap[skey] = sr
     amap = {}
     if adjusted is not None and not adjusted.empty:
         for _, r in adjusted.iterrows():
@@ -134,6 +142,24 @@ def build_decisions(
         quote = pd.to_datetime(r.get("PriceTimestampUTC"), utc=True, errors="coerce")
         age = (now - quote).total_seconds() / 60.0 if pd.notna(quote) else float("inf")
         confirmed = bool(verified.get(key, False))
+        scenario_row = smap.get(key)
+        scenario_p = float("nan")
+        scenario_ev = float("nan")
+        scenario_edge = float("nan")
+        if scenario_row is not None and np.isfinite(p) and np.isfinite(price) and price > 1:
+            new_raw_p, new_push = scenario_probability(r, scenario_row)
+            original_push = _number(r.get("PushProbability"), 0.0)
+            # Sensitivity analysis only for non-push markets; no double counting
+            # of market anchoring already applied in the existing ranked price.
+            if (np.isfinite(new_raw_p) and np.isfinite(new_push)
+                    and abs(new_push) < 1e-9 and abs(original_push) < 1e-9):
+                raw_p = _number(r.get("RawModelWinProbability"))
+                anchor = {"Moneyline": 0.45, "Spread": 0.40, "Total": 0.35}.get(
+                    str(r.get("MarketType")), 0.40)
+                if np.isfinite(raw_p):
+                    scenario_p = float(np.clip(p + (1.0 - anchor) * (new_raw_p - raw_p), 0, 1))
+                    scenario_ev = scenario_p * price - 1.0
+                    scenario_edge = scenario_p - 1.0 / price
         reason = ""
         if pd.notna(kickoff) and kickoff <= now:
             reason = "KICKOFF_PASSED"
@@ -146,6 +172,10 @@ def build_decisions(
             reason = "INSUFFICIENT_VALIDATED_VALUE"
         else:
             reason = _risk_rule(r)
+            if not reason and np.isfinite(scenario_ev) and (
+                scenario_ev < rules["min_ev"] or scenario_edge < rules["min_edge"]
+            ):
+                reason = "SCENARIO_SENSITIVE_NO_BET"
 
         if reason:
             status = "NO_BET"
@@ -160,6 +190,10 @@ def build_decisions(
             "V13Status": status,
             "V13Reason": reason or ("Starting XIs not explicitly verified" if not confirmed else "Price update required" if status == "REPRICE_REQUIRED" else "Passed paper-only screening"),
             "V13QuoteAgeMinutes": age if np.isfinite(age) else np.nan,
+            "V13ScenarioProbability": scenario_p,
+            "V13ScenarioEV": scenario_ev,
+            "V13ScenarioEdge": scenario_edge,
+            "V13ScenarioAssumption": str(scenario_row.get("AssumptionNote", "")) if scenario_row is not None else "",
             "V13LineupsVerified": confirmed,
             "V13IndependentV2": not _shared_baseline(amap.get(key)),
             "V13Priority": p,  # after positive-EV filtering, prefer higher win frequency
@@ -198,7 +232,8 @@ def main() -> None:
     adjusted_path = DATA_DIR / "pre_kickoff_adjusted_latest.csv"
     adj = pd.read_csv(adjusted_path) if adjusted_path.exists() else pd.DataFrame()
     lineups = pd.read_csv(LINEUP_PATH) if LINEUP_PATH.exists() else pd.DataFrame()
-    out = build_decisions(rankings, adj, lineups)
+    scenarios = pd.read_csv(SCENARIO_PATH) if SCENARIO_PATH.exists() else pd.DataFrame()
+    out = build_decisions(rankings, adj, lineups, scenarios=scenarios)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     out.to_csv(OUT_PATH, index=False)
     columns = ["Date", "HomeTeam", "AwayTeam", "MarketType", "Selection",

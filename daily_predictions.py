@@ -11,7 +11,7 @@ from understatapi import UnderstatClient
 
 from backtest import _fit_platt, _logit, _sigmoid
 from model_v11 import _derived_markets, _score_matrix
-from model_v12 import _estimate_rho_from_history, _fit_strengths, build_predictions_v12
+from model_v12 import _estimate_rho_from_history, _fit_strengths, build_predictions_v12, effective_home_advantage
 from pipeline import build_master, load_config, normalize_team, season_label
 
 FPL_FIXTURES_URL = "https://fantasy.premierleague.com/api/fixtures/"
@@ -188,7 +188,8 @@ def _predict_fixture(row: pd.Series, fit, rho: float, cfg: dict, beta: np.ndarra
     aa = fit.attack.get(a, 0.0)
     da = fit.defense.get(a, 0.0)
 
-    lam_h = math.exp(np.clip(fit.intercept + fit.home_advantage + ah - da, -4.0, 3.0))
+    home_adv = effective_home_advantage(fit, cfg)
+    lam_h = math.exp(np.clip(fit.intercept + home_adv + ah - da, -4.0, 3.0))
     lam_a = math.exp(np.clip(fit.intercept + aa - dh, -4.0, 3.0))
     lam_h = max(floor, min(float(lam_h), cap))
     lam_a = max(floor, min(float(lam_a), cap))
@@ -230,6 +231,8 @@ def _predict_fixture(row: pd.Series, fit, rho: float, cfg: dict, beta: np.ndarra
         "HomeDefenseRating": dh,
         "AwayAttackRating": aa,
         "AwayDefenseRating": da,
+        "HomeAdvantageLog": fit.home_advantage,
+        "HomeAdvantageUsed": home_adv,
     }
 
 

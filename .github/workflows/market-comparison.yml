@@ -12,6 +12,10 @@ on:
       - 'gameweek_rankings.py'
       - 'pre_kickoff_adjustment.py'
       - 'decision_focus.py'
+      - 'actionable_bets_v13.py'
+      - 'scenario_v13.py'
+      - 'data/manual_scenarios_v13.csv'
+      - 'data/lineup_confirmations_v13.csv'
       - 'prepare_manual_mybookie.py'
       - 'data/manual_mybookie_odds*.csv'
       - 'data/manual_availability_adjustments.csv'
@@ -76,6 +80,12 @@ jobs:
       - name: Build focused decision layer
         run: python decision_focus.py
 
+      - name: Build hypothetical injury-sensitive scenarios
+        run: python scenario_v13.py
+
+      - name: Build V1.3 actionable paper decision shortlist
+        run: python actionable_bets_v13.py
+
       - name: Build conservative paper portfolio
         run: python safe_portfolio_manager.py
 
@@ -131,6 +141,8 @@ jobs:
           git add -f data/processed/v2_shadow_predictions_latest.csv
           git add -f data/processed/pre_kickoff_adjusted_latest.csv
           git add -f data/processed/decision_focus_latest.csv
+          git add -f data/processed/scenario_predictions_v13_latest.csv
+          git add -f data/processed/actionable_decisions_v13_latest.csv
           git add -f data/processed/v1_v2_agreement_audit_latest.csv
           git add -f data/processed/extreme_edge_audit_latest.csv
           git add -f data/processed/moneyline_calibration_gate_latest.csv
@@ -233,6 +245,8 @@ jobs:
             data/processed/v2_shadow_predictions_latest.csv
             data/processed/pre_kickoff_adjusted_latest.csv
             data/processed/decision_focus_latest.csv
+            data/processed/scenario_predictions_v13_latest.csv
+            data/processed/actionable_decisions_v13_latest.csv
             data/processed/v1_v2_agreement_audit_latest.csv
             data/processed/extreme_edge_audit_latest.csv
             data/processed/moneyline_calibration_gate_latest.csv

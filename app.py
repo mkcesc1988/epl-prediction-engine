@@ -95,11 +95,13 @@ def performance_breakdown(settled: pd.DataFrame, group_col: str) -> pd.DataFrame
 
 
 st.title("⚽ EPL Prediction Engine")
-st.caption("Production V1.2 + shadow context + market comparison. Decision Focus is the first place to look.")
+st.caption("Production V1.2 forecasts, V1.3 conservative decision gate, hypothetical injury stress tests. No automatic bet execution.")
 
 predictions = load_csv("daily_predictions_latest.csv")
 rankings = load_csv("gameweek_rankings_latest.csv")
 focus = load_csv("decision_focus_latest.csv")
+v13_decisions = load_csv("actionable_decisions_v13_latest.csv")
+v13_scenarios = load_csv("scenario_predictions_v13_latest.csv")
 adjusted = load_csv("pre_kickoff_adjusted_latest.csv")
 
 # Dashboard resilience: if the workflow has not yet published Decision Focus but
@@ -127,14 +129,45 @@ parlay_watch = load_history("parlay_bet_ledger.csv")
 backtest_summary = load_csv("backtest_summary_v12.csv")
 model_comparison = load_csv("model_comparison_v12.csv")
 
-focus_tab, pred_tab, rank_tab, portfolio_tab, market_tab, live_tab, clv_tab, perf_tab = st.tabs([
-    "Decision Focus", "Predictions", "All Rankings", "Paper Portfolio", "Market Comparison",
+v13_tab, focus_tab, pred_tab, rank_tab, portfolio_tab, market_tab, live_tab, clv_tab, perf_tab = st.tabs([
+    "V1.3 Bet Decisions", "Decision Focus", "Predictions", "All Rankings", "Paper Portfolio", "Market Comparison",
     "Live History", "Closing Line", "Model Performance",
 ])
 
+with v13_tab:
+    st.subheader("V1.3: Are there any robust betting candidates?")
+    st.caption("This is a paper-only research gate. It rejects stale quotes, unverified lineups, weak market support and fragile hypothetical injury scenarios. A missing bet is a valid outcome.")
+    if v13_decisions.empty:
+        st.info("The V1.3 gate has not run yet. Run scenario_v13.py followed by actionable_bets_v13.py, or wait for the market-comparison workflow.")
+    else:
+        shortlist = v13_decisions[
+            v13_decisions["V13PreferredForMatch"].astype(str).str.lower().eq("true")
+        ].copy()
+        ready = shortlist[shortlist["V13Status"].astype(str).eq("PAPER_CANDIDATE")]
+        st.metric("Ready for paper tracking", len(ready))
+        if ready.empty:
+            st.info("No current verified selections passed every gate. Do not treat old positive-EV rankings as actionable.")
+        cols = ["Date", "HomeTeam", "AwayTeam", "MarketType", "Selection",
+                "MyBookieOdds", "ModelWinProbability", "ExpectedReturnPerUnit",
+                "V13ScenarioProbability", "V13ScenarioEV",
+                "V13Status", "V13Reason", "V13QuoteAgeMinutes"]
+        st.dataframe(shortlist[[c for c in cols if c in shortlist.columns]],
+                     use_container_width=True, hide_index=True)
+        with st.expander("All filtered and correlated alternatives"):
+            st.dataframe(v13_decisions[[c for c in cols if c in v13_decisions.columns]],
+                         use_container_width=True, hide_index=True)
+    if not v13_scenarios.empty:
+        st.markdown("### Injury scenario sensitivity (not a fitted player model)")
+        columns = ["HomeTeam", "AwayTeam", "BaselineHomeLambda", "BaselineAwayLambda",
+                   "ScenarioHomeLambda", "ScenarioAwayLambda",
+                   "BaseHomeWin", "ScenarioHomeWin", "ScenarioDraw",
+                   "ScenarioAwayWin", "AssumptionNote"]
+        st.dataframe(v13_scenarios[[c for c in columns if c in v13_scenarios.columns]],
+                     use_container_width=True, hide_index=True)
+
 with focus_tab:
     st.subheader("What should I look at first?")
-    st.caption("This layer prioritizes signals using existing rank, V1/V2 agreement, modal-score support and validation. It does not replace V1.2 or guarantee an edge.")
+    st.caption("Legacy V1.2 review only. V1.3 bet-decision tab supersedes this ranking for actionable signals. Mirrored V1/V2 outputs are not independent confirmation.")
     if focus.empty:
         if rankings.empty:
             st.info("Decision Focus is waiting for current market rankings. Once rankings are available, this screen will populate automatically.")
@@ -162,8 +195,8 @@ with focus_tab:
         with st.expander("How to use this screen"):
             st.write("1. Start with STRONG FOCUS. REVIEW is secondary. PASS means the price/model setup does not justify attention.")
             st.write("2. Confirm positive EV. A high win probability without a good price is not automatically a good bet.")
-            st.write("3. Prefer STRONG AGREEMENT between V1.2, V2 context and the adjusted direction.")
-            st.write("4. Check whether the modal score supports the market. This is a useful confirmation signal, not a standalone predictor.")
+            st.write("3. Mirrored V1/V2 predictions do not count as independent agreement; check V1.3 gating.")
+            st.write("4. Do not elevate a bet because its single most likely score happens to support it.")
             st.write("5. Check validation status. O/U 2.5 has deeper calibration than some derived markets.")
             st.write("6. If the signals conflict, pass rather than forcing a selection.")
 

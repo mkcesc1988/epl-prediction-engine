@@ -112,6 +112,10 @@ def _manual_shift(manual: pd.DataFrame, date: str, home: str, away: str) -> tupl
 
 
 def _agreement_label(v1: np.ndarray, v2: np.ndarray, final: np.ndarray) -> str:
+    # V2 currently mirrors V1 on many fixtures. Matching copies are NOT
+    # independent corroboration and must not be labeled strong agreement.
+    if np.isfinite(v1).all() and np.isfinite(v2).all() and np.max(np.abs(v1 - v2)) < 0.005:
+        return "SHARED_BASELINE"
     v1_pick = int(np.argmax(v1))
     v2_pick = int(np.argmax(v2))
     final_pick = int(np.argmax(final))

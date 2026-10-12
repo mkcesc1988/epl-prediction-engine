@@ -66,6 +66,19 @@ def fetch_fpl() -> tuple[dict, list]:
     return _get_json("bootstrap-static/"), _get_json("fixtures/")
 
 
+def fetch_gameweek_minutes(gws: list[int]) -> pd.DataFrame:
+    """Per-player minutes and starts for each finished gameweek (one call per GW)."""
+    rows = []
+    for gw in gws:
+        live = _get_json(f"event/{gw}/live/")
+        for el in live.get("elements", []):
+            st = el.get("stats", {})
+            mins = float(st.get("minutes", 0) or 0)
+            rows.append({"id": int(el["id"]), "GW": int(gw), "minutes": mins,
+                         "starts": float(st.get("starts", 1.0 if mins >= 60 else 0.0) or 0)})
+    return pd.DataFrame(rows, columns=["id", "GW", "minutes", "starts"])
+
+
 def fetch_entry(team_id: int, event: int) -> tuple[dict, dict]:
     picks = _get_json(f"entry/{team_id}/event/{event}/picks/")
     history = _get_json(f"entry/{team_id}/history/")
@@ -153,7 +166,44 @@ def model_lambdas(cfg: dict, reference_date: pd.Timestamp):
 # Player layer
 # --------------------------------------------------------------------------
 
-def player_rates(bootstrap: dict, games: dict[int, int], prior_minutes: float = 270.0) -> pd.DataFrame:
+def recent_usage(gw_minutes: pd.DataFrame, fx: pd.DataFrame, team_of: dict[int, int],
+                 decay: float = 0.6) -> pd.DataFrame:
+    """Recency-weighted start, sub and minutes rates per player.
+
+    Each finished gameweek a player's club played in gets weight decay**age
+    (age 0 = latest), so a player who has started the last four matches is
+    treated as a starter even if he sat out the opening weeks. Double
+    gameweeks count each fixture; blanks are skipped.
+    """
+    done = fx[fx["Finished"]]
+    games = (pd.concat([done[["GW", "HomeId"]].rename(columns={"HomeId": "team"}),
+                        done[["GW", "AwayId"]].rename(columns={"AwayId": "team"})])
+             .groupby(["team", "GW"]).size().rename("Fixtures").reset_index())
+    if games.empty or gw_minutes.empty:
+        return pd.DataFrame(columns=["id", "StartRate", "SubRate", "MinutesRate"])
+    latest = int(games["GW"].max())
+    out = []
+    for pid, team in team_of.items():
+        g = games[games["team"] == team]
+        if g.empty:
+            continue
+        m = gw_minutes[gw_minutes["id"] == pid].set_index("GW")
+        w = decay ** (latest - g["GW"].to_numpy())
+        fixtures = g["Fixtures"].to_numpy()
+        mins = m["minutes"].reindex(g["GW"]).fillna(0).to_numpy()
+        starts = np.minimum(m["starts"].reindex(g["GW"]).fillna(0).to_numpy(), fixtures)
+        apps = np.where(mins > 0, np.minimum(fixtures, np.maximum(1, np.ceil(mins / 90.0))), 0)
+        subs = np.clip(apps - starts, 0, None)
+        denom = float((w * fixtures).sum())
+        out.append({"id": pid,
+                    "StartRate": float((w * starts).sum()) / denom,
+                    "SubRate": float((w * subs).sum()) / denom,
+                    "MinutesRate": float((w * mins).sum()) / (90.0 * denom)})
+    return pd.DataFrame(out)
+
+
+def player_rates(bootstrap: dict, games: dict[int, int], prior_minutes: float = 270.0,
+                 recent: pd.DataFrame | None = None) -> pd.DataFrame:
     """Per-player involvement rates, shrunk toward position averages."""
     p = pd.DataFrame(bootstrap["elements"])
     num = ["expected_goals", "expected_assists", "minutes", "starts", "goals_scored",
@@ -199,6 +249,10 @@ def player_rates(bootstrap: dict, games: dict[int, int], prior_minutes: float = 
     p["StartRate"] = (p["starts"] / p["TeamGames"]).clip(0, 1)
     p["MinutesRate"] = (p["minutes"] / (90 * p["TeamGames"])).clip(0, 1)
     p["SubRate"] = (sub_apps / p["TeamGames"]).clip(lower=0)
+    if recent is not None and not recent.empty:
+        r = p[["id"]].merge(recent, on="id", how="left")
+        for col in ("StartRate", "SubRate", "MinutesRate"):
+            p[col] = r[col].fillna(p[col]).clip(0, 1).to_numpy()
     p["SubRate"] = np.minimum(p["SubRate"], 1 - p["StartRate"])
     return p
 
@@ -409,7 +463,11 @@ def main() -> None:
     lam, rho = model_lambdas(cfg, pd.Timestamp(next_ev["deadline_time"]).tz_convert(None).normalize())
     team_fx = team_fixture_projections(upcoming, lam, rho)
 
-    players = player_rates(bootstrap, team_games_played(fx))
+    finished_gws = sorted(fx.loc[fx["Finished"], "GW"].unique().tolist())
+    form_decay = float(fcfg.get("recent_form_decay", 0.6))
+    recent = recent_usage(fetch_gameweek_minutes(finished_gws), fx,
+                          {int(e["id"]): int(e["team"]) for e in bootstrap["elements"]}, form_decay)
+    players = player_rates(bootstrap, team_games_played(fx), recent=recent)
     proj = project_players(players, team_fx, gws)
     proj.attrs["team_short"] = {int(t["id"]): t["short_name"] for t in bootstrap["teams"]}
     proj.insert(3, "Club", proj["team"].map(proj.attrs["team_short"]))

@@ -183,10 +183,10 @@ def _predict_fixture(row: pd.Series, fit, rho: float, cfg: dict, beta: np.ndarra
 
     h = str(row["HomeTeam"])
     a = str(row["AwayTeam"])
-    ah = fit.attack.get(h, 0.0)
-    dh = fit.defense.get(h, 0.0)
-    aa = fit.attack.get(a, 0.0)
-    da = fit.defense.get(a, 0.0)
+    ah = fit.team_attack(h)
+    dh = fit.team_defense(h)
+    aa = fit.team_attack(a)
+    da = fit.team_defense(a)
 
     home_adv = effective_home_advantage(fit, cfg)
     lam_h = math.exp(np.clip(fit.intercept + home_adv + ah - da, -4.0, 3.0))

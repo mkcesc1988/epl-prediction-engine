@@ -38,10 +38,10 @@ def predict_one_off(home_team: str, away_team: str, match_date: str, neutral: bo
     cap = float(mc.get("lambda_cap", 4.5))
     max_goal = int(mc.get("max_goal", 10))
 
-    ah = fit.attack.get(home, 0.0)
-    dh = fit.defense.get(home, 0.0)
-    aa = fit.attack.get(away, 0.0)
-    da = fit.defense.get(away, 0.0)
+    ah = fit.team_attack(home)
+    dh = fit.team_defense(home)
+    aa = fit.team_attack(away)
+    da = fit.team_defense(away)
 
     home_adv = 0.0 if neutral else effective_home_advantage(fit, cfg)
     lam_h = math.exp(np.clip(fit.intercept + home_adv + ah - da, -4.0, 3.0))

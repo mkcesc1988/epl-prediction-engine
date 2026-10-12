@@ -32,8 +32,18 @@ model_v12:
   min_history_matches: 200
   regularization: 0.20
   # Fraction of the fitted home advantage to remove (0 = off, 1 = none).
-  # Leave at 0 until home_advantage_sweep.py shows a multi-season gain.
-  home_advantage_shrink: 0.0
+  # 0.15 had the best multi-season RPS in home_advantage_sweep (2023-26) and
+  # cuts the home-win over-prediction (model 45.7% vs actual 43.2%).
+  home_advantage_shrink: 0.15
+  # Promoted-team prior: promoted sides shrink toward the historical
+  # promoted-team rating (estimated leakage-safe from past seasons when
+  # promoted_prior_auto is true) instead of the league average (0).
+  promoted_prior_enabled: true
+  promoted_prior_auto: true
+  promoted_prior_attack: -0.20     # fallback when history is too short
+  promoted_prior_defense: -0.20    # fallback (higher = concedes less)
+  promoted_prior_matches: 8        # prior strength in pseudo-matches
+  promoted_prior_min_team_seasons: 3
   lambda_floor: 0.15
   lambda_cap: 4.5
   max_goal: 10
@@ -80,13 +90,19 @@ market_comparison:
 
 decision:
   market_anchor_enabled: true
-  market_anchor_weight_moneyline: 0.45
+  # Moneyline: walk-forward fit of outcome ~ model + market gave the model
+  # ~0 weight beyond the no-vig market, so lean heavily on the market until
+  # the model proves closing-line value.
+  market_anchor_weight_moneyline: 0.85
   market_anchor_weight_spread: 0.40
   market_anchor_weight_total: 0.35
   min_consensus_books: 2
   no_bet_edge: 0.03
   bet_eligible_edge: 0.05
   max_raw_model_market_gap: 0.18
+  # Early-season extra market anchoring (fades to 0 after this many GWs).
+  early_season_gameweeks: 8
+  early_season_anchor_bonus: 0.15
 
 ranking:
   primary_book: mybookie

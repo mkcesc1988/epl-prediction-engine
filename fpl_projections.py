@@ -325,6 +325,7 @@ def transfer_options(proj: pd.DataFrame, squad_ids: list[int], bank: float, gws:
         return singles_df
 
     doubles = []
+    seen: set[tuple[frozenset, frozenset]] = set()
     best_ins = (singles_df.sort_values("Gain", ascending=False)
                 .groupby(singles_df["OutIds"].map(lambda t: t[0])).head(top_per_slot))
     by_out = {k: g for k, g in best_ins.groupby(best_ins["OutIds"].map(lambda t: t[0]))}
@@ -333,6 +334,10 @@ def transfer_options(proj: pd.DataFrame, squad_ids: list[int], bank: float, gws:
             for _, b in by_out[o2].iterrows():
                 if a["InIds"][0] == b["InIds"][0] or a["Cost"] + b["Cost"] > bank + 1e-9:
                     continue
+                key = (frozenset((o1, o2)), frozenset((a["InIds"][0], b["InIds"][0])))
+                if key in seen:
+                    continue
+                seen.add(key)
                 ids = [i for i in squad_ids if i not in (o1, o2)] + [a["InIds"][0], b["InIds"][0]]
                 new = proj[proj["id"].isin(ids)]
                 if len(new) != 15 or not legal(new):

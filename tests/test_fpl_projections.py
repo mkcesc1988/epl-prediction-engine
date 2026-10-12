@@ -127,5 +127,9 @@ def test_transfer_options_respect_budget_and_club_limit():
     assert not opts.empty
     assert (opts["BankAfter"] >= -1e-9).all()
     assert (opts.loc[opts["Type"] == "double", "HitCost"] == 4).all()
+    doubles = opts[opts["Type"] == "double"]
+    keys = doubles.apply(lambda r: (frozenset(r["OutIds"]), frozenset(r["InIds"])), axis=1)
+    assert not keys.duplicated().any()
     best = opts.iloc[0]
     assert best["NetGain"] >= opts["NetGain"].iloc[-1]
+

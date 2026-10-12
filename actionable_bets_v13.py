@@ -224,15 +224,29 @@ def build_decisions(
     return frame.reset_index(drop=True)
 
 
+def _read_optional_csv(path: Path) -> pd.DataFrame:
+    """Read an optional input; missing, zero-byte or header-less files are empty.
+
+    scenario_v13.py writes a column-less file when no scenario override matches
+    the current gameweek, which pandas cannot parse (EmptyDataError).
+    """
+    if not path.exists() or path.stat().st_size == 0:
+        return pd.DataFrame()
+    try:
+        return pd.read_csv(path)
+    except pd.errors.EmptyDataError:
+        return pd.DataFrame()
+
+
 def main() -> None:
     rankings_file = DATA_DIR / "gameweek_rankings_latest.csv"
     if not rankings_file.exists():
         raise FileNotFoundError("Run gameweek_rankings.py before the V1.3 decision gate")
     rankings = pd.read_csv(rankings_file)
     adjusted_path = DATA_DIR / "pre_kickoff_adjusted_latest.csv"
-    adj = pd.read_csv(adjusted_path) if adjusted_path.exists() else pd.DataFrame()
-    lineups = pd.read_csv(LINEUP_PATH) if LINEUP_PATH.exists() else pd.DataFrame()
-    scenarios = pd.read_csv(SCENARIO_PATH) if SCENARIO_PATH.exists() else pd.DataFrame()
+    adj = _read_optional_csv(adjusted_path)
+    lineups = _read_optional_csv(LINEUP_PATH)
+    scenarios = _read_optional_csv(SCENARIO_PATH)
     out = build_decisions(rankings, adj, lineups, scenarios=scenarios)
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     out.to_csv(OUT_PATH, index=False)

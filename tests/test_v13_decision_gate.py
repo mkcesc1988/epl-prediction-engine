@@ -109,3 +109,20 @@ def test_scenario_limit_rejects_unjustified_multiplier():
         "AwayLambdaMultiplier": 1.0, "AssumptionNote": "too large"}])
     with pytest.raises(ValueError):
         build_scenarios(pred, over)
+
+
+def test_optional_csv_reader_tolerates_empty_scenario_file(tmp_path):
+    from actionable_bets_v13 import _read_optional_csv
+
+    missing = tmp_path / "missing.csv"
+    zero = tmp_path / "zero.csv"
+    zero.write_text("")
+    headerless = tmp_path / "headerless.csv"
+    pd.DataFrame().to_csv(headerless, index=False)  # what scenario_v13 writes with no scenarios
+    ok = tmp_path / "ok.csv"
+    pd.DataFrame({"a": [1]}).to_csv(ok, index=False)
+
+    assert _read_optional_csv(missing).empty
+    assert _read_optional_csv(zero).empty
+    assert _read_optional_csv(headerless).empty
+    assert list(_read_optional_csv(ok).columns) == ["a"]

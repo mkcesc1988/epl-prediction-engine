@@ -1,6 +1,6 @@
 # FPL plan 4414893 - GW7 (horizon GW7-9)
 
-Bank £2.5m · estimated free transfers: 3 (selling prices approximated by current prices)
+Bank £2.5m · estimated free transfers: 1 (selling prices approximated by current prices)
 
 **Captain:** Haaland
 
@@ -26,13 +26,13 @@ Bank £2.5m · estimated free transfers: 3 (selling prices approximated by curre
 
 | Out | In | Gain | Hit | Net | Bank after |
 |---|---|---|---|---|---|
-| Konsa + Muharemović | Hall + Silva | 6.3 | -0 | 6.3 | £1.8m |
-| Konsa + Tarkowski | Hall + Silva | 6.2 | -0 | 6.2 | £3.0m |
-| Kostoulas + Muharemović | João Pedro + Hall | 6.1 | -0 | 6.1 | £0.0m |
-| Delap + Muharemović | João Pedro + Hall | 6.1 | -0 | 6.1 | £0.0m |
-| Konsa + Muharemović | Hall + Guéhi | 6.0 | -0 | 6.0 | £0.8m |
-| Kostoulas + Tarkowski | João Pedro + Hall | 6.0 | -0 | 6.0 | £1.2m |
-| Delap + Tarkowski | João Pedro + Hall | 6.0 | -0 | 6.0 | £1.2m |
-| Konsa + Tarkowski | Hall + Guéhi | 6.0 | -0 | 6.0 | £2.0m |
-| Konsa + Kostoulas | Hall + Wissa | 5.8 | -0 | 5.8 | £1.1m |
-| Konsa + Delap | Hall + Wissa | 5.8 | -0 | 5.8 | £1.1m |
+| Konsa | Hall | 4.1 | -0 | 4.1 | £1.8m |
+| Konsa | Silva | 3.6 | -0 | 3.6 | £2.1m |
+| Kostoulas | João Pedro | 3.4 | -0 | 3.4 | £0.3m |
+| Delap | João Pedro | 3.4 | -0 | 3.4 | £0.3m |
+| Konsa | Guéhi | 3.4 | -0 | 3.4 | £1.1m |
+| Muharemović | Hall | 3.0 | -0 | 3.0 | £2.2m |
+| Delap | Wissa | 2.7 | -0 | 2.7 | £1.8m |
+| Kostoulas | Wissa | 2.7 | -0 | 2.7 | £1.8m |
+| Tarkowski | Hall | 2.7 | -0 | 2.7 | £3.4m |
+| Muharemović | Silva | 2.6 | -0 | 2.6 | £2.5m |

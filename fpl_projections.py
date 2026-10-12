@@ -289,9 +289,11 @@ def estimate_free_transfers(history: dict, next_gw: int) -> int:
         if gw == 1:
             ft = 1
             continue
-        if gw not in chips:
-            ft = max(ft - made.get(gw, 0), 0)
-        ft = min(ft + 1, 5)
+        if gw in chips:
+            # Wildcard/Free Hit weeks keep the banked transfers but do not add
+            # one (matches the FPL app: GW3 FH + GW5 WC left this team on 1).
+            continue
+        ft = min(max(ft - made.get(gw, 0), 0) + 1, 5)
     return ft
 
 

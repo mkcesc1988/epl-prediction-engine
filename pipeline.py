@@ -17,6 +17,7 @@ TEAM_MAP = {
     "Newcastle United": "Newcastle",
     "Newcastle Utd": "Newcastle",
     "Tottenham Hotspur": "Tottenham",
+    "Spurs": "Tottenham",
     "West Ham United": "West Ham",
     "Wolverhampton Wanderers": "Wolves",
     "Brighton and Hove Albion": "Brighton",

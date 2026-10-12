@@ -36,8 +36,8 @@ def _number(value: object, fallback: float = float("nan")) -> float:
 def _norm(value: object) -> str:
     mapping = {
         "Nottingham Forest": "Nott'm Forest",
-        "Tottenham Hotspur": "Spurs",
-        "Tottenham": "Spurs",
+        "Tottenham Hotspur": "Tottenham",
+        "Spurs": "Tottenham",
         "Manchester United": "Man United",
         "Manchester City": "Man City",
         "Ipswich": "Ipswich Town",

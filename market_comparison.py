@@ -19,7 +19,7 @@ def _norm(name: object) -> str:
         "Manchester City": "Man City",
         "Manchester United": "Man United",
         "Newcastle United": "Newcastle",
-        "Tottenham Hotspur": "Tottenham",
+        "Tottenham Hotspur": "Tottenham", "Spurs": "Tottenham",
         "West Ham United": "West Ham",
         "Wolverhampton Wanderers": "Wolves",
         "Brighton and Hove Albion": "Brighton",

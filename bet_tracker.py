@@ -25,7 +25,7 @@ FPL_BOOTSTRAP_URL = "https://fantasy.premierleague.com/api/bootstrap-static/"
 def _norm(value: object) -> str:
     mapping = {
         "Manchester City": "Man City", "Manchester United": "Man United",
-        "Newcastle United": "Newcastle", "Tottenham Hotspur": "Tottenham",
+        "Newcastle United": "Newcastle", "Tottenham Hotspur": "Tottenham", "Spurs": "Tottenham",
         "West Ham United": "West Ham", "Wolverhampton Wanderers": "Wolves",
         "Brighton and Hove Albion": "Brighton", "Brighton & Hove Albion": "Brighton",
         "Nottingham Forest": "Nott'm Forest", "Leeds United": "Leeds",

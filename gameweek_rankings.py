@@ -195,12 +195,32 @@ def _consensus_no_vig_probability(q: pd.Series, odds: pd.DataFrame) -> tuple[flo
     return float(np.median(probs)), int(len(probs)), source
 
 
+def _early_season_anchor_bonus(gameweek: object, cfg: dict) -> float:
+    """Extra market-anchor weight for the first gameweeks of a season.
+
+    Early in the season the strength fit is still dominated by last season and
+    by priors for promoted teams, and historically over-rated underdogs. The
+    bonus fades linearly to zero at ``early_season_gameweeks``.
+    """
+    dc = cfg.get("decision", {})
+    n_weeks = int(dc.get("early_season_gameweeks", 0) or 0)
+    bonus = float(dc.get("early_season_anchor_bonus", 0.0) or 0.0)
+    try:
+        gw = float(gameweek)
+    except (TypeError, ValueError):
+        return 0.0
+    if n_weeks <= 0 or bonus <= 0 or not np.isfinite(gw) or gw > n_weeks:
+        return 0.0
+    return bonus * (n_weeks - gw + 1) / n_weeks
+
+
 def _decision_probability(
     p_win: float,
     p_push: float,
     market_prior: float,
     market_label: str,
     cfg: dict,
+    gameweek: object = None,
 ) -> tuple[float, float]:
     """Shrink model probability toward the no-vig market prior.
 
@@ -218,7 +238,9 @@ def _decision_probability(
         "Spread": float(dc.get("market_anchor_weight_spread", 0.40)),
         "Total": float(dc.get("market_anchor_weight_total", 0.35)),
     }
-    weight = float(np.clip(weights.get(market_label, 0.40), 0.0, 1.0))
+    weight = float(weights.get(market_label, 0.40))
+    weight += _early_season_anchor_bonus(gameweek, cfg)
+    weight = float(np.clip(weight, 0.0, 1.0))
     nonpush_mass = max(1e-12, 1.0 - p_push)
     raw_effective = float(np.clip(p_win / nonpush_mass, 0.0, 1.0))
     prior = float(np.clip(market_prior, 0.0, 1.0))
@@ -478,7 +500,7 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
             consensus_books = 0
 
         decision_p_win, decision_effective = _decision_probability(
-            p_win, p_push, market_prior, market_label, cfg
+            p_win, p_push, market_prior, market_label, cfg, pred.get("FPLGameweek")
         )
         fair_odds = _binary_fair_odds(decision_p_win, p_push)
         ev = _ev_with_push(decision_p_win, p_push, odds_price)

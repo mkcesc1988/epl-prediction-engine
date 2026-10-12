@@ -161,3 +161,9 @@ home_advantage_sweep:
   shrink_grid: [0.0, 0.15, 0.3, 0.45, 0.6]
   # Seasons to score (all earlier seasons are still used as training history).
   eval_last_n_seasons: 3
+
+fpl:
+  # Fantasy Premier League team to plan for (public team ID from the FPL site).
+  team_id: 4414893
+  horizon_gameweeks: 3   # gameweeks ahead to value transfers over
+  horizon_decay: 0.9     # weight on each later gameweek (next GW = 1.0)

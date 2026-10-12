@@ -5,3 +5,4 @@ requests>=2.31
 PyYAML>=6.0
 understatapi>=0.7.1
 streamlit>=1.45
+tabulate>=0.9

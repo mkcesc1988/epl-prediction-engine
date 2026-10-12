@@ -19,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: fpl-projections-${{ github.ref }}
@@ -45,6 +46,22 @@ jobs:
 
       - name: Build FPL projections and squad plan
         run: python fpl_projections.py
+
+      - name: Post squad report on the pull request
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          {
+            echo "### FPL projection preview"
+            echo
+            cat data/processed/fpl_squad_report_latest.md
+            echo
+            echo "#### Top 20 projected players"
+            echo
+            python -c "import pandas as pd; p=pd.read_csv('data/processed/fpl_player_projections_latest.csv'); c=[x for x in p if x.startswith('xPts')]; print(p[['web_name','Club','Pos','Price']+c].head(20).round(1).to_markdown(index=False))" || true
+          } > pr_comment.md
+          gh pr comment ${{ github.event.pull_request.number }} --body-file pr_comment.md
 
       - name: Upload FPL outputs
         if: always()

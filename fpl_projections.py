@@ -167,7 +167,7 @@ def model_lambdas(cfg: dict, reference_date: pd.Timestamp):
 # --------------------------------------------------------------------------
 
 def recent_usage(gw_minutes: pd.DataFrame, fx: pd.DataFrame, team_of: dict[int, int],
-                 decay: float = 0.6) -> pd.DataFrame:
+                 decay: float = 0.75) -> pd.DataFrame:
     """Recency-weighted start, sub and minutes rates per player.
 
     Each finished gameweek a player's club played in gets weight decay**age
@@ -464,7 +464,7 @@ def main() -> None:
     team_fx = team_fixture_projections(upcoming, lam, rho)
 
     finished_gws = sorted(fx.loc[fx["Finished"], "GW"].unique().tolist())
-    form_decay = float(fcfg.get("recent_form_decay", 0.6))
+    form_decay = float(fcfg.get("recent_form_decay", 0.75))
     recent = recent_usage(fetch_gameweek_minutes(finished_gws), fx,
                           {int(e["id"]): int(e["team"]) for e in bootstrap["elements"]}, form_decay)
     players = player_rates(bootstrap, team_games_played(fx), recent=recent)

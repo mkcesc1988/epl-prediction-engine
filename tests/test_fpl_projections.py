@@ -143,9 +143,9 @@ def test_recent_starts_outweigh_early_benching():
     mins = [0, 11, 90, 90, 90, 90]
     gw_minutes = pd.DataFrame({"id": pid, "GW": range(1, 7), "minutes": mins,
                                "starts": [0, 0, 1, 1, 1, 1]})
-    recent = fp.recent_usage(gw_minutes, fx, {pid: 1}, decay=0.6)
+    recent = fp.recent_usage(gw_minutes, fx, {pid: 1}, decay=0.75)
     row = recent.iloc[0]
-    assert row["StartRate"] > 0.85          # season average would be 0.67
+    assert row["StartRate"] > 0.8           # season average would be 0.67
     assert 0 < row["SubRate"] < 0.1
     players = fp.player_rates(boot, fp.team_games_played(fx), recent=recent)
     assert players.set_index("id").loc[pid, "StartRate"] == row["StartRate"]
@@ -157,5 +157,16 @@ def test_recently_dropped_player_rate_falls():
     pid = boot["elements"][1]["id"]
     gw_minutes = pd.DataFrame({"id": pid, "GW": range(1, 7), "minutes": [90, 90, 90, 90, 0, 0],
                                "starts": [1, 1, 1, 1, 0, 0]})
-    row = fp.recent_usage(gw_minutes, fx, {pid: 1}, decay=0.6).iloc[0]
-    assert row["StartRate"] < 0.4           # season average would be 0.67
+    row = fp.recent_usage(gw_minutes, fx, {pid: 1}, decay=0.75).iloc[0]
+    assert row["StartRate"] < 0.5           # season average would be 0.67
+
+
+def test_single_rest_day_does_not_sink_a_regular():
+    """Gvardiol case: five starts then one appearance off the bench."""
+    boot, fixtures = _league()
+    fx = fp.fixture_frame(boot, fixtures)
+    pid = boot["elements"][1]["id"]
+    gw_minutes = pd.DataFrame({"id": pid, "GW": range(1, 7), "minutes": [90, 74, 90, 90, 90, 24],
+                               "starts": [1, 1, 1, 1, 1, 0]})
+    row = fp.recent_usage(gw_minutes, fx, {pid: 1}).iloc[0]
+    assert row["StartRate"] > 0.65

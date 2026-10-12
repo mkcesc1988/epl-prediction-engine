@@ -167,3 +167,4 @@ fpl:
   team_id: 4414893
   horizon_gameweeks: 3   # gameweeks ahead to value transfers over
   horizon_decay: 0.9     # weight on each later gameweek (next GW = 1.0)
+  recent_form_decay: 0.75 # weight per gameweek back when judging who starts (latest = 1.0)

@@ -101,7 +101,7 @@ def test_free_transfer_estimate_respects_chips():
                            {"event": 4, "event_transfers": 2}, {"event": 5, "event_transfers": 15},
                            {"event": 6, "event_transfers": 1}],
                "chips": [{"name": "freehit", "event": 3}, {"name": "wildcard", "event": 5}]}
-    assert fp.estimate_free_transfers(history, 7) == 3
+    assert fp.estimate_free_transfers(history, 7) == 1  # what the FPL app showed
 
 
 def test_transfer_options_respect_budget_and_club_limit():

@@ -1,0 +1,54 @@
+{
+  "rows": 1678,
+  "duplicates": 0,
+  "missing_scores": 0,
+  "xg_complete": 1666,
+  "missing_xg": 12,
+  "score_mismatches": 0,
+  "football_data_fallback_seasons": [],
+  "historical_market_odds_complete": true,
+  "league": "Ligue_1",
+  "reconciled_team_names": {},
+  "teams_missing_xg": {
+    "Lyon": 3,
+    "Lens": 3,
+    "Nice": 2,
+    "Brest": 2,
+    "Metz": 2,
+    "Nantes": 2,
+    "Marseille": 2,
+    "Lille": 2,
+    "Lorient": 2,
+    "Strasbourg": 1,
+    "Paris SG": 1,
+    "Rennes": 1,
+    "Monaco": 1
+  },
+  "by_season": {
+    "2021/22": {
+      "matches": 380,
+      "xg_complete": 379,
+      "missing_xg": 1
+    },
+    "2022/23": {
+      "matches": 380,
+      "xg_complete": 379,
+      "missing_xg": 1
+    },
+    "2023/24": {
+      "matches": 306,
+      "xg_complete": 304,
+      "missing_xg": 2
+    },
+    "2024/25": {
+      "matches": 306,
+      "xg_complete": 306,
+      "missing_xg": 0
+    },
+    "2025/26": {
+      "matches": 306,
+      "xg_complete": 298,
+      "missing_xg": 8
+    }
+  }
+}

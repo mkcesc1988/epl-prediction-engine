@@ -78,7 +78,7 @@ The run creates:
 python league_predictions.py                     # all leagues in config.yaml leagues.enabled
 python league_predictions.py --league SERIEA     # one league (LALIGA, BUNDESLIGA, SERIEA, LIGUE1)
 python league_predictions.py --backtest          # add walk-forward backtests
-python league_predictions.py --odds              # add The Odds API comparison (needs THE_ODDS_API_KEY)
+python league_predictions.py --odds              # force an Odds API pull (default: only near kickoff)
 ```
 
 Sources per league: Football-Data.co.uk (`SP1`, `D1`, `I1`, `F1`) for results and historical odds, Understat for xG and the fixture list, and The Odds API (`soccer_spain_la_liga`, `soccer_germany_bundesliga`, `soccer_italy_serie_a`, `soccer_france_ligue_one`) for live prices.
@@ -89,7 +89,16 @@ Team names are canonicalised to Football-Data spellings through `leagues.py`. Na
 
 Per-league settings can be overridden under `leagues.overrides` in `config.yaml`. The EPL-tuned `home_advantage_shrink: 0.15` applies to every league until a league's own backtest supports a different value.
 
-These outputs are research only. Treat a league as bettable only once its backtest shows model RPS close to the Pinnacle market's across several seasons.
+### League paper betting
+
+When a league has a fixture within `leagues.odds_within_days` (default 2), the run pulls The Odds API prices and sends the league through the same decision stack as the EPL: `gameweek_rankings.build_rankings` blends the model toward the no-vig consensus (moneyline 0.85, spread 0.40, total 0.35, plus an early-season bonus by matchday), then the 5pp decision-edge gate, extreme-edge sanity gate and capped fractional Kelly sizing from `portfolio_manager`. League differences (`league_portfolio.py`):
+
+- No V2 agreement gate (V2 is EPL-only), so extreme edges stay research-only.
+- Each league's exposure cap is 4% of the paper bankroll, and open bets count against it.
+- `portfolio.blocked_markets` keeps La Liga and Bundesliga totals ranked but out of the portfolio: in the 2023/24–2025/26 backtest, O/U bets passing the live gate lost 15% and 11% there.
+- Ligue 1 totals are in goal units (`model_v12.totals_goal_scale`), correcting a goals-below-xG drift that biased its totals high.
+
+Paper bets are recorded in `data/history/leagues/paper_bet_ledger.csv`, settled from Understat results, and summarised by league in `paper_performance_summary.csv`. Nothing here touches the EPL ledgers or real-money tracking.
 
 The **League predictions** workflow runs daily at 12:30 UTC and can be run by hand with a league list, backtests and odds turned on.
 

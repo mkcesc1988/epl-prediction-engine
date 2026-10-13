@@ -457,6 +457,10 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
         elif market == "totals":
             if pd.isna(point):
                 continue
+            goal_scale = pd.to_numeric(pred.get("GoalScale"), errors="coerce")
+            if pd.notna(goal_scale) and float(goal_scale) != 1.0:
+                # Totals in goal units for leagues with totals_goal_scale on.
+                matrix = _score_matrix(lam_h * float(goal_scale), lam_a * float(goal_scale), rho, max_goal)
             side = outcome.title()
             if side not in {"Over", "Under"}:
                 continue
@@ -499,8 +503,11 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
             market_prior_source = "raw_mybookie_implied_fallback"
             consensus_books = 0
 
+        round_number = pred.get("FPLGameweek")
+        if round_number is None or pd.isna(round_number):
+            round_number = pred.get("Matchday")  # non-EPL leagues
         decision_p_win, decision_effective = _decision_probability(
-            p_win, p_push, market_prior, market_label, cfg, pred.get("FPLGameweek")
+            p_win, p_push, market_prior, market_label, cfg, round_number
         )
         fair_odds = _binary_fair_odds(decision_p_win, p_push)
         ev = _ev_with_push(decision_p_win, p_push, odds_price)

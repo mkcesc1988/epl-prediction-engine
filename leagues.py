@@ -229,8 +229,9 @@ def _deep_update(base: dict, overrides: dict) -> dict:
 def league_config(cfg: dict, code: str) -> dict:
     """Return a copy of ``cfg`` pointed at one league's sources and output folders.
 
-    ``leagues.overrides.<CODE>`` in config.yaml can override any section for that
-    league (e.g. ``model_v12.home_advantage_shrink``) without touching the EPL.
+    ``leagues.defaults`` applies to every non-EPL league and
+    ``leagues.overrides.<CODE>`` to one league (e.g.
+    ``model_v12.home_advantage_shrink``); neither touches the EPL.
     """
     key = code.upper()
     meta = LEAGUES[key]
@@ -245,6 +246,11 @@ def league_config(cfg: dict, code: str) -> dict:
     out.setdefault("market_comparison", {})["odds_api_sport"] = meta["odds_api_sport"]
     # Manual MyBookie screenshots are EPL-only.
     out["market_comparison"]["use_manual_mybookie"] = False
+    out["market_comparison"]["mybookie_direct_only_if_missing"] = True
+    # The V2 shadow model (rest, congestion, preseason context) is EPL-only, so
+    # the V1/V2 agreement gate cannot run. Extreme edges still need V2, so they
+    # stay research-only for these leagues.
+    out.setdefault("portfolio", {})["require_v2_agreement"] = False
 
     league_cfg = cfg.get("leagues") or {}
     daily = out.setdefault("daily", {})
@@ -259,7 +265,8 @@ def league_config(cfg: dict, code: str) -> dict:
     for name, filename in _LEAGUE_PATHS.items():
         paths[name] = str(proc_root / filename)
 
-    _deep_update(out, (league_cfg.get("overrides") or {}).get(key, {}))
+    _deep_update(out, copy.deepcopy(league_cfg.get("defaults") or {}))
+    _deep_update(out, copy.deepcopy((league_cfg.get("overrides") or {}).get(key, {})))
     return out
 
 
@@ -267,12 +274,16 @@ def reconcile_team_names(
     reference: pd.DataFrame,
     other: pd.DataFrame,
     date_tolerance_days: int = 1,
+    allow_fuzzy: bool = True,
 ) -> dict[str, str]:
     """Map team names in ``other`` that don't appear in ``reference`` onto reference names.
 
     Both frames need Date, HomeTeam and AwayTeam. Matching uses fixture overlap:
     two names are the same club when they play the same opponent on (about) the
-    same date. A name-similarity tiebreak resolves the rare ambiguous case.
+    same date. A name-similarity tiebreak resolves the rare ambiguous case, and
+    with ``allow_fuzzy`` a name with no shared fixture falls back to similarity
+    alone (off for small reference sets, where it could pair e.g. Paris FC with
+    Paris SG).
     Returns ``{other_name: reference_name}`` for the names it could resolve.
     """
     if reference.empty or other.empty:
@@ -322,7 +333,7 @@ def reconcile_team_names(
             best = max(scores, key=lambda c: scores[c])
             mapping[name] = best
             strength[name] = scores[best]
-        else:
+        elif allow_fuzzy:
             # No shared fixtures (e.g. odds for a fixture we don't predict): name similarity only.
             close = difflib.get_close_matches(strip_accents(name), candidates, n=1, cutoff=0.6)
             if close:
@@ -338,13 +349,18 @@ def reconcile_team_names(
     return {name: target for target, name in by_target.items()}
 
 
-def harmonize_team_names(reference: pd.DataFrame, other: pd.DataFrame, max_rounds: int = 3) -> tuple[pd.DataFrame, dict[str, str]]:
+def harmonize_team_names(
+    reference: pd.DataFrame,
+    other: pd.DataFrame,
+    max_rounds: int = 3,
+    allow_fuzzy: bool = True,
+) -> tuple[pd.DataFrame, dict[str, str]]:
     """Rename teams in ``other`` to ``reference`` spellings, repeating so that
     fixtures between two unknown names resolve once one side is learned."""
     out = other.copy()
     learned: dict[str, str] = {}
     for _ in range(max_rounds):
-        mapping = reconcile_team_names(reference, out)
+        mapping = reconcile_team_names(reference, out, allow_fuzzy=allow_fuzzy)
         mapping = {k: v for k, v in mapping.items() if k not in learned}
         if not mapping:
             break

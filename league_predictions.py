@@ -9,19 +9,23 @@ league writes to data/processed/leagues/<CODE>/:
   market_odds_latest.csv            The Odds API prices (when THE_ODDS_API_KEY is set)
   market_comparison_latest.csv      O/U 2.5 model vs market
   moneyline_comparison_latest.csv   1X2 model vs best price and no-vig consensus
+  rankings_latest.csv               MyBookie quotes blended toward the market and graded
+  paper_portfolio_latest.csv        new paper bets sized by capped fractional Kelly
+  extreme_edge_audit_latest.csv     extreme-edge sanity checks
   home_advantage_sweep_summary.csv  (--backtest) 1X2 RPS vs Pinnacle by season
 
-plus data/processed/leagues/all_leagues_predictions_latest.csv combining them.
+plus combined files in data/processed/leagues/ and a paper ledger with results
+in data/history/leagues/ (see league_portfolio.py).
 
-These outputs are research only: nothing here feeds the EPL portfolio, bet
-ledgers or real-money tracking. Promote a league only after its backtest shows
-model RPS close to the market's.
+Everything here is paper only: nothing feeds the EPL portfolio, EPL ledgers or
+real-money tracking.
 
 Usage:
   python league_predictions.py                    # all enabled leagues
   python league_predictions.py --league SERIEA    # one league
   python league_predictions.py --backtest         # also run walk-forward backtests
-  python league_predictions.py --odds             # also pull The Odds API prices
+  python league_predictions.py --odds             # pull odds now (default: only near kickoff)
+  python league_predictions.py --no-odds          # never pull odds
 """
 from __future__ import annotations
 
@@ -34,7 +38,16 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from daily_predictions import build_daily_predictions
+from daily_predictions import build_daily_predictions, fetch_current_understat_completed
+from league_portfolio import (
+    LEDGER_PATH,
+    build_league_portfolio,
+    load_ledger,
+    performance_summary,
+    record_bets,
+    save_ledger,
+    settle_bets,
+)
 from leagues import LEAGUES, enabled_leagues, harmonize_team_names, league_config
 from market_comparison import _norm, compare_totals_25, fetch_market_odds
 from pipeline import load_config
@@ -66,7 +79,7 @@ def align_odds_to_predictions(predictions: pd.DataFrame, odds: pd.DataFrame) -> 
     lo = pred_keys["Date"].min() - pd.Timedelta(days=1)
     hi = pred_keys["Date"].max() + pd.Timedelta(days=1)
     events = out.loc[out["Date"].between(lo, hi), ["Date", "HomeTeam", "AwayTeam"]].drop_duplicates()
-    _, learned = harmonize_team_names(pred_keys, events)
+    _, learned = harmonize_team_names(pred_keys, events, allow_fuzzy=False)
     if learned:
         print(f"  Reconciled bookmaker team names: {learned}")
         for col in ("HomeTeam", "AwayTeam"):
@@ -200,24 +213,68 @@ def run_backtest(lcfg: dict, out_dir: Path) -> str:
     )
 
 
-def run_league(cfg: dict, code: str, fetch_odds: bool, backtest: bool) -> tuple[pd.DataFrame, str | None]:
+def _odds_due(predictions: pd.DataFrame, cfg: dict) -> bool:
+    """True when a fixture kicks off within ``leagues.odds_within_days``."""
+    if predictions.empty:
+        return False
+    within = int((cfg.get("leagues") or {}).get("odds_within_days", 2))
+    today = pd.Timestamp.now(tz="UTC").tz_localize(None).normalize()
+    return bool((pd.to_datetime(predictions["Date"]) <= today + pd.Timedelta(days=within)).any())
+
+
+def _fill_kickoffs(predictions: pd.DataFrame, odds: pd.DataFrame) -> pd.DataFrame:
+    """Use the bookmakers' UTC kickoff so started matches are never ranked."""
+    if predictions.empty or odds.empty or "KickoffUTC" not in odds.columns:
+        return predictions
+    kick = (
+        odds.dropna(subset=["KickoffUTC"])
+        .drop_duplicates(["Date", "HomeTeam", "AwayTeam"])
+        .set_index(["Date", "HomeTeam", "AwayTeam"])["KickoffUTC"]
+    )
+    out = predictions.copy()
+    keys = list(zip(out["Date"].astype(str), out["HomeTeam"], out["AwayTeam"]))
+    found = [kick.get(k) for k in keys]
+    out["KickoffUTC"] = [f if f is not None else k for f, k in zip(found, out["KickoffUTC"])]
+    return out
+
+
+def run_league(
+    cfg: dict,
+    code: str,
+    odds_mode: str,
+    backtest: bool,
+    ledger: pd.DataFrame,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, str | None]:
+    """Predict, price, rank and paper-bet one league.
+
+    ``odds_mode`` is "force", "auto" (only near kickoff) or "off".
+    Returns (predictions, portfolio, ledger, backtest verdict).
+    """
     lcfg = league_config(cfg, code)
     out_dir = Path(lcfg["paths"]["processed_dir"])
     out_dir.mkdir(parents=True, exist_ok=True)
     Path(lcfg["paths"]["raw_dir"]).mkdir(parents=True, exist_ok=True)
     print(f"\n=== {LEAGUES[code]['name']} ({code}) ===")
 
+    # Settle anything already played before placing new paper bets.
+    season = int(lcfg.get("daily", {}).get("current_season", 2026))
+    results = fetch_current_understat_completed(season, lcfg["league"])
+    ledger, n_settled = settle_bets(ledger, results, code)
+    if n_settled:
+        print(f"  Settled paper bets: {n_settled}")
+
     predictions = build_daily_predictions(lcfg)
-    predictions.to_csv(out_dir / "daily_predictions_latest.csv", index=False)
     if not predictions.empty:
         stamp = str(predictions["Date"].min()).replace("-", "")
-        predictions.to_csv(out_dir / f"daily_predictions_{stamp}.csv", index=False)
         cols = ["Date", "HomeTeam", "AwayTeam", "P_HomeWin", "P_Draw", "P_AwayWin", "CalP_Over2_5", "MostLikelyScore"]
         print(predictions[cols].round(3).to_string(index=False))
 
-    if fetch_odds and not predictions.empty:
+    portfolio = pd.DataFrame()
+    pull = odds_mode == "force" or (odds_mode == "auto" and _odds_due(predictions, lcfg))
+    if pull and not predictions.empty:
         odds = fetch_market_odds(lcfg)
         odds = align_odds_to_predictions(predictions, odds)
+        predictions = _fill_kickoffs(predictions, odds)
         odds.to_csv(out_dir / "market_odds_latest.csv", index=False)
         totals = compare_totals_25(predictions, odds)
         if not totals.empty:
@@ -225,13 +282,35 @@ def run_league(cfg: dict, code: str, fetch_odds: bool, backtest: bool) -> tuple[
         totals.to_csv(out_dir / "market_comparison_latest.csv", index=False)
         moneyline = compare_moneyline(predictions, odds)
         moneyline.to_csv(out_dir / "moneyline_comparison_latest.csv", index=False)
-        print(f"  Odds rows: {len(odds)} | O/U 2.5 comparisons: {len(totals)} | 1X2 comparisons: {len(moneyline)}")
+
+        rankings, portfolio, extreme_audit = build_league_portfolio(code, predictions, odds, lcfg, ledger)
+        rankings.to_csv(out_dir / "rankings_latest.csv", index=False)
+        portfolio.to_csv(out_dir / "paper_portfolio_latest.csv", index=False)
+        extreme_audit.to_csv(out_dir / "extreme_edge_audit_latest.csv", index=False)
+        ledger, n_new = record_bets(ledger, portfolio, code)
+        eligible = int(rankings["DecisionStatus"].eq("BET_ELIGIBLE").sum()) if not rankings.empty else 0
+        print(
+            f"  Odds rows: {len(odds)} | O/U 2.5: {len(totals)} | 1X2: {len(moneyline)} | "
+            f"MyBookie selections ranked: {len(rankings)} | bet-eligible: {eligible} | "
+            f"paper bets: {len(portfolio)} ({n_new} new)"
+        )
+        if not portfolio.empty:
+            show = ["Date", "HomeTeam", "AwayTeam", "MarketType", "Selection", "MyBookieOdds",
+                    "RawModelWinProbability", "ModelWinProbability", "ConsensusFairProbability",
+                    "ExpectedReturnPerUnit", "PaperStakeUnits"]
+            print(portfolio[[c for c in show if c in portfolio.columns]].round(3).to_string(index=False))
+    elif odds_mode == "auto":
+        print("  Odds skipped: no fixture inside leagues.odds_within_days.")
+
+    predictions.to_csv(out_dir / "daily_predictions_latest.csv", index=False)
+    if not predictions.empty:
+        predictions.to_csv(out_dir / f"daily_predictions_{stamp}.csv", index=False)
 
     verdict_text = None
     if backtest:
         verdict_text = run_backtest(lcfg, out_dir)
         print(f"  Backtest: {verdict_text}")
-    return predictions, verdict_text
+    return predictions, portfolio, ledger, verdict_text
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -252,19 +331,39 @@ def main(argv: list[str] | None = None) -> int:
         print("No non-EPL leagues enabled (config.yaml leagues.enabled).")
         return 0
 
-    fetch_odds = (args.odds or bool((cfg.get("leagues") or {}).get("fetch_odds", False))) and not args.no_odds
-    frames, failures, verdicts = [], [], {}
+    if args.no_odds:
+        odds_mode = "off"
+    elif args.odds:
+        odds_mode = "force"
+    else:
+        odds_mode = "auto" if bool((cfg.get("leagues") or {}).get("fetch_odds", True)) else "off"
+
+    ledger = load_ledger()
+    frames, portfolios, failures, verdicts = [], [], [], {}
     for code in codes:
         try:
-            preds, verdict_text = run_league(cfg, code, fetch_odds, args.backtest)
+            preds, portfolio, ledger, verdict_text = run_league(cfg, code, odds_mode, args.backtest, ledger)
             if not preds.empty:
                 frames.append(preds)
+            if not portfolio.empty:
+                portfolios.append(portfolio)
             if verdict_text:
                 verdicts[code] = verdict_text
         except Exception as exc:  # one league failing must not block the others
             failures.append(code)
             print(f"ERROR: {code} failed: {exc}")
             traceback.print_exc()
+
+    if not ledger.empty:
+        save_ledger(ledger)
+        summary = performance_summary(ledger)
+        open_n = int(ledger["Result"].astype(str).eq("OPEN").sum())
+        print(f"\nLeague paper ledger: {len(ledger)} bets, {open_n} open -> {LEDGER_PATH}")
+        if not summary.empty:
+            print(summary[summary["Segment"] == "ALL"].round(3).to_string(index=False))
+    portfolio_path = Path(cfg["paths"]["processed_dir"]) / "leagues" / "all_leagues_paper_portfolio_latest.csv"
+    portfolio_path.parent.mkdir(parents=True, exist_ok=True)
+    (pd.concat(portfolios, ignore_index=True) if portfolios else pd.DataFrame()).to_csv(portfolio_path, index=False)
 
     combined_path = Path(cfg["paths"]["processed_dir"]) / "leagues" / "all_leagues_predictions_latest.csv"
     combined_path.parent.mkdir(parents=True, exist_ok=True)
@@ -277,6 +376,7 @@ def main(argv: list[str] | None = None) -> int:
         with open(step_summary, "a", encoding="utf-8") as fh:
             fh.write("## League predictions\n\n")
             fh.write(f"Fixtures predicted: {len(combined)}\n\n")
+            fh.write(f"New paper bets this run: {sum(len(p) for p in portfolios)}\n\n")
             for code, text in verdicts.items():
                 fh.write(f"- **{LEAGUES[code]['name']}**: {text}\n")
             if failures:

@@ -53,6 +53,11 @@ model_v12:
   rho_grid_min: -0.20
   rho_grid_max: 0.05
   rho_grid_step: 0.005
+  # Put totals/BTTS into goal units with the recent goals-per-xG ratio
+  # (see model_v12.goal_conversion_scale). Off for the EPL; on for Ligue 1.
+  totals_goal_scale: false
+  totals_goal_scale_half_life_days: 365
+  totals_goal_scale_min_matches: 200
 
 v2_shadow:
   rest_day_floor: 3
@@ -87,16 +92,35 @@ leagues:
   # pipeline and files above are unchanged. Codes: LALIGA, BUNDESLIGA, SERIEA, LIGUE1.
   enabled: [LALIGA, BUNDESLIGA, SERIEA, LIGUE1]
   horizon_days: 7          # predict every fixture kicking off in the next N days
-  # Pull The Odds API prices when THE_ODDS_API_KEY is set. Off by default: each
-  # league costs about 6 credits per run, so 4 leagues daily is ~720 credits a
-  # month on top of the EPL. Turn on per run with `--odds` or the workflow input.
-  fetch_odds: false
-  # Per-league overrides of any section above, e.g.
-  # overrides:
-  #   BUNDESLIGA:
-  #     model_v12:
-  #       home_advantage_shrink: 0.0
-  overrides: {}
+  # Pull The Odds API prices when THE_ODDS_API_KEY is set, but only on days with
+  # a fixture inside odds_within_days, to save credits (about 3 credits per
+  # league per pull when the regional feed already includes MyBookie, else 6).
+  # `--odds` forces a pull, `--no-odds` skips it.
+  fetch_odds: true
+  odds_within_days: 2
+  # Applied to every league above; leagues.overrides wins over these.
+  defaults:
+    portfolio:
+      # Each league gets half the EPL's exposure cap while it builds a track
+      # record; open bets already in the league ledger count against it.
+      max_gameweek_exposure_pct: 0.04
+  # Per-league overrides of any section above. Evidence for these is in the
+  # 2023/24-2025/26 walk-forward backtest against Pinnacle closing prices:
+  # - LIGUE1: goals ran ~9% below xG since 2022, so totals were biased high.
+  #   Goal-scaling cut the O/U 2.5 Brier from 0.2461 to 0.2451 and turned the
+  #   gated O/U record from +1.3% to +6.4% ROI.
+  # - LALIGA / BUNDESLIGA: O/U bets passing the live decision gate lost 15% and
+  #   11%, so totals stay ranked but are kept out of the paper portfolio.
+  overrides:
+    LIGUE1:
+      model_v12:
+        totals_goal_scale: true
+    LALIGA:
+      portfolio:
+        blocked_markets: [Total]
+    BUNDESLIGA:
+      portfolio:
+        blocked_markets: [Total]
 
 market_comparison:
   odds_api_sport: soccer_epl

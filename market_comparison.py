@@ -137,11 +137,19 @@ def fetch_market_odds(cfg: dict) -> pd.DataFrame:
         {**common, "regions": regions},
         "Odds API regional market feed",
     )
-    mybookie_payload = _fetch_odds_payload(
-        url,
-        {**common, "bookmakers": mybookie_key},
-        f"Odds API explicit MyBookie feed ({mybookie_key})",
+    regional_has_mybookie = any(
+        mybookie_key in str(book.get("key", "")).lower() or "mybookie" in str(book.get("key", "")).lower()
+        for event in broad_payload for book in (event.get("bookmakers") or [])
     )
+    if bool(mc.get("mybookie_direct_only_if_missing", False)) and regional_has_mybookie:
+        # Saves Odds API credits: the regional feed already carries MyBookie.
+        mybookie_payload = []
+    else:
+        mybookie_payload = _fetch_odds_payload(
+            url,
+            {**common, "bookmakers": mybookie_key},
+            f"Odds API explicit MyBookie feed ({mybookie_key})",
+        )
 
     if not broad_payload and not mybookie_payload:
         print("WARNING: all live odds requests failed or returned no events; using manual MyBookie prices only.")

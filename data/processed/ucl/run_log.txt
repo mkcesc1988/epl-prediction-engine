@@ -1,79 +1,12 @@
 Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connection.py", line 169, in _new_conn
-    conn = connection.create_connection(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/util/connection.py", line 96, in create_connection
-    raise err
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/util/connection.py", line 86, in create_connection
-    sock.connect(sa)
-TimeoutError: timed out
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 699, in urlopen
-    httplib_response = self._make_request(
-                       ^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 394, in _make_request
-    conn.request(method, url, **httplib_request_kw)
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connection.py", line 234, in request
-    super(HTTPConnection, self).request(method, url, body=body, headers=headers)
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 1386, in request
-    self._send_request(method, url, body, headers, encode_chunked)
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 1432, in _send_request
-    self.endheaders(body, encode_chunked=encode_chunked)
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 1381, in endheaders
-    self._send_output(message_body, encode_chunked=encode_chunked)
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 1141, in _send_output
-    self.send(msg)
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/http/client.py", line 1085, in send
-    self.connect()
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connection.py", line 200, in connect
-    conn = self._new_conn()
-           ^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connection.py", line 174, in _new_conn
-    raise ConnectTimeoutError(
-urllib3.exceptions.ConnectTimeoutError: (<urllib3.connection.HTTPConnection object at 0x7fccdc774320>, 'Connection to api.clubelo.com timed out. (connect timeout=60)')
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/adapters.py", line 644, in send
-    resp = conn.urlopen(
-           ^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/connectionpool.py", line 755, in urlopen
-    retries = retries.increment(
-              ^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/urllib3/util/retry.py", line 574, in increment
-    raise MaxRetryError(_pool, url, error or ResponseError(cause))
-urllib3.exceptions.MaxRetryError: HTTPConnectionPool(host='api.clubelo.com', port=80): Max retries exceeded with url: /2026-10-13 (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x7fccdc774320>, 'Connection to api.clubelo.com timed out. (connect timeout=60)'))
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File "/home/runner/work/epl-prediction-engine/epl-prediction-engine/ucl_predictions.py", line 529, in <module>
+  File "/home/runner/work/epl-prediction-engine/epl-prediction-engine/ucl_predictions.py", line 543, in <module>
     main()
-  File "/home/runner/work/epl-prediction-engine/epl-prediction-engine/ucl_predictions.py", line 514, in main
+  File "/home/runner/work/epl-prediction-engine/epl-prediction-engine/ucl_predictions.py", line 528, in main
     games, bets, notes, teams = build(cfg)
                                 ^^^^^^^^^^
-  File "/home/runner/work/epl-prediction-engine/epl-prediction-engine/ucl_predictions.py", line 346, in build
+  File "/home/runner/work/epl-prediction-engine/epl-prediction-engine/ucl_predictions.py", line 360, in build
     elo_now = fetch_clubelo(today)
               ^^^^^^^^^^^^^^^^^^^^
-  File "/home/runner/work/epl-prediction-engine/epl-prediction-engine/ucl_predictions.py", line 140, in fetch_clubelo
-    r = requests.get(url, headers=HEADERS, timeout=60)
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/api.py", line 73, in get
-    return request("get", url, params=params, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/api.py", line 59, in request
-    return session.request(method=method, url=url, **kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/sessions.py", line 589, in request
-    resp = self.send(prep, **send_kwargs)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/sessions.py", line 703, in send
-    r = adapter.send(request, **kwargs)
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/requests/adapters.py", line 665, in send
-    raise ConnectTimeout(e, request=request)
-requests.exceptions.ConnectTimeout: HTTPConnectionPool(host='api.clubelo.com', port=80): Max retries exceeded with url: /2026-10-13 (Caused by ConnectTimeoutError(<urllib3.connection.HTTPConnection object at 0x7fccdc774320>, 'Connection to api.clubelo.com timed out. (connect timeout=60)'))
+  File "/home/runner/work/epl-prediction-engine/epl-prediction-engine/ucl_predictions.py", line 155, in fetch_clubelo
+    raise RuntimeError(f"ClubElo unreachable: {last}")
+RuntimeError: ClubElo unreachable: HTTPSConnectionPool(host='api.clubelo.com', port=443): Max retries exceeded with url: /2026-10-13 (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f4dd56fe570>, 'Connection to api.clubelo.com timed out. (connect timeout=25)'))

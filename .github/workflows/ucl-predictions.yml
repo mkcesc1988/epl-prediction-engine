@@ -2,6 +2,9 @@ name: UCL predictions
 
 on:
   workflow_dispatch:
+  push:
+    branches: [feature/ucl-predictions]
+    paths: ['ucl_predictions.py', 'data/manual_ucl_mybookie_odds.csv', '.github/workflows/ucl-predictions.yml']
 
 permissions:
   contents: write

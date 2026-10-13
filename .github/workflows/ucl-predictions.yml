@@ -26,9 +26,12 @@ jobs:
         env:
           THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
-        run: python ucl_predictions.py
+        run: |
+          mkdir -p data/processed/ucl
+          set -o pipefail
+          python ucl_predictions.py 2>&1 | tee data/processed/ucl/run_log.txt
       - name: Publish UCL outputs
-        if: success()
+        if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

@@ -392,7 +392,7 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
     lines = pd.read_csv(ODDS_PATH)
     lines["Decimal"] = lines["AmericanOdds"].map(american_to_decimal)
     lines["Point"] = pd.to_numeric(lines["Point"], errors="coerce")
-    fixtures = lines[["Date", "KickoffPT", "HomeTeam", "AwayTeam"]].drop_duplicates().reset_index(drop=True)
+    fixtures = lines[["Date", "KickoffET", "HomeTeam", "AwayTeam"]].drop_duplicates().reset_index(drop=True)
     teams = sorted(set(fixtures.HomeTeam).union(fixtures.AwayTeam))
 
     today = pd.Timestamp.now(tz="UTC").tz_localize(None).normalize()
@@ -535,7 +535,7 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
         cons_d, _ = consensus_prob(cons, h, a, "h2h", "Draw", None)
         cons_a, nbooks = consensus_prob(cons, h, a, "h2h", a, None)
         games.append({
-            "Date": fx.Date, "KickoffPT": fx.KickoffPT, "HomeTeam": h, "AwayTeam": a,
+            "Date": fx.Date, "KickoffET": fx.KickoffET, "HomeTeam": h, "AwayTeam": a,
             "EloHome": th["Elo"], "EloAway": ta["Elo"], "EloXgAdjHome": th["EloXgAdj"], "EloXgAdjAway": ta["EloXgAdj"],
             "EloExpectancyHome": exp, "MarketTotal": market_total, "TotalSource": total_src, "TempoFactor": tempo_factor,
             "Lambda_Home": lam_h, "Lambda_Away": lam_a, "P_Home": mk["home"], "P_Draw": mk["draw"], "P_Away": mk["away"],
@@ -591,7 +591,7 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
             label = sel.Outcome if sel.Market == "h2h" else (
                 f"{sel.Outcome} {point:+g}" if sel.Market == "spreads" else f"{sel.Outcome} {point:g}")
             bets.append({
-                "Game": f"{h} v {a}", "KickoffPT": fx.KickoffPT, "Market": sel.Market, "Selection": label,
+                "Game": f"{h} v {a}", "KickoffET": fx.KickoffET, "Market": sel.Market, "Selection": label,
                 "AmericanOdds": int(sel.AmericanOdds), "Decimal": round(sel.Decimal, 3),
                 "RawModelProb": raw_eff, "MarketProb": prior, "MarketSource": prior_src,
                 "DecisionProb": dec_eff, "Edge": edge, "EV": ev, "RawEV": raw_eff * nonpush * sel.Decimal - (1 - p_push),

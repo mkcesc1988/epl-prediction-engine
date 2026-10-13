@@ -41,6 +41,48 @@ def effective_home_advantage(fit: StrengthFit, cfg: dict) -> float:
     return float(fit.home_advantage) * (1.0 - shrink)
 
 
+def goal_conversion_scale(history: pd.DataFrame, reference_date: pd.Timestamp, cfg: dict) -> float:
+    """Recent goals per unit of xG, used to put totals markets into goal units.
+
+    The strength fit works in xG. When a league's finishing drifts away from
+    its xG (Ligue 1 went from ~1.05 goals per xG in 2021/22 to ~0.91 since),
+    totals inherit that bias. ``model_v12.totals_goal_scale`` multiplies both
+    lambdas by the time-decayed ratio of goals to xG in matches strictly before
+    ``reference_date`` when computing totals and BTTS only; 1X2, spreads and
+    the most likely score keep the xG lambdas (scaling them hurt 1X2 RPS).
+    Returns 1.0 when disabled or with fewer than ``totals_goal_scale_min_matches``.
+    """
+    mc = cfg.get("model_v12", {})
+    if not bool(mc.get("totals_goal_scale", False)):
+        return 1.0
+    cols = ["Date", "FTHG", "FTAG", "Home_xG", "Away_xG"]
+    if history.empty or not set(cols).issubset(history.columns):
+        return 1.0
+    h = history.dropna(subset=cols)
+    h = h[pd.to_datetime(h["Date"]) < pd.Timestamp(reference_date)]
+    if len(h) < int(mc.get("totals_goal_scale_min_matches", 200)):
+        return 1.0
+    w = _weights(h["Date"], pd.Timestamp(reference_date), float(mc.get("totals_goal_scale_half_life_days", 365.0)))
+    xg = float(np.sum(w * (h["Home_xG"].to_numpy(float) + h["Away_xG"].to_numpy(float))))
+    goals = float(np.sum(w * (h["FTHG"].to_numpy(float) + h["FTAG"].to_numpy(float))))
+    if xg <= 0:
+        return 1.0
+    lo, hi = float(mc.get("totals_goal_scale_min", 0.8)), float(mc.get("totals_goal_scale_max", 1.2))
+    return float(np.clip(goals / xg, lo, hi))
+
+
+def totals_in_goal_units(markets: dict, lam_h: float, lam_a: float, rho: float, scale: float, max_goal: int) -> dict:
+    """Replace the totals and BTTS entries of ``markets`` with goal-scaled ones."""
+    if scale == 1.0:
+        return markets
+    scaled = _derived_markets(_score_matrix(lam_h * scale, lam_a * scale, rho, max_goal))
+    out = dict(markets)
+    for key, value in scaled.items():
+        if key.startswith(("P_Over_", "P_Under_", "P_BTTS_")):
+            out[key] = value
+    return out
+
+
 def _weights(dates: pd.Series, reference_date: pd.Timestamp, half_life_days: float) -> np.ndarray:
     age_days = (reference_date - pd.to_datetime(dates)).dt.days.clip(lower=0).to_numpy(dtype=float)
     if half_life_days <= 0:
@@ -295,6 +337,7 @@ def build_predictions_v12(master: pd.DataFrame, cfg: dict) -> pd.DataFrame:
         fit = _fit_strengths(history, pd.Timestamp(match_date), cfg)
         rho = _estimate_rho_from_history(history, fit, cfg) if fit is not None else np.nan
         home_adv = effective_home_advantage(fit, cfg) if fit is not None else np.nan
+        goal_scale = goal_conversion_scale(history, pd.Timestamp(match_date), cfg)
 
         for _, r in day_games.iterrows():
             row = dict(r)
@@ -314,7 +357,9 @@ def build_predictions_v12(master: pd.DataFrame, cfg: dict) -> pd.DataFrame:
 
             if pd.notna(lam_h) and pd.notna(lam_a):
                 matrix = _score_matrix(float(lam_h), float(lam_a), float(rho), max_goal)
-                markets = _derived_markets(matrix)
+                markets = totals_in_goal_units(
+                    _derived_markets(matrix), float(lam_h), float(lam_a), float(rho), goal_scale, max_goal
+                )
                 p_over = float(markets["P_Over_2_5_DC"])
                 row.update({
                     "Lambda_Home_xG": lam_h,
@@ -331,6 +376,7 @@ def build_predictions_v12(master: pd.DataFrame, cfg: dict) -> pd.DataFrame:
                     "AwayDefenseRating": fit.team_defense(a),
                     "HomeAdvantageLog": fit.home_advantage,
                     "HomeAdvantageUsed": home_adv,
+                    "GoalScale": goal_scale,
                 })
                 row.update(markets)
             else:

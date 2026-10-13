@@ -11,7 +11,14 @@ from understatapi import UnderstatClient
 
 from backtest import _fit_platt, _logit, _sigmoid
 from model_v11 import _derived_markets, _score_matrix
-from model_v12 import _estimate_rho_from_history, _fit_strengths, build_predictions_v12, effective_home_advantage
+from model_v12 import (
+    _estimate_rho_from_history,
+    _fit_strengths,
+    build_predictions_v12,
+    effective_home_advantage,
+    goal_conversion_scale,
+    totals_in_goal_units,
+)
 from leagues import harmonize_team_names
 from pipeline import build_master, load_config, normalize_team, season_label
 
@@ -150,6 +157,19 @@ def parse_understat_fixtures(matches: list[dict] | None, start_year: int) -> pd.
     return pd.DataFrame(rows)[cols].sort_values(["Date", "KickoffLocal", "HomeTeam"]).reset_index(drop=True)
 
 
+def league_matchday(fixtures_all: pd.DataFrame, fixtures: pd.DataFrame) -> pd.Series:
+    """Approximate round number for leagues without an FPL gameweek.
+
+    One more than the most matches either side has completed this season, so
+    early-season market anchoring can fade out the same way it does for the EPL.
+    """
+    done = fixtures_all[fixtures_all["Finished"].astype(bool)]
+    played = pd.concat([done["HomeTeam"], done["AwayTeam"]]).value_counts()
+    home = fixtures["HomeTeam"].map(played).fillna(0)
+    away = fixtures["AwayTeam"].map(played).fillna(0)
+    return (pd.concat([home, away], axis=1).max(axis=1) + 1).astype(int)
+
+
 def fetch_understat_fixtures(start_year: int, league: str) -> pd.DataFrame:
     with UnderstatClient() as client:
         matches = client.league(league=league).get_match_data(season=str(start_year))
@@ -230,7 +250,9 @@ def _fit_live_over25_calibrator(history: pd.DataFrame, cfg: dict) -> np.ndarray 
     return _fit_platt(train["RawP_Over2_5_xG"], train["Over2_5_Result"])
 
 
-def _predict_fixture(row: pd.Series, fit, rho: float, cfg: dict, beta: np.ndarray | None) -> dict:
+def _predict_fixture(
+    row: pd.Series, fit, rho: float, cfg: dict, beta: np.ndarray | None, goal_scale: float = 1.0
+) -> dict:
     mc = cfg.get("model_v12", {})
     floor = float(mc.get("lambda_floor", 0.15))
     cap = float(mc.get("lambda_cap", 4.5))
@@ -250,12 +272,12 @@ def _predict_fixture(row: pd.Series, fit, rho: float, cfg: dict, beta: np.ndarra
     lam_a = max(floor, min(float(lam_a), cap))
 
     matrix = _score_matrix(lam_h, lam_a, rho, max_goal)
-    markets = _derived_markets(matrix)
+    markets = totals_in_goal_units(_derived_markets(matrix), lam_h, lam_a, rho, goal_scale, max_goal)
     raw_over = float(markets["P_Over_2_5_DC"])
     cal_over = raw_over if beta is None else _sigmoid(beta[0] + beta[1] * _logit(raw_over))
     best_idx = np.unravel_index(np.argmax(matrix), matrix.shape)
 
-    return {
+    out = {
         "Date": pd.Timestamp(row["Date"]).strftime("%Y-%m-%d"),
         "KickoffUTC": row.get("KickoffUTC"),
         "FPLGameweek": row.get("FPLGameweek"),
@@ -289,6 +311,9 @@ def _predict_fixture(row: pd.Series, fit, rho: float, cfg: dict, beta: np.ndarra
         "HomeAdvantageLog": fit.home_advantage,
         "HomeAdvantageUsed": home_adv,
     }
+    if goal_scale != 1.0:
+        out["GoalScale"] = goal_scale
+    return out
 
 
 def build_daily_predictions(cfg: dict) -> pd.DataFrame:
@@ -343,13 +368,17 @@ def build_daily_predictions(cfg: dict) -> pd.DataFrame:
     if unknown:
         print(f"WARNING: no fitted rating for {unknown}; using the promoted/unknown-team prior.")
 
-    rows = [_predict_fixture(r, fit, rho, cfg, beta) for _, r in fixtures.iterrows()]
+    goal_scale = goal_conversion_scale(history, reference_date, cfg)
+    if goal_scale != 1.0:
+        print(f"Totals in goal units: scaling xG lambdas by {goal_scale:.3f} for totals/BTTS")
+    rows = [_predict_fixture(r, fit, rho, cfg, beta, goal_scale) for _, r in fixtures.iterrows()]
     out = pd.DataFrame(rows)
     if league == "EPL":
         return out.sort_values(["FPLGameweek", "Date", "KickoffUTC", "HomeTeam"]).reset_index(drop=True)
 
     out.insert(0, "League", cfg.get("league_code", league))
     out.insert(out.columns.get_loc("KickoffUTC") + 1, "KickoffLocal", fixtures["KickoffLocal"].to_numpy())
+    out.insert(out.columns.get_loc("FPLGameweek") + 1, "Matchday", league_matchday(fixtures_all, fixtures).to_numpy())
     return out.sort_values(["Date", "KickoffLocal", "HomeTeam"]).reset_index(drop=True)
 
 

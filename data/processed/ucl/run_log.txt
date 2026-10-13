@@ -1,4 +1,4 @@
-Odds API credits remaining: 188
+Odds API credits remaining: 182
              Team          RatingName  Rating  DomGames DomResults  DomPPG  DomGF  DomGA  EloXgAdj     Elo  DomxGF  DomxGA  LeagueXG  XgLuckPerGame
               AEK          AEK Athens   87.01       6.0     WDWDWW    2.33   2.67   0.50      0.00 2436.34     NaN     NaN       NaN            NaN
       Aston Villa         Aston Villa   93.53       6.0     LLDLWD    0.83   1.00   1.83     -1.55 2618.96    1.14    2.02      1.65           0.05
@@ -20,7 +20,7 @@ Slovan Bratislava   Slovan Bratislava   80.26       NaN        NaN     NaN    Na
         Stuttgart           Stuttgart   89.39       5.0      LWLLW    1.20   1.60   1.80    -14.44 2502.86    2.14    2.82      1.95           0.48
          HomeTeam    AwayTeam  P_Home  P_Draw  P_Away  Lambda_Home  Lambda_Away MostLikelyScore
         Feyenoord        Como   0.304   0.226   0.469        1.627        2.041             1-1
-             LASK   Liverpool   0.096   0.167   0.737        0.843        2.549             0-2
+             LASK   Liverpool   0.096   0.167   0.737        0.846        2.553             0-2
              Roma Real Madrid   0.350   0.226   0.424        1.786        1.974             1-1
       Aston Villa  Fenerbahce   0.683   0.200   0.117        2.187        0.803             2-0
        Bodo/Glimt    Dortmund   0.357   0.286   0.357        1.288        1.288             1-1
@@ -28,18 +28,33 @@ Slovan Bratislava   Slovan Bratislava   80.26       NaN        NaN     NaN    Na
          Man City    Paris SG   0.568   0.210   0.222        2.294        1.405             2-1
             Betis       Porto   0.374   0.254   0.372        1.569        1.565             1-1
 Slovan Bratislava   Stuttgart   0.174   0.185   0.641        1.341        2.611             1-2
-                         Game KickoffPT  Market              Selection  AmericanOdds  Decimal  RawModelProb  MarketProb       MarketSource  DecisionProb  Edge    EV       Status  StakeUnits
-          Man City v Paris SG     15:00 spreads          Man City -0.5           117    2.170         0.568       0.440  consensus_5_books         0.517 0.077 0.121 BET_ELIGIBLE        2.00
-Slovan Bratislava v Stuttgart     15:00 spreads Slovan Bratislava +1.5           108    2.080         0.560       0.457  consensus_8_books         0.519 0.062 0.080 BET_ELIGIBLE        1.85
-                Betis v Porto     15:00 spreads             Porto +0.5          -127    1.787         0.626       0.529  consensus_7_books         0.587 0.059 0.050 BET_ELIGIBLE        1.58
-        Bodo/Glimt v Dortmund     15:00 spreads        Bodo/Glimt +0.5          -135    1.741         0.643       0.540  consensus_6_books         0.602 0.062 0.047 BET_ELIGIBLE        1.60
-     Aston Villa v Fenerbahce     15:00 spreads       Aston Villa -0.5          -164    1.610         0.683       0.577  consensus_1_books         0.640 0.064 0.031 BET_ELIGIBLE        1.27
-           Roma v Real Madrid     15:00  totals               Over 3.5           107    2.070         0.518       0.459 consensus_17_books         0.498 0.038 0.030       REVIEW        0.00
-          Man City v Paris SG     15:00  totals               Over 3.5           111    2.110         0.506       0.455 consensus_16_books         0.488 0.033 0.030       REVIEW        0.00
-           Roma v Real Madrid     15:00 spreads              Roma +0.5          -115    1.870         0.576       0.506  consensus_8_books         0.548 0.042 0.025       REVIEW        0.00
-                Betis v Porto     15:00  totals               Over 2.5          -139    1.719         0.606       0.554 consensus_18_books         0.588 0.034 0.011       REVIEW        0.00
-Slovan Bratislava v Stuttgart     15:00  totals               Over 3.5          -113    1.885         0.557       0.497 consensus_18_books         0.536 0.039 0.011       REVIEW        0.00
-ClubElo unavailable (ClubElo unreachable: HTTPSConnectionPool(host='api.clubelo.com', port=443): Max retries exceeded with url: /2026-10-13 (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7fa712980b90>, 'Connection to api.clubelo.com timed out. (connect timeout=15)'))); using Opta Power Rankings.
+                         Game KickoffPT  Market              Selection  AmericanOdds  Decimal  RawModelProb  MarketProb       MarketSource  DecisionProb   Edge     EV  RawEV       Status  StakeUnits
+Slovan Bratislava v Stuttgart     15:00 spreads Slovan Bratislava +1.5           108    2.080         0.560       0.457  consensus_8_books         0.519  0.062  0.080  0.166 BET_ELIGIBLE        1.85
+           Roma v Real Madrid     15:00  totals               Over 3.5           107    2.070         0.518       0.459 consensus_17_books         0.498  0.038  0.030  0.073       REVIEW        0.00
+          Man City v Paris SG     15:00  totals               Over 3.5           111    2.110         0.506       0.455 consensus_16_books         0.488  0.033  0.030  0.067       REVIEW        0.00
+             LASK v Liverpool     12:45  totals              Under 3.5          -115    1.870         0.559       0.514 consensus_18_books         0.543  0.029  0.015  0.045       NO_BET        0.00
+                Betis v Porto     15:00  totals               Over 2.5          -139    1.719         0.606       0.554 consensus_18_books         0.588  0.034  0.011  0.042       REVIEW        0.00
+Slovan Bratislava v Stuttgart     15:00  totals               Over 3.5          -113    1.885         0.557       0.497 consensus_18_books         0.536  0.039  0.011  0.050       REVIEW        0.00
+          Man City v Paris SG     15:00 spreads          Man City -0.5           117    2.170         0.568       0.443 consensus_29_books         0.462  0.019  0.003  0.233       NO_BET        0.00
+          Man City v Paris SG     15:00     h2h               Man City           117    2.170         0.568       0.443 consensus_29_books         0.462  0.019  0.003  0.233       NO_BET        0.00
+     Aston Villa v Fenerbahce     15:00  totals              Under 2.5           136    2.360         0.426       0.411 consensus_13_books         0.420  0.010 -0.008  0.004       NO_BET        0.00
+             Feyenoord v Como     12:45  totals               Over 3.5           104    2.040         0.499       0.459 consensus_17_books         0.485  0.026 -0.010  0.018       NO_BET        0.00
+                Betis v Porto     15:00     h2h                  Porto           238    3.380         0.372       0.276 consensus_28_books         0.290  0.014 -0.018  0.258       NO_BET        0.00
+             Feyenoord v Como     12:45 spreads         Feyenoord +0.5          -106    1.943         0.531       0.499 consensus_29_books         0.503  0.005 -0.022  0.031       NO_BET        0.00
+        Bodo/Glimt v Dortmund     15:00     h2h                   Draw           300    4.000         0.286       0.237 consensus_29_books         0.244  0.007 -0.022  0.142       NO_BET        0.00
+                Betis v Porto     15:00 spreads             Porto +0.5          -127    1.787         0.626       0.531 consensus_28_books         0.545  0.014 -0.025  0.119       NO_BET        0.00
+Slovan Bratislava v Stuttgart     15:00     h2h                   Draw           510    6.100         0.185       0.155 consensus_29_books         0.160  0.004 -0.027  0.128       NO_BET        0.00
+        Bodo/Glimt v Dortmund     15:00 spreads        Bodo/Glimt +0.5          -135    1.741         0.643       0.543 consensus_29_books         0.558  0.015 -0.029  0.119       NO_BET        0.00
+             Feyenoord v Como     12:45     h2h              Feyenoord           255    3.550         0.304       0.268 consensus_29_books         0.273  0.005 -0.029  0.080       NO_BET        0.00
+               Shakhtar v AEK     15:00     h2h                   Draw           244    3.440         0.276       0.283 consensus_29_books         0.282 -0.001 -0.030 -0.050       NO_BET        0.00
+           Roma v Real Madrid     15:00 spreads              Roma +0.5          -115    1.870         0.576       0.509 consensus_29_books         0.519  0.010 -0.030  0.077       NO_BET        0.00
+               Shakhtar v AEK     15:00  totals              Under 2.5          -103    1.971         0.492       0.492 consensus_21_books         0.492  0.000 -0.031 -0.031       NO_BET        0.00
+             LASK v Liverpool     12:45 spreads              LASK +1.5           105    2.050         0.475       0.466  consensus_7_books         0.471  0.005 -0.034 -0.027       NO_BET        0.00
+               Shakhtar v AEK     15:00 spreads          Shakhtar +0.5          -195    1.513         0.599       0.643 consensus_29_books         0.636 -0.007 -0.037 -0.094       NO_BET        0.00
+     Aston Villa v Fenerbahce     15:00 spreads       Aston Villa -0.5          -164    1.610         0.683       0.581 consensus_28_books         0.596  0.015 -0.040  0.100       NO_BET        0.00
+           Roma v Real Madrid     15:00     h2h                   Roma           244    3.440         0.350       0.266 consensus_29_books         0.279  0.013 -0.041  0.203       NO_BET        0.00
+     Aston Villa v Fenerbahce     15:00     h2h            Aston Villa          -165    1.606         0.683       0.581 consensus_28_books         0.596  0.015 -0.042  0.097       NO_BET        0.00
+ClubElo unavailable (ClubElo unreachable: HTTPSConnectionPool(host='api.clubelo.com', port=443): Max retries exceeded with url: /2026-10-13 (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f1812955610>, 'Connection to api.clubelo.com timed out. (connect timeout=15)'))); using Opta Power Rankings.
 UCL results unavailable from API-Football: {'plan': 'Free plans do not have access to this season, try from 2022 to 2024.'}
 Opta rating scale fitted to this slate: 28.0 Elo points per rating point.
 Strength source: Opta

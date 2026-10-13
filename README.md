@@ -70,6 +70,29 @@ The run creates:
 - `data/processed/walkforward_predictions.csv`
 - `data/processed/backtest_summary.csv`
 
+## Other leagues: La Liga, Bundesliga, Serie A, Ligue 1
+
+`league_predictions.py` runs the same V1.2 xG attack/defense Dixon-Coles model on Europe's other big-five leagues. Each league is fitted only on its own history, so the EPL configuration, outputs, portfolio and bet ledgers are unchanged.
+
+```bash
+python league_predictions.py                     # all leagues in config.yaml leagues.enabled
+python league_predictions.py --league SERIEA     # one league (LALIGA, BUNDESLIGA, SERIEA, LIGUE1)
+python league_predictions.py --backtest          # add walk-forward backtests
+python league_predictions.py --odds              # add The Odds API comparison (needs THE_ODDS_API_KEY)
+```
+
+Sources per league: Football-Data.co.uk (`SP1`, `D1`, `I1`, `F1`) for results and historical odds, Understat for xG and the fixture list, and The Odds API (`soccer_spain_la_liga`, `soccer_germany_bundesliga`, `soccer_italy_serie_a`, `soccer_france_ligue_one`) for live prices.
+
+Outputs go to `data/processed/leagues/<CODE>/`: `daily_predictions_latest.csv` (fixtures in the next `leagues.horizon_days` days), `market_comparison_latest.csv` (O/U 2.5), `moneyline_comparison_latest.csv` (1X2 vs best price and no-vig consensus), and with `--backtest` the walk-forward summaries including `home_advantage_sweep_summary.csv` (1X2 RPS vs Pinnacle). `data/processed/leagues/all_leagues_predictions_latest.csv` combines all leagues.
+
+Team names are canonicalised to Football-Data spellings through `leagues.py`. Names the alias map misses (for example a newly promoted club) are matched automatically by shared fixtures and listed under `reconciled_team_names` in each league's `validation_report.json`.
+
+Per-league settings can be overridden under `leagues.overrides` in `config.yaml`. The EPL-tuned `home_advantage_shrink: 0.15` applies to every league until a league's own backtest supports a different value.
+
+These outputs are research only. Treat a league as bettable only once its backtest shows model RPS close to the Pinnacle market's across several seasons.
+
+The **League predictions** workflow runs daily at 12:30 UTC and can be run by hand with a league list, backtests and odds turned on.
+
 ## How to judge model improvements
 
 A new feature should not be accepted just because historical ROI increases. The primary development checks are:

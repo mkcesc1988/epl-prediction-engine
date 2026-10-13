@@ -9,6 +9,8 @@ import requests
 import yaml
 from understatapi import UnderstatClient
 
+from leagues import alias_team, harmonize_team_names
+
 TEAM_MAP = {
     "Manchester United": "Man United",
     "Manchester Utd": "Man United",
@@ -44,7 +46,9 @@ ODDS_COLUMNS = [
 
 def normalize_team(name: object) -> str:
     value = str(name).strip()
-    return TEAM_MAP.get(value, value)
+    if value in TEAM_MAP:
+        return TEAM_MAP[value]
+    return alias_team(value)
 
 
 def season_label(start_year: int) -> str:
@@ -136,13 +140,13 @@ def _num(value: object) -> float | None:
         return None
 
 
-def fetch_understat_xg(start_year: int, raw_dir: str) -> pd.DataFrame:
-    print(f"  Understat {season_label(start_year)} league match data")
+def fetch_understat_xg(start_year: int, raw_dir: str, league: str = "EPL") -> pd.DataFrame:
+    print(f"  Understat {league} {season_label(start_year)} league match data")
     with UnderstatClient() as client:
-        matches = client.league(league="EPL").get_match_data(season=str(start_year))
+        matches = client.league(league=league).get_match_data(season=str(start_year))
 
     if not matches:
-        raise RuntimeError(f"Understat returned no EPL match data for {start_year}")
+        raise RuntimeError(f"Understat returned no {league} match data for {start_year}")
 
     rows = []
     for m in matches:
@@ -178,7 +182,7 @@ def fetch_understat_xg(start_year: int, raw_dir: str) -> pd.DataFrame:
         .reset_index(drop=True)
     )
 
-    out = Path(raw_dir) / f"understat_EPL_{season_code(start_year)}.csv"
+    out = Path(raw_dir) / f"understat_{league}_{season_code(start_year)}.csv"
     df.to_csv(out, index=False)
     return df
 
@@ -209,10 +213,11 @@ def build_master(cfg: dict) -> pd.DataFrame:
     fd_frames = []
     xg_frames = []
     fallback_seasons: list[str] = []
+    league = str(cfg.get("league", "EPL"))
 
     for year in range(int(cfg["start_season"]), int(cfg["end_season"]) + 1):
         print(f"Understat {season_label(year)}")
-        xg_year = fetch_understat_xg(year, cfg["paths"]["raw_dir"])
+        xg_year = fetch_understat_xg(year, cfg["paths"]["raw_dir"], league)
         xg_frames.append(xg_year)
 
         print(f"Football-Data {season_label(year)}")
@@ -230,6 +235,13 @@ def build_master(cfg: dict) -> pd.DataFrame:
 
     if fd.duplicated(key).any():
         raise RuntimeError("Duplicate historical match keys detected")
+    learned_names: dict[str, str] = {}
+    if league != "EPL":
+        # Alias maps cover known spellings; anything new (e.g. a promoted club)
+        # is matched to its Football-Data name by shared fixtures.
+        xg, learned_names = harmonize_team_names(fd, xg)
+        if learned_names:
+            print(f"Reconciled Understat team names by fixture overlap: {learned_names}")
     if xg.duplicated(key).any():
         raise RuntimeError("Duplicate Understat match keys detected")
 
@@ -252,6 +264,15 @@ def build_master(cfg: dict) -> pd.DataFrame:
         "score_mismatches": int(master["score_source_mismatch"].sum()),
         "football_data_fallback_seasons": fallback_seasons,
         "historical_market_odds_complete": len(fallback_seasons) == 0,
+        "league": league,
+        "reconciled_team_names": learned_names,
+        "teams_missing_xg": {
+            str(team): int(n)
+            for team, n in pd.concat([
+                master.loc[master["Home_xG"].isna(), "HomeTeam"],
+                master.loc[master["Away_xG"].isna(), "AwayTeam"],
+            ]).value_counts().items()
+        },
         "by_season": {},
     }
     for season, g in master.groupby("Season"):
@@ -261,6 +282,8 @@ def build_master(cfg: dict) -> pd.DataFrame:
             "missing_xg": int((g["Home_xG"].isna() | g["Away_xG"].isna()).sum()),
         }
 
+    if report["missing_xg"] and league != "EPL":
+        print(f"WARNING: {report['missing_xg']} {league} matches lack xG; teams: {report['teams_missing_xg']}")
     Path(cfg["paths"]["validation"]).write_text(json.dumps(report, indent=2), encoding="utf-8")
     return master
 

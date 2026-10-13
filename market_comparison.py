@@ -106,7 +106,8 @@ def _fetch_odds_payload(url: str, params: dict, label: str) -> list[dict]:
 
 
 def fetch_market_odds(cfg: dict) -> pd.DataFrame:
-    manual = _load_manual_mybookie()
+    use_manual = bool(cfg.get("market_comparison", {}).get("use_manual_mybookie", True))
+    manual = _load_manual_mybookie() if use_manual else pd.DataFrame()
     key = os.getenv("THE_ODDS_API_KEY", "").strip()
 
     if not _live_odds_allowed():

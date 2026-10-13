@@ -1,0 +1,63 @@
+name: League predictions (La Liga, Bundesliga, Serie A, Ligue 1)
+
+on:
+  workflow_dispatch:
+    inputs:
+      leagues:
+        description: 'Space-separated league codes (blank = all enabled): LALIGA BUNDESLIGA SERIEA LIGUE1'
+        required: false
+        default: ''
+      backtest:
+        description: 'Also run walk-forward backtests (slower)'
+        type: boolean
+        default: false
+      odds:
+        description: 'Fetch The Odds API prices (uses API credits)'
+        type: boolean
+        default: false
+  schedule:
+    - cron: '30 12 * * *'
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Generate league predictions
+        env:
+          THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+          THE_ODDS_API_LIVE: 'true'
+          LEAGUES: ${{ github.event.inputs.leagues }}
+          BACKTEST: ${{ github.event.inputs.backtest }}
+          ODDS: ${{ github.event.inputs.odds }}
+        run: |
+          args=()
+          for code in $LEAGUES; do args+=(--league "$code"); done
+          if [ "$BACKTEST" = "true" ]; then args+=(--backtest); fi
+          if [ "$ODDS" = "true" ]; then args+=(--odds); fi
+          python league_predictions.py "${args[@]}"
+
+      - name: Upload league outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: league-predictions
+          path: |
+            data/processed/leagues/**/*.csv
+            data/processed/leagues/**/*.json
+          if-no-files-found: warn
+          retention-days: 30

@@ -12,6 +12,7 @@ from understatapi import UnderstatClient
 from backtest import _fit_platt, _logit, _sigmoid
 from model_v11 import _derived_markets, _score_matrix
 from model_v12 import _estimate_rho_from_history, _fit_strengths, build_predictions_v12, effective_home_advantage
+from leagues import harmonize_team_names
 from pipeline import build_master, load_config, normalize_team, season_label
 
 FPL_FIXTURES_URL = "https://fantasy.premierleague.com/api/fixtures/"
@@ -58,10 +59,10 @@ def _get_json_with_retry(url: str, headers: dict[str, str], label: str, attempts
     raise RuntimeError(f"{label} failed after {attempts} attempts: {last_error}")
 
 
-def fetch_current_understat_completed(start_year: int) -> pd.DataFrame:
-    """Fetch completed current-season EPL matches with xG from Understat."""
+def fetch_current_understat_completed(start_year: int, league: str = "EPL") -> pd.DataFrame:
+    """Fetch completed current-season matches with xG from Understat."""
     with UnderstatClient() as client:
-        matches = client.league(league="EPL").get_match_data(season=str(start_year))
+        matches = client.league(league=league).get_match_data(season=str(start_year))
 
     rows: list[dict] = []
     for m in matches or []:
@@ -106,6 +107,56 @@ def fetch_current_understat_completed(start_year: int) -> pd.DataFrame:
         .sort_values("Date")
         .reset_index(drop=True)
     )
+
+
+def parse_understat_fixtures(matches: list[dict] | None, start_year: int) -> pd.DataFrame:
+    """Turn Understat's season match list into a fixture frame (played and unplayed).
+
+    Used for leagues without an FPL-style fixture feed. Understat lists every
+    scheduled match for the season; ``isResult`` marks the ones already played.
+    """
+    rows: list[dict] = []
+    for m in matches or []:
+        home = normalize_team(_team_title(m.get("h")))
+        away = normalize_team(_team_title(m.get("a")))
+        stamp = m.get("datetime") or m.get("date")
+        if not home or not away or not stamp:
+            continue
+        ts = pd.to_datetime(stamp, errors="coerce")
+        if pd.isna(ts):
+            continue
+        goals = m.get("goals") or {}
+        finished = str(m.get("isResult", "")).strip().lower() in {"true", "1"}
+        rows.append({
+            "Season": season_label(start_year),
+            "Date": ts.normalize(),
+            "KickoffUTC": pd.NA,
+            "KickoffLocal": ts.isoformat(),
+            "HomeTeam": home,
+            "AwayTeam": away,
+            "UnderstatMatchId": m.get("id"),
+            "FPLGameweek": pd.NA,
+            "Finished": finished,
+            "Started": finished,
+            "HomeGoals": _num(goals.get("h")) if isinstance(goals, dict) else None,
+            "AwayGoals": _num(goals.get("a")) if isinstance(goals, dict) else None,
+        })
+    cols = [
+        "Season", "Date", "KickoffUTC", "KickoffLocal", "HomeTeam", "AwayTeam", "UnderstatMatchId",
+        "FPLGameweek", "Finished", "Started", "HomeGoals", "AwayGoals",
+    ]
+    if not rows:
+        return pd.DataFrame(columns=cols)
+    return pd.DataFrame(rows)[cols].sort_values(["Date", "KickoffLocal", "HomeTeam"]).reset_index(drop=True)
+
+
+def fetch_understat_fixtures(start_year: int, league: str) -> pd.DataFrame:
+    with UnderstatClient() as client:
+        matches = client.league(league=league).get_match_data(season=str(start_year))
+    df = parse_understat_fixtures(matches, start_year)
+    if df.empty:
+        raise RuntimeError(f"Understat returned no {league} fixtures for {start_year}")
+    return df
 
 
 def fetch_fpl_fixtures(start_year: int) -> pd.DataFrame:
@@ -154,6 +205,10 @@ def _build_training_history(cfg: dict, current_completed: pd.DataFrame) -> pd.Da
     historical["Date"] = pd.to_datetime(historical["Date"])
 
     completed_current = current_completed.copy()
+    if str(cfg.get("league", "EPL")) != "EPL" and not completed_current.empty:
+        completed_current, learned = harmonize_team_names(historical, completed_current)
+        if learned:
+            print(f"Reconciled current-season team names: {learned}")
     if not completed_current.empty:
         completed_current["TotalGoals"] = completed_current["FTHG"] + completed_current["FTAG"]
         completed_current["Over2_5_Result"] = (completed_current["TotalGoals"] >= 3).astype("Int64")
@@ -242,9 +297,18 @@ def build_daily_predictions(cfg: dict) -> pd.DataFrame:
     horizon_days = int(daily.get("horizon_days", 21))
     next_gameweek_only = bool(daily.get("next_gameweek_only", True))
 
-    current_completed = fetch_current_understat_completed(current_season)
-    fixtures_all = fetch_fpl_fixtures(current_season)
+    league = str(cfg.get("league", "EPL"))
+    league_label = str(cfg.get("league_name", league))
+    current_completed = fetch_current_understat_completed(current_season, league)
+    if league == "EPL":
+        fixtures_all = fetch_fpl_fixtures(current_season)
+    else:
+        fixtures_all = fetch_understat_fixtures(current_season, league)
     history = _build_training_history(cfg, current_completed)
+    if league != "EPL":
+        fixtures_all, learned = harmonize_team_names(history, fixtures_all)
+        if learned:
+            print(f"Reconciled fixture team names: {learned}")
 
     today = pd.Timestamp.now(tz="UTC").tz_localize(None).normalize()
     fixtures = fixtures_all[
@@ -254,7 +318,7 @@ def build_daily_predictions(cfg: dict) -> pd.DataFrame:
     ].copy()
 
     if fixtures.empty:
-        print("No upcoming EPL fixtures found inside the configured horizon.")
+        print(f"No upcoming {league_label} fixtures found inside the configured horizon.")
         return pd.DataFrame()
 
     if next_gameweek_only and "FPLGameweek" in fixtures.columns:
@@ -273,8 +337,20 @@ def build_daily_predictions(cfg: dict) -> pd.DataFrame:
     rho = _estimate_rho_from_history(history, fit, cfg)
     beta = _fit_live_over25_calibrator(history, cfg)
 
+    unknown = sorted(
+        {t for t in set(fixtures["HomeTeam"]).union(fixtures["AwayTeam"]) if t not in fit.attack}
+    )
+    if unknown:
+        print(f"WARNING: no fitted rating for {unknown}; using the promoted/unknown-team prior.")
+
     rows = [_predict_fixture(r, fit, rho, cfg, beta) for _, r in fixtures.iterrows()]
-    return pd.DataFrame(rows).sort_values(["FPLGameweek", "Date", "KickoffUTC", "HomeTeam"]).reset_index(drop=True)
+    out = pd.DataFrame(rows)
+    if league == "EPL":
+        return out.sort_values(["FPLGameweek", "Date", "KickoffUTC", "HomeTeam"]).reset_index(drop=True)
+
+    out.insert(0, "League", cfg.get("league_code", league))
+    out.insert(out.columns.get_loc("KickoffUTC") + 1, "KickoffLocal", fixtures["KickoffLocal"].to_numpy())
+    return out.sort_values(["Date", "KickoffLocal", "HomeTeam"]).reset_index(drop=True)
 
 
 def main() -> None:

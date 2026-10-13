@@ -81,6 +81,23 @@ daily:
   horizon_days: 21
   next_gameweek_only: true
 
+leagues:
+  # Other big-five leagues run by league_predictions.py. Each league is fitted
+  # on its own history and writes to data/processed/leagues/<CODE>/; the EPL
+  # pipeline and files above are unchanged. Codes: LALIGA, BUNDESLIGA, SERIEA, LIGUE1.
+  enabled: [LALIGA, BUNDESLIGA, SERIEA, LIGUE1]
+  horizon_days: 7          # predict every fixture kicking off in the next N days
+  # Pull The Odds API prices when THE_ODDS_API_KEY is set. Off by default: each
+  # league costs about 6 credits per run, so 4 leagues daily is ~720 credits a
+  # month on top of the EPL. Turn on per run with `--odds` or the workflow input.
+  fetch_odds: false
+  # Per-league overrides of any section above, e.g.
+  # overrides:
+  #   BUNDESLIGA:
+  #     model_v12:
+  #       home_advantage_shrink: 0.0
+  overrides: {}
+
 market_comparison:
   odds_api_sport: soccer_epl
   regions: us

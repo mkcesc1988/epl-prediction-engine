@@ -18,6 +18,13 @@ on:
   schedule:
     - cron: '30 12 * * *'
 
+permissions:
+  contents: write
+
+concurrency:
+  group: league-predictions-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   predict:
     runs-on: ubuntu-latest
@@ -61,3 +68,28 @@ jobs:
             data/processed/leagues/**/*.json
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Publish league outputs
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          shopt -s nullglob
+          files=(data/processed/leagues/all_leagues_predictions_latest.csv)
+          for dir in data/processed/leagues/*/; do
+            for f in daily_predictions_latest.csv market_comparison_latest.csv moneyline_comparison_latest.csv \
+                     validation_report.json backtest_summary_v12.csv home_advantage_sweep_summary.csv; do
+              if [ -f "$dir$f" ]; then files+=("$dir$f"); fi
+            done
+          done
+          git add -f "${files[@]}"
+
+          if git diff --cached --quiet; then
+            echo "No league output changes to commit"
+          else
+            git commit -m "data: publish latest league predictions [skip ci]"
+            git fetch origin "$GITHUB_REF_NAME"
+            git rebase -X theirs "origin/$GITHUB_REF_NAME"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi

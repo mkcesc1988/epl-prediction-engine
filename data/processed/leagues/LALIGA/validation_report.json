@@ -1,0 +1,46 @@
+{
+  "rows": 1900,
+  "duplicates": 0,
+  "missing_scores": 0,
+  "xg_complete": 1897,
+  "missing_xg": 3,
+  "score_mismatches": 0,
+  "football_data_fallback_seasons": [],
+  "historical_market_odds_complete": true,
+  "league": "La_Liga",
+  "reconciled_team_names": {},
+  "teams_missing_xg": {
+    "Valencia": 2,
+    "Espanol": 1,
+    "Granada": 1,
+    "Ath Bilbao": 1,
+    "Oviedo": 1
+  },
+  "by_season": {
+    "2021/22": {
+      "matches": 380,
+      "xg_complete": 379,
+      "missing_xg": 1
+    },
+    "2022/23": {
+      "matches": 380,
+      "xg_complete": 380,
+      "missing_xg": 0
+    },
+    "2023/24": {
+      "matches": 380,
+      "xg_complete": 379,
+      "missing_xg": 1
+    },
+    "2024/25": {
+      "matches": 380,
+      "xg_complete": 380,
+      "missing_xg": 0
+    },
+    "2025/26": {
+      "matches": 380,
+      "xg_complete": 379,
+      "missing_xg": 1
+    }
+  }
+}

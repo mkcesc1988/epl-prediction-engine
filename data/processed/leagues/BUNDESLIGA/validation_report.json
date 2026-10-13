@@ -1,0 +1,43 @@
+{
+  "rows": 1530,
+  "duplicates": 0,
+  "missing_scores": 0,
+  "xg_complete": 1529,
+  "missing_xg": 1,
+  "score_mismatches": 1,
+  "football_data_fallback_seasons": [],
+  "historical_market_odds_complete": true,
+  "league": "Bundesliga",
+  "reconciled_team_names": {},
+  "teams_missing_xg": {
+    "St Pauli": 1,
+    "Holstein Kiel": 1
+  },
+  "by_season": {
+    "2021/22": {
+      "matches": 306,
+      "xg_complete": 306,
+      "missing_xg": 0
+    },
+    "2022/23": {
+      "matches": 306,
+      "xg_complete": 306,
+      "missing_xg": 0
+    },
+    "2023/24": {
+      "matches": 306,
+      "xg_complete": 306,
+      "missing_xg": 0
+    },
+    "2024/25": {
+      "matches": 306,
+      "xg_complete": 305,
+      "missing_xg": 1
+    },
+    "2025/26": {
+      "matches": 306,
+      "xg_complete": 306,
+      "missing_xg": 0
+    }
+  }
+}

@@ -468,6 +468,7 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
                "totals": float(dc.get("market_anchor_weight_total", 0.35))}
     no_bet, eligible = float(dc.get("no_bet_edge", 0.03)), float(dc.get("bet_eligible_edge", 0.05))
     max_gap = float(dc.get("max_raw_model_market_gap", 0.18))
+    min_books = int(dc.get("min_consensus_books", 2))
     pc = cfg.get("portfolio", {})
     kelly_frac, max_stake = float(pc.get("fractional_kelly", 0.25)), float(pc.get("max_stake_pct", 0.02))
 
@@ -547,7 +548,15 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
         for sel in fl.itertuples():
             point = float(sel.Point) if pd.notna(sel.Point) else 0.0
             p_win, p_push = selection_probability(m, sel.Market, sel.Outcome, point, h, a)
-            prior, n = consensus_prob(cons, h, a, sel.Market, sel.Outcome, point if sel.Market != "h2h" else None)
+            half_goal = sel.Market == "spreads" and abs(point) == 0.5
+            if half_goal:
+                # +-0.5 is a moneyline (-0.5) or double chance (+0.5): price it
+                # from the 1X2 consensus and anchor it like a moneyline.
+                p_team, n = consensus_prob(cons, h, a, "h2h", sel.Outcome, None)
+                p_draw, _ = consensus_prob(cons, h, a, "h2h", "Draw", None)
+                prior = p_team + (p_draw if point > 0 else 0.0)
+            else:
+                prior, n = consensus_prob(cons, h, a, sel.Market, sel.Outcome, point if sel.Market != "h2h" else None)
             prior_src = f"consensus_{n}_books"
             if n == 0:
                 # De-vig MyBookie's own market as the prior.
@@ -561,7 +570,7 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
                 prior_src = "mybookie_devig"
             nonpush = max(1e-9, 1 - p_push)
             raw_eff = p_win / nonpush
-            w = weights[sel.Market]
+            w = weights["h2h" if half_goal else sel.Market]
             dec_eff = (1 - w) * raw_eff + w * prior
             dec_win = dec_eff * nonpush
             ev = dec_win * (sel.Decimal - 1) - (1 - dec_win - p_push)
@@ -571,6 +580,8 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
                 status = "NO_BET"
             elif edge < eligible:
                 status = "REVIEW"
+            elif n < min_books:
+                status = "REVIEW_LOW_MARKET_SUPPORT"
             elif gap > max_gap:
                 status = "REVIEW_MODEL_MARKET_DISAGREEMENT"
             else:
@@ -583,7 +594,8 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
                 "Game": f"{h} v {a}", "KickoffPT": fx.KickoffPT, "Market": sel.Market, "Selection": label,
                 "AmericanOdds": int(sel.AmericanOdds), "Decimal": round(sel.Decimal, 3),
                 "RawModelProb": raw_eff, "MarketProb": prior, "MarketSource": prior_src,
-                "DecisionProb": dec_eff, "Edge": edge, "EV": ev, "Status": status,
+                "DecisionProb": dec_eff, "Edge": edge, "EV": ev, "RawEV": raw_eff * nonpush * sel.Decimal - (1 - p_push),
+                "Status": status,
                 "StakeUnits": round(100 * min(max_stake, kelly * kelly_frac), 2) if status == "BET_ELIGIBLE" else 0.0,
             })
 
@@ -603,8 +615,7 @@ def main() -> None:
     pd.set_option("display.max_columns", None)
     print(teams.round(2).to_string(index=False))
     print(games[["HomeTeam", "AwayTeam", "P_Home", "P_Draw", "P_Away", "Lambda_Home", "Lambda_Away", "MostLikelyScore"]].round(3).to_string(index=False))
-    top = bets[bets.Status != "NO_BET"].sort_values("EV", ascending=False)
-    print(top.round(3).to_string(index=False))
+    print(bets.sort_values("EV", ascending=False).head(25).round(3).to_string(index=False))
     print("\n".join(notes))
 
 

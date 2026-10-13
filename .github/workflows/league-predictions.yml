@@ -79,7 +79,8 @@ jobs:
           files=(data/processed/leagues/all_leagues_predictions_latest.csv)
           for dir in data/processed/leagues/*/; do
             for f in daily_predictions_latest.csv market_comparison_latest.csv moneyline_comparison_latest.csv \
-                     validation_report.json backtest_summary_v12.csv home_advantage_sweep_summary.csv; do
+                     validation_report.json backtest_summary_v12.csv home_advantage_sweep_summary.csv \
+                     xg_predictions_v12.csv; do
               if [ -f "$dir$f" ]; then files+=("$dir$f"); fi
             done
           done

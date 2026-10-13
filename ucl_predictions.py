@@ -136,10 +136,24 @@ def selection_probability(m: np.ndarray, market: str, outcome: str, point: float
 
 # ---------------------------------------------------------------- sources
 def fetch_clubelo(day: pd.Timestamp) -> pd.DataFrame:
-    url = f"http://api.clubelo.com/{day:%Y-%m-%d}"
-    r = requests.get(url, headers=HEADERS, timeout=60)
-    r.raise_for_status()
-    df = pd.read_csv(io.StringIO(r.text))
+    last: Exception | None = None
+    text = None
+    for attempt in range(3):
+        for scheme in ("http", "https"):
+            try:
+                r = requests.get(f"{scheme}://api.clubelo.com/{day:%Y-%m-%d}", headers=HEADERS, timeout=25)
+                r.raise_for_status()
+                text = r.text
+                break
+            except requests.RequestException as exc:
+                last = exc
+        if text is not None:
+            break
+        import time
+        time.sleep(10 * (attempt + 1))
+    if text is None:
+        raise RuntimeError(f"ClubElo unreachable: {last}")
+    df = pd.read_csv(io.StringIO(text))
     if df.empty or "Elo" not in df.columns:
         raise RuntimeError(f"ClubElo returned no ratings for {day:%Y-%m-%d}")
     return df

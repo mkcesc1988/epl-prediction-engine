@@ -4,8 +4,10 @@ UCL games are cross-league, so the per-league V1.2 ratings can't be compared
 directly. This module puts every club on one scale and reuses the engine's
 goal model and decision rules:
 
-1. Strength: ClubElo ratings (all competitions, opponent-adjusted, so domestic
-   and European form are both in it) plus a UCL home advantage.
+1. Strength: ClubElo ratings, or Opta Power Rankings when ClubElo is down
+   (both cover all competitions, so domestic and European form are in them),
+   plus a UCL home advantage. Opta's 0-100 scale is converted to Elo points
+   with one slope fitted to the slate's market prices.
 2. Form: Elo change over the last ``ucl.form_days`` (shown, already inside the
    rating), recent domestic results/xG, and this season's UCL results. For
    big-five clubs a small "results vs xG" correction pulls a team that has
@@ -42,24 +44,24 @@ HEADERS = {"User-Agent": "Mozilla/5.0 EPL prediction engine"}
 
 # Our name -> (ClubElo country, ClubElo name candidates, domestic source, source key)
 CLUBS: dict[str, dict] = {
-    "Feyenoord": {"country": "NED", "elo": ["Feyenoord"], "fd": "N1"},
-    "Como": {"country": "ITA", "elo": ["Como"], "understat": "Serie_A"},
-    "LASK": {"country": "AUT", "elo": ["LASK", "Linz"], "fd_new": "AUT"},
-    "Liverpool": {"country": "ENG", "elo": ["Liverpool"], "understat": "EPL"},
-    "Roma": {"country": "ITA", "elo": ["Roma"], "understat": "Serie_A"},
-    "Real Madrid": {"country": "ESP", "elo": ["Real Madrid"], "understat": "La_Liga"},
-    "Aston Villa": {"country": "ENG", "elo": ["Aston Villa"], "understat": "EPL"},
-    "Fenerbahce": {"country": "TUR", "elo": ["Fenerbahce"], "fd": "T1"},
-    "Bodo/Glimt": {"country": "NOR", "elo": ["Bodoe/Glimt", "Bodo/Glimt", "Bodoe Glimt", "Glimt"], "fd_new": "NOR"},
-    "Dortmund": {"country": "GER", "elo": ["Dortmund"], "understat": "Bundesliga"},
-    "Shakhtar": {"country": "UKR", "elo": ["Shakhtar"]},
-    "AEK": {"country": "GRE", "elo": ["AEK"], "fd": "G1"},
-    "Man City": {"country": "ENG", "elo": ["Man City"], "understat": "EPL"},
-    "Paris SG": {"country": "FRA", "elo": ["Paris SG"], "understat": "Ligue_1"},
-    "Betis": {"country": "ESP", "elo": ["Betis"], "understat": "La_Liga"},
-    "Porto": {"country": "POR", "elo": ["Porto"], "fd": "P1"},
-    "Slovan Bratislava": {"country": "SVK", "elo": ["Slovan Bratislava", "Slovan"]},
-    "Stuttgart": {"country": "GER", "elo": ["Stuttgart"], "understat": "Bundesliga"},
+    "Feyenoord": {"opta": ['Feyenoord'], "country": "NED", "elo": ["Feyenoord"], "fd": "N1"},
+    "Como": {"opta": ['Como'], "country": "ITA", "elo": ["Como"], "understat": "Serie_A"},
+    "LASK": {"opta": ['LASK'], "country": "AUT", "elo": ["LASK", "Linz"], "fd_new": "AUT"},
+    "Liverpool": {"opta": ['Liverpool'], "country": "ENG", "elo": ["Liverpool"], "understat": "EPL"},
+    "Roma": {"opta": ['Roma'], "country": "ITA", "elo": ["Roma"], "understat": "Serie_A"},
+    "Real Madrid": {"opta": ['Real Madrid'], "country": "ESP", "elo": ["Real Madrid"], "understat": "La_Liga"},
+    "Aston Villa": {"opta": ['Aston Villa'], "country": "ENG", "elo": ["Aston Villa"], "understat": "EPL"},
+    "Fenerbahce": {"opta": ['Fenerbahçe', 'Fenerbahce'], "country": "TUR", "elo": ["Fenerbahce"], "fd": "T1"},
+    "Bodo/Glimt": {"opta": ['Bodø / Glimt', 'Bodo/Glimt'], "country": "NOR", "elo": ["Bodoe/Glimt", "Bodo/Glimt", "Bodoe Glimt", "Glimt"], "fd_new": "NOR"},
+    "Dortmund": {"opta": ['Borussia Dortmund'], "country": "GER", "elo": ["Dortmund"], "understat": "Bundesliga"},
+    "Shakhtar": {"opta": ['Shakhtar Donetsk'], "country": "UKR", "elo": ["Shakhtar"]},
+    "AEK": {"opta": ['AEK Athens'], "country": "GRE", "elo": ["AEK"], "fd": "G1"},
+    "Man City": {"opta": ['Manchester City'], "country": "ENG", "elo": ["Man City"], "understat": "EPL"},
+    "Paris SG": {"opta": ['Paris Saint-Germain'], "country": "FRA", "elo": ["Paris SG"], "understat": "Ligue_1"},
+    "Betis": {"opta": ['Real Betis'], "country": "ESP", "elo": ["Betis"], "understat": "La_Liga"},
+    "Porto": {"opta": ['Porto', 'FC Porto'], "country": "POR", "elo": ["Porto"], "fd": "P1"},
+    "Slovan Bratislava": {"opta": ['Slovan Bratislava'], "country": "SVK", "elo": ["Slovan Bratislava", "Slovan"]},
+    "Stuttgart": {"opta": ['Stuttgart', 'VfB Stuttgart'], "country": "GER", "elo": ["Stuttgart"], "understat": "Bundesliga"},
 }
 
 
@@ -138,10 +140,10 @@ def selection_probability(m: np.ndarray, market: str, outcome: str, point: float
 def fetch_clubelo(day: pd.Timestamp) -> pd.DataFrame:
     last: Exception | None = None
     text = None
-    for attempt in range(3):
+    for attempt in range(2):
         for scheme in ("http", "https"):
             try:
-                r = requests.get(f"{scheme}://api.clubelo.com/{day:%Y-%m-%d}", headers=HEADERS, timeout=25)
+                r = requests.get(f"{scheme}://api.clubelo.com/{day:%Y-%m-%d}", headers=HEADERS, timeout=15)
                 r.raise_for_status()
                 text = r.text
                 break
@@ -150,13 +152,50 @@ def fetch_clubelo(day: pd.Timestamp) -> pd.DataFrame:
         if text is not None:
             break
         import time
-        time.sleep(10 * (attempt + 1))
+        time.sleep(5)
     if text is None:
         raise RuntimeError(f"ClubElo unreachable: {last}")
     df = pd.read_csv(io.StringIO(text))
     if df.empty or "Elo" not in df.columns:
         raise RuntimeError(f"ClubElo returned no ratings for {day:%Y-%m-%d}")
     return df
+
+
+OPTA_URL = "https://dataviz.theanalyst.com/opta-power-rankings/pr-reference.json"
+
+
+def fetch_opta() -> pd.DataFrame:
+    r = requests.get(OPTA_URL, headers=HEADERS, timeout=60)
+    r.raise_for_status()
+    df = pd.DataFrame(r.json())
+    if df.empty or "currentRating" not in df.columns:
+        raise RuntimeError("Opta Power Rankings returned no ratings")
+    return df
+
+
+def match_opta(opta: pd.DataFrame, team: str) -> tuple[str, float] | None:
+    cands = CLUBS[team]["opta"]
+    for col in ("contestantName", "contestantShortName", "contestantClubName"):
+        exact = opta[opta[col].astype(str).str.lower().isin([c.lower() for c in cands])]
+        if not exact.empty:
+            return str(exact.iloc[0]["contestantName"]), float(exact.iloc[0]["currentRating"])
+    names = opta["contestantName"].astype(str)
+    best = max(names, key=lambda n: max(_similar(n, c) for c in cands))
+    if max(_similar(best, c) for c in cands) >= 0.75:
+        return best, float(opta[names == best].iloc[0]["currentRating"])
+    return None
+
+
+def fit_rating_scale(games: list[tuple[float, float, float]], hfa: float) -> float:
+    """Elo points per Opta rating point that best match the market's win expectancies.
+
+    ``games`` holds (home rating, away rating, market expectancy). One slope for
+    the whole slate keeps every game's ordering from Opta, so a game the model
+    and market disagree on still shows up as an edge.
+    """
+    grid = np.arange(5.0, 120.0, 0.5)
+    errs = [sum((elo_expectancy(k * rh, k * ra, hfa) - t) ** 2 for rh, ra, t in games) for k in grid]
+    return float(grid[int(np.argmin(errs))])
 
 
 def match_elo(elo: pd.DataFrame, team: str) -> tuple[str, float] | None:
@@ -357,17 +396,27 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
     teams = sorted(set(fixtures.HomeTeam).union(fixtures.AwayTeam))
 
     today = pd.Timestamp.now(tz="UTC").tz_localize(None).normalize()
-    elo_now = fetch_clubelo(today)
-    elo_then = fetch_clubelo(today - pd.Timedelta(days=form_days))
-
     team_rows = {}
-    for t in teams:
-        now = match_elo(elo_now, t)
-        then = match_elo(elo_then, t)
-        if now is None:
-            raise RuntimeError(f"No ClubElo rating for {t}")
-        team_rows[t] = {"Team": t, "EloClub": now[0], "Elo": now[1],
-                        f"EloChange{form_days}d": now[1] - then[1] if then else np.nan}
+    strength_source = "ClubElo"
+    try:
+        elo_now = fetch_clubelo(today)
+        elo_then = fetch_clubelo(today - pd.Timedelta(days=form_days))
+        for t in teams:
+            now = match_elo(elo_now, t)
+            then = match_elo(elo_then, t)
+            if now is None:
+                raise RuntimeError(f"No ClubElo rating for {t}")
+            team_rows[t] = {"Team": t, "RatingName": now[0], "Rating": now[1],
+                            f"EloChange{form_days}d": now[1] - then[1] if then else np.nan}
+    except Exception as exc:  # noqa: BLE001
+        notes.append(f"ClubElo unavailable ({exc}); using Opta Power Rankings.")
+        strength_source = "Opta"
+        opta = fetch_opta()
+        for t in teams:
+            hit = match_opta(opta, t)
+            if hit is None:
+                raise RuntimeError(f"No Opta rating for {t}")
+            team_rows[t] = {"Team": t, "RatingName": hit[0], "Rating": hit[1]}
 
     # Domestic form.
     understat_cache: dict[str, tuple[pd.DataFrame, float]] = {}
@@ -421,6 +470,25 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
     max_gap = float(dc.get("max_raw_model_market_gap", 0.18))
     pc = cfg.get("portfolio", {})
     kelly_frac, max_stake = float(pc.get("fractional_kelly", 0.25)), float(pc.get("max_stake_pct", 0.02))
+
+    def market_expectancy(h: str, a: str) -> float:
+        ph, n = consensus_prob(cons, h, a, "h2h", h, None)
+        pdw, _ = consensus_prob(cons, h, a, "h2h", "Draw", None)
+        if n:
+            return ph + pdw / 2
+        fl = lines[(lines.HomeTeam == h) & (lines.AwayTeam == a) & (lines.Market == "h2h")]
+        imp = {r.Outcome: 1 / r.Decimal for r in fl.itertuples()}
+        tot = sum(imp.values())
+        return (imp[h] + imp["Draw"] / 2) / tot
+
+    scale = 1.0
+    if strength_source == "Opta":
+        sample = [(team_rows[f.HomeTeam]["Rating"], team_rows[f.AwayTeam]["Rating"], market_expectancy(f.HomeTeam, f.AwayTeam))
+                  for f in fixtures.itertuples()]
+        scale = fit_rating_scale(sample, hfa)
+        notes.append(f"Opta rating scale fitted to this slate: {scale:.1f} Elo points per rating point.")
+    for t in team_rows.values():
+        t["Elo"] = t["Rating"] * scale
 
     games, bets = [], []
     for _, fx in fixtures.iterrows():
@@ -519,7 +587,8 @@ def build(cfg: dict) -> tuple[pd.DataFrame, pd.DataFrame, list[str], pd.DataFram
                 "StakeUnits": round(100 * min(max_stake, kelly * kelly_frac), 2) if status == "BET_ELIGIBLE" else 0.0,
             })
 
-    return pd.DataFrame(games), pd.DataFrame(bets), notes + [f"Teams: {len(team_df)}"], team_df
+    team_df = pd.DataFrame(team_rows.values())
+    return pd.DataFrame(games), pd.DataFrame(bets), notes + [f"Strength source: {strength_source}"], team_df
 
 
 def main() -> None:

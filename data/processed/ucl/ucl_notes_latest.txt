@@ -1,0 +1,4 @@
+ClubElo unavailable (ClubElo unreachable: HTTPSConnectionPool(host='api.clubelo.com', port=443): Max retries exceeded with url: /2026-10-13 (Caused by ConnectTimeoutError(<urllib3.connection.HTTPSConnection object at 0x7f1812955610>, 'Connection to api.clubelo.com timed out. (connect timeout=15)'))); using Opta Power Rankings.
+UCL results unavailable from API-Football: {'plan': 'Free plans do not have access to this season, try from 2022 to 2024.'}
+Opta rating scale fitted to this slate: 28.0 Elo points per rating point.
+Strength source: Opta

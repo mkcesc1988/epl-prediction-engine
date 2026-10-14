@@ -31,7 +31,7 @@ Bank £2.5m · estimated free transfers: 1 (selling prices approximated by curre
 | Konsa | Silva | 2.4 | -0 | 2.4 | £2.1m |
 | Muharemović | Guéhi | 2.3 | -0 | 2.3 | £1.5m |
 | Gvardiol | Guéhi | 2.3 | -0 | 2.3 | £2.3m |
-| Schade | Cherki | 2.3 | -0 | 2.3 | £0.9m |
+| Schade | Cherki | 2.3 | -0 | 2.3 | £0.8m |
 | Tarkowski | Silva | 2.2 | -0 | 2.2 | £3.7m |
 | Konsa | Guéhi | 2.1 | -0 | 2.1 | £1.1m |
 | Muharemović | Hall | 2.1 | -0 | 2.1 | £2.2m |

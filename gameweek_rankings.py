@@ -195,6 +195,37 @@ def _consensus_no_vig_probability(q: pd.Series, odds: pd.DataFrame) -> tuple[flo
     return float(np.median(probs)), int(len(probs)), source
 
 
+def _half_goal_spread_moneyline_prior(q: pd.Series, odds: pd.DataFrame) -> tuple[float, int, str]:
+    """Price a +/-0.5 spread off the 1X2 consensus instead of the spread market.
+
+    Team -0.5 wins exactly when the team wins, and team +0.5 wins when the team
+    wins or draws, so both are moneyline outcomes. The 1X2 market is far deeper
+    than half-goal spread lines (which often only MyBookie quotes), and judging
+    the same outcome against a thinner, MyBookie-only prior manufactured edges
+    the moneyline view rejected. Returns (nan, 0, "unavailable") unless at least
+    one non-MyBookie book quotes the full 1X2 market.
+    """
+    point = pd.to_numeric(q.get("Point"), errors="coerce")
+    if pd.isna(point) or not np.isclose(abs(float(point)), 0.5):
+        return np.nan, 0, "unavailable"
+
+    base = q.copy()
+    base["Market"] = "h2h"
+    base["Point"] = np.nan
+    win_p, win_books, win_src = _consensus_no_vig_probability(base, odds)
+    if win_src != "consensus_non_mybookie" or not np.isfinite(win_p):
+        return np.nan, 0, "unavailable"
+    if float(point) < 0:
+        return win_p, win_books, "consensus_1x2_half_goal"
+
+    draw_q = base.copy()
+    draw_q["Outcome"] = "Draw"
+    draw_p, draw_books, draw_src = _consensus_no_vig_probability(draw_q, odds)
+    if draw_src != "consensus_non_mybookie" or not np.isfinite(draw_p):
+        return np.nan, 0, "unavailable"
+    return float(min(1.0, win_p + draw_p)), int(min(win_books, draw_books)), "consensus_1x2_half_goal"
+
+
 def _early_season_anchor_bonus(gameweek: object, cfg: dict) -> float:
     """Extra market-anchor weight for the first gameweeks of a season.
 
@@ -496,7 +527,15 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
         raw_effective = p_win / max(1e-12, 1.0 - p_push)
         implied = 1.0 / odds_price
 
-        market_prior, consensus_books, market_prior_source = _consensus_no_vig_probability(q, odds)
+        anchor_label = market_label
+        market_prior, consensus_books, market_prior_source = (np.nan, 0, "unavailable")
+        if market_label == "Spread":
+            market_prior, consensus_books, market_prior_source = _half_goal_spread_moneyline_prior(q, odds)
+            if np.isfinite(market_prior):
+                # Same outcome as a moneyline bet, so it gets the moneyline anchor too.
+                anchor_label = "Moneyline"
+        if not np.isfinite(market_prior):
+            market_prior, consensus_books, market_prior_source = _consensus_no_vig_probability(q, odds)
         if not np.isfinite(market_prior):
             # Conservative fallback when a proper paired market is unavailable.
             market_prior = implied
@@ -507,7 +546,7 @@ def build_rankings(predictions: pd.DataFrame, odds: pd.DataFrame, cfg: dict) -> 
         if round_number is None or pd.isna(round_number):
             round_number = pred.get("Matchday")  # non-EPL leagues
         decision_p_win, decision_effective = _decision_probability(
-            p_win, p_push, market_prior, market_label, cfg, round_number
+            p_win, p_push, market_prior, anchor_label, cfg, round_number
         )
         fair_odds = _binary_fair_odds(decision_p_win, p_push)
         ev = _ev_with_push(decision_p_win, p_push, odds_price)

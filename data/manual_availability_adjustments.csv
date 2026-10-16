@@ -1,3 +1,13 @@
 Date,HomeTeam,AwayTeam,HomeProbShift,DrawProbShift,AwayProbShift,Note
 2026-09-06,Everton,Man United,0,0,0,Fill only after confirmed lineup/injury news; shifts capped at +/-0.05
 2026-09-06,Arsenal,Chelsea,0,0,0,Fill only after confirmed lineup/injury news; shifts capped at +/-0.05
+2026-10-17,Everton,Chelsea,0.01,0,-0.01,Reece James out (knee); Mykolenko/Branthwaite doubts; both sides rested
+2026-10-17,Brentford,Liverpool,0.04,0.01,-0.05,LIV 3 days rest after away CL Wed at LASK; Gravenberch banned; Szoboszlai/Gakpo/Isak doubts; Ekitike out; Villarreal Tue
+2026-10-17,Fulham,Hull City,0.02,0,-0.02,Hull missing Butland Mendy Hughes Targett Gyabi Cho; Fulham Larsson doubt
+2026-10-17,Man City,Ipswich Town,-0.03,0.02,0.01,City 3 days after PSG loss; Maresca rotation flagged; AEK Tue
+2026-10-17,Newcastle,Aston Villa,0.02,0,-0.02,Villa 3 days rest after CL Wed; NEW 5 days; NEW missing Elanga Livramento Ramsey; Villa missing Maatsen Ruggeri Onana
+2026-10-18,Bournemouth,Sunderland,0.02,0,-0.02,Both played Thu Europa; SUN travelled from Portugal; Isidor doubt Meunier out; BOU Kluivert Adli back
+2026-10-18,Brighton,Crystal Palace,0.04,0,-0.04,CRY Thu away at Lyon; Mateta Henderson Tomiyasu Chilwell Riad out; Disasi banned; BHA missing Mitoma Minteh Wieffer Ferguson
+2026-10-18,Leeds,Man United,0.02,0,-0.02,MUN missing Sesko Dorgu Mazraoui Ugarte; Shaw Mainoo doubts; Leeds Rodon out
+2026-10-18,Nott'm Forest,Arsenal,0.01,0,-0.01,ARS Saliba Hincapie out Zubimendi doubt; NFO Gibbs-White doubt Igor Jesus out
+2026-10-19,Tottenham,Coventry City,0,0,0,Neutral: Coventry Awoniyi back; both a full week rest

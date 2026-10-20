@@ -127,6 +127,11 @@ market_comparison:
   regions: us
   markets: h2h,spreads,totals
   mybookie_bookmaker_key: mybookieag
+  # Odds API credit savers: skip the MyBookie-only request when the regional
+  # feed already carries MyBookie, and only pull live odds when a fixture
+  # kicks off within this many days.
+  mybookie_direct_only_if_missing: true
+  odds_within_days: 2
   executable_quote_max_age_minutes: 240
 
 decision:

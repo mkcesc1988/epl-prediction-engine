@@ -31,3 +31,17 @@ def test_fetch_date_safe_reraises_other_runtime_errors(monkeypatch):
         assert "API_FOOTBALL_KEY is not configured" in str(exc)
     else:
         raise AssertionError("Expected non-plan RuntimeError to be re-raised")
+
+
+def test_fetch_date_safe_skips_free_plan_season_error(monkeypatch):
+    import post_match_process_audit as audit
+
+    def boom(date):
+        raise RuntimeError(
+            "API-Football error: {'plan': 'Free plans do not have access to this season, try from 2022 to 2024.'}"
+        )
+
+    monkeypatch.setattr(audit, "fetch_date", boom)
+    rows, skipped = audit.fetch_date_safe("2026-10-18")
+    assert rows == []
+    assert skipped["AuditStatus"] == "AUDIT_SKIPPED"

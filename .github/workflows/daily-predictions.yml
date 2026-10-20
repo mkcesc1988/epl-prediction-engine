@@ -7,6 +7,13 @@ on:
   schedule:
     - cron: '0 12 * * *'
 
+permissions:
+  contents: write
+
+concurrency:
+  group: epl-data-publisher
+  cancel-in-progress: false
+
 jobs:
   predict:
     runs-on: ubuntu-latest
@@ -28,6 +35,21 @@ jobs:
 
       - name: Generate daily EPL predictions
         run: python daily_predictions.py
+
+      - name: Publish daily predictions
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/processed/daily_predictions_latest.csv
+          if git diff --cached --quiet; then
+            echo "No daily prediction changes to publish"
+          else
+            git commit -m "data: publish daily EPL predictions [skip ci]"
+            git fetch origin main
+            git rebase -X theirs origin/main
+            git push origin HEAD:main
+          fi
 
       - name: Upload daily predictions
         if: always()

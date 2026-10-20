@@ -98,6 +98,8 @@ def _fetch_odds_payload(url: str, params: dict, label: str) -> list[dict]:
         detail = f"HTTP {status}" if status is not None else exc.__class__.__name__
         if remaining is not None:
             detail += f", requests remaining={remaining}"
+        if status == 401:
+            detail += "; THE_ODDS_API_KEY is invalid or out of usage credits"
         print(f"WARNING: {label} unavailable ({detail})")
         return []
     except ValueError as exc:

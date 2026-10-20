@@ -1,0 +1,84 @@
+Date,HomeTeam,AwayTeam,Bookmaker,BookmakerKey,Market,Outcome,Point,DecimalOdds,ManualSource,CapturedAt
+2026-10-23,Ipswich Town,Nott'm Forest,MyBookie.ag,mybookie_manual,h2h,Ipswich Town,,2.96,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-23,Ipswich Town,Nott'm Forest,MyBookie.ag,mybookie_manual,h2h,Draw,,3.38,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-23,Ipswich Town,Nott'm Forest,MyBookie.ag,mybookie_manual,h2h,Nott'm Forest,,2.24,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-23,Ipswich Town,Nott'm Forest,MyBookie.ag,mybookie_manual,spreads,Ipswich Town,0.5,1.6024096386,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-23,Ipswich Town,Nott'm Forest,MyBookie.ag,mybookie_manual,spreads,Nott'm Forest,-0.5,2.19,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-23,Ipswich Town,Nott'm Forest,MyBookie.ag,mybookie_manual,totals,Over,2.5,1.6896551724,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-23,Ipswich Town,Nott'm Forest,MyBookie.ag,mybookie_manual,totals,Under,2.5,2.05,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Aston Villa,Man City,MyBookie.ag,mybookie_manual,h2h,Aston Villa,,4.3,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Aston Villa,Man City,MyBookie.ag,mybookie_manual,h2h,Draw,,3.95,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Aston Villa,Man City,MyBookie.ag,mybookie_manual,h2h,Man City,,1.6849315068,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Aston Villa,Man City,MyBookie.ag,mybookie_manual,spreads,Aston Villa,0.5,2.08,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Aston Villa,Man City,MyBookie.ag,mybookie_manual,spreads,Man City,-0.5,1.6666666667,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Aston Villa,Man City,MyBookie.ag,mybookie_manual,totals,Over,3.5,2.24,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Aston Villa,Man City,MyBookie.ag,mybookie_manual,totals,Under,3.5,1.5780346821,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Arsenal,Everton,MyBookie.ag,mybookie_manual,h2h,Arsenal,,1.3571428571,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Arsenal,Everton,MyBookie.ag,mybookie_manual,h2h,Draw,,4.7,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Arsenal,Everton,MyBookie.ag,mybookie_manual,h2h,Everton,,7.8,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Arsenal,Everton,MyBookie.ag,mybookie_manual,spreads,Arsenal,-1.5,2.03,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Arsenal,Everton,MyBookie.ag,mybookie_manual,spreads,Everton,1.5,1.7042253521,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Arsenal,Everton,MyBookie.ag,mybookie_manual,totals,Over,2.5,1.7751937984,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Arsenal,Everton,MyBookie.ag,mybookie_manual,totals,Under,2.5,1.9345794393,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Coventry City,Fulham,MyBookie.ag,mybookie_manual,h2h,Coventry City,,2.8,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Coventry City,Fulham,MyBookie.ag,mybookie_manual,h2h,Draw,,3.4,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Coventry City,Fulham,MyBookie.ag,mybookie_manual,h2h,Fulham,,2.34,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Coventry City,Fulham,MyBookie.ag,mybookie_manual,spreads,Coventry City,0.5,1.5586592179,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Coventry City,Fulham,MyBookie.ag,mybookie_manual,spreads,Fulham,-0.5,2.28,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Coventry City,Fulham,MyBookie.ag,mybookie_manual,totals,Over,2.5,1.6802721088,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Coventry City,Fulham,MyBookie.ag,mybookie_manual,totals,Under,2.5,2.06,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Chelsea,Tottenham,MyBookie.ag,mybookie_manual,h2h,Chelsea,,1.6666666667,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Chelsea,Tottenham,MyBookie.ag,mybookie_manual,h2h,Draw,,4.0,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Chelsea,Tottenham,MyBookie.ag,mybookie_manual,h2h,Tottenham,,4.3,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Chelsea,Tottenham,MyBookie.ag,mybookie_manual,spreads,Chelsea,-0.5,1.6493506494,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Chelsea,Tottenham,MyBookie.ag,mybookie_manual,spreads,Tottenham,0.5,2.11,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Chelsea,Tottenham,MyBookie.ag,mybookie_manual,totals,Over,3.5,2.27,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-24,Chelsea,Tottenham,MyBookie.ag,mybookie_manual,totals,Under,3.5,1.5617977528,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Liverpool,Brighton,MyBookie.ag,mybookie_manual,h2h,Liverpool,,2.09,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Liverpool,Brighton,MyBookie.ag,mybookie_manual,h2h,Draw,,3.65,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Liverpool,Brighton,MyBookie.ag,mybookie_manual,h2h,Brighton,,3.06,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Liverpool,Brighton,MyBookie.ag,mybookie_manual,spreads,Liverpool,-0.5,2.06,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Liverpool,Brighton,MyBookie.ag,mybookie_manual,spreads,Brighton,0.5,1.6849315068,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Liverpool,Brighton,MyBookie.ag,mybookie_manual,totals,Over,2.5,1.5464480874,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Liverpool,Brighton,MyBookie.ag,mybookie_manual,totals,Under,2.5,2.31,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Hull City,Brentford,MyBookie.ag,mybookie_manual,h2h,Hull City,,4.2,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Hull City,Brentford,MyBookie.ag,mybookie_manual,h2h,Draw,,3.8,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Hull City,Brentford,MyBookie.ag,mybookie_manual,h2h,Brentford,,1.7299270073,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Hull City,Brentford,MyBookie.ag,mybookie_manual,spreads,Hull City,0.5,2.01,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Hull City,Brentford,MyBookie.ag,mybookie_manual,spreads,Brentford,-0.5,1.7142857143,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Hull City,Brentford,MyBookie.ag,mybookie_manual,totals,Over,2.5,1.6493506494,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Hull City,Brentford,MyBookie.ag,mybookie_manual,totals,Under,2.5,2.11,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Crystal Palace,Newcastle,MyBookie.ag,mybookie_manual,h2h,Crystal Palace,,2.72,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Crystal Palace,Newcastle,MyBookie.ag,mybookie_manual,h2h,Draw,,3.48,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Crystal Palace,Newcastle,MyBookie.ag,mybookie_manual,h2h,Newcastle,,2.36,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Crystal Palace,Newcastle,MyBookie.ag,mybookie_manual,spreads,Crystal Palace,0.5,1.5524861878,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Crystal Palace,Newcastle,MyBookie.ag,mybookie_manual,spreads,Newcastle,-0.5,2.3,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Crystal Palace,Newcastle,MyBookie.ag,mybookie_manual,totals,Over,2.5,1.5882352941,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Crystal Palace,Newcastle,MyBookie.ag,mybookie_manual,totals,Under,2.5,2.22,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Man United,Bournemouth,MyBookie.ag,mybookie_manual,h2h,Man United,,1.8333333333,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Man United,Bournemouth,MyBookie.ag,mybookie_manual,h2h,Draw,,3.8,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Man United,Bournemouth,MyBookie.ag,mybookie_manual,h2h,Bournemouth,,3.7,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Man United,Bournemouth,MyBookie.ag,mybookie_manual,spreads,Man United,-0.5,1.8130081301,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Man United,Bournemouth,MyBookie.ag,mybookie_manual,spreads,Bournemouth,0.5,1.8928571429,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Man United,Bournemouth,MyBookie.ag,mybookie_manual,totals,Over,2.5,1.5464480874,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Man United,Bournemouth,MyBookie.ag,mybookie_manual,totals,Under,2.5,2.31,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Sunderland,Leeds,MyBookie.ag,mybookie_manual,h2h,Sunderland,,2.8,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Sunderland,Leeds,MyBookie.ag,mybookie_manual,h2h,Draw,,3.22,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Sunderland,Leeds,MyBookie.ag,mybookie_manual,h2h,Leeds,,2.43,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Sunderland,Leeds,MyBookie.ag,mybookie_manual,spreads,Sunderland,0.5,1.5208333333,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Sunderland,Leeds,MyBookie.ag,mybookie_manual,spreads,Leeds,-0.5,2.36,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Sunderland,Leeds,MyBookie.ag,mybookie_manual,totals,Over,2.5,2.03,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-25,Sunderland,Leeds,MyBookie.ag,mybookie_manual,totals,Under,2.5,1.7042253521,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Chelsea,Man United,MyBookie.ag,mybookie_manual,h2h,Chelsea,,1.9523809524,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Chelsea,Man United,MyBookie.ag,mybookie_manual,h2h,Draw,,3.7,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Chelsea,Man United,MyBookie.ag,mybookie_manual,h2h,Man United,,3.34,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Chelsea,Man United,MyBookie.ag,mybookie_manual,spreads,Chelsea,-0.5,1.9259259259,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Chelsea,Man United,MyBookie.ag,mybookie_manual,spreads,Man United,0.5,1.78125,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Chelsea,Man United,MyBookie.ag,mybookie_manual,totals,Over,3.5,2.25,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Chelsea,Man United,MyBookie.ag,mybookie_manual,totals,Under,3.5,1.5747126437,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Bournemouth,Leeds,MyBookie.ag,mybookie_manual,h2h,Bournemouth,,2.16,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Bournemouth,Leeds,MyBookie.ag,mybookie_manual,h2h,Draw,,3.42,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Bournemouth,Leeds,MyBookie.ag,mybookie_manual,h2h,Leeds,,3.08,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Bournemouth,Leeds,MyBookie.ag,mybookie_manual,spreads,Bournemouth,-0.5,2.12,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Bournemouth,Leeds,MyBookie.ag,mybookie_manual,spreads,Leeds,0.5,1.6451612903,screenshot_2026-10-19,2026-10-20T03:51:00+00:00
+2026-10-31,Bournemouth,Leeds,MyBookie.ag,mybookie_manual,totals,Over,2.5,1.7633587786,screenshot_2026-10-19,2026-10-20T03:51:00+00:00

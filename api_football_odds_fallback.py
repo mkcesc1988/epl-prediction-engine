@@ -153,7 +153,13 @@ def main() -> None:
         print(f"Current-gameweek market rows already available: {existing_current}; API-Football fallback not needed")
         return
 
-    fallback = fetch_api_football_odds(preds)
+    try:
+        fallback = fetch_api_football_odds(preds)
+    except (RuntimeError, requests.RequestException) as exc:
+        # The fallback is best-effort: a plan that does not cover the current
+        # season (or any API outage) must not fail the whole market job.
+        print(f"WARNING: API-Football odds fallback unavailable; continuing without it ({exc})")
+        return
     print(f"API-Football fallback market rows parsed: {len(fallback)}")
     if fallback.empty:
         return

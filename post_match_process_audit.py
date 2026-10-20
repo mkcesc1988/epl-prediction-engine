@@ -101,9 +101,11 @@ def fetch_date(date: str) -> list[dict]:
 
 def _is_plan_date_access_error(exc: Exception) -> bool:
     msg = str(exc).lower()
+    # API-Football has worded this as "access to this date" and, from the
+    # 2026/27 season, "access to this season, try from 2022 to 2024".
     return (
-        "free plans do not have access to this date" in msg
-        or ("api-football error" in msg and "plan" in msg and "date" in msg)
+        "free plans do not have access" in msg
+        or ("api-football error" in msg and "plan" in msg and ("date" in msg or "season" in msg))
     )
 
 

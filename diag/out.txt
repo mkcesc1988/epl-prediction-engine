@@ -1,0 +1,41 @@
+### prepare_manual_mybookie.py
+Merged 3 manual snapshot files into data/manual_mybookie_odds.csv with 229 rows
+exit=0
+### safe_market_comparison.py
+Understat 2021/22
+  Understat EPL 2021/22 league match data
+Football-Data 2021/22
+Understat 2022/23
+  Understat EPL 2022/23 league match data
+Football-Data 2022/23
+Understat 2023/24
+  Understat EPL 2023/24 league match data
+Football-Data 2023/24
+Understat 2024/25
+  Understat EPL 2024/25 league match data
+Football-Data 2024/25
+Understat 2025/26
+  Understat EPL 2025/26 league match data
+Football-Data 2025/26
+Predicting full EPL Gameweek 8: 10 fixtures
+Fresh daily predictions built: 10
+No fixture kicks off within 2 day(s); skipping Odds API pull to save credits.
+Odds API live pull disabled for this run; using manual MyBookie prices only.
+Daily fixtures available: 10
+Market outcome rows:      229
+O/U 2.5 comparisons:     16
+MyBookie comparisons:    16
+exit=0
+### api_football_odds_fallback.py
+Current-gameweek market rows already available: 70; API-Football fallback not needed
+exit=0
+### post_match_process_audit.py
+[audit] prediction dates=['2026-10-23', '2026-10-24', '2026-10-25']
+[audit] requesting API-Football date=2026-10-23
+[audit] AUDIT_SKIPPED date=2026-10-23 reason=DATA_UNAVAILABLE error=API-Football error: {'plan': 'Free plans do not have access to this date, try from 2026-10-19 to 2026-10-21.'}
+[audit] requesting API-Football date=2026-10-24
+[audit] AUDIT_SKIPPED date=2026-10-24 reason=DATA_UNAVAILABLE error=API-Football error: {'plan': 'Free plans do not have access to this date, try from 2026-10-19 to 2026-10-21.'}
+[audit] requesting API-Football date=2026-10-25
+[audit] AUDIT_SKIPPED date=2026-10-25 reason=DATA_UNAVAILABLE error=API-Football error: {'plan': 'Free plans do not have access to this date, try from 2026-10-19 to 2026-10-21.'}
+No finished EPL fixtures audited; skipped 3 inaccessible prediction date(s)
+exit=0

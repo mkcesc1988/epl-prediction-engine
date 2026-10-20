@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import pandas as pd
@@ -19,6 +20,23 @@ def _load_cached_predictions(path: Path) -> pd.DataFrame:
         return pd.DataFrame()
     required = {"Date", "HomeTeam", "AwayTeam", "P_HomeWin", "P_Draw", "P_AwayWin"}
     return df if not df.empty and required.issubset(df.columns) else pd.DataFrame()
+
+
+def live_odds_due(predictions: pd.DataFrame, cfg: dict, now: pd.Timestamp | None = None) -> bool:
+    """True when an unplayed fixture kicks off within market_comparison.odds_within_days.
+
+    Each Odds API pull costs credits (markets x regions per request), and this job
+    runs many times a week, so skip live pulls when nothing is close to kickoff.
+    """
+    within = float((cfg.get("market_comparison") or {}).get("odds_within_days", 2))
+    if predictions.empty:
+        return False
+    now = now if now is not None else pd.Timestamp.now(tz="UTC")
+    kickoff = pd.to_datetime(predictions.get("KickoffUTC", pd.Series(index=predictions.index, dtype=object)), utc=True, errors="coerce")
+    by_date = pd.to_datetime(predictions["Date"], errors="coerce").dt.tz_localize("UTC") + pd.Timedelta(hours=23, minutes=59)
+    kickoff = kickoff.fillna(by_date)
+    upcoming = kickoff[kickoff >= now]
+    return bool(not upcoming.empty and (upcoming.min() - now) <= pd.Timedelta(days=within))
 
 
 def main() -> None:
@@ -45,6 +63,10 @@ def main() -> None:
         )
         print(f"Cached prediction fixtures used: {len(predictions)}")
 
+    if not live_odds_due(predictions, cfg):
+        within = (cfg.get("market_comparison") or {}).get("odds_within_days", 2)
+        print(f"No fixture kicks off within {within} day(s); skipping Odds API pull to save credits.")
+        os.environ["THE_ODDS_API_LIVE"] = "false"
     odds = fetch_market_odds(cfg)
     odds.to_csv(out_dir / "market_odds_latest.csv", index=False)
     comparison = compare_totals_25(predictions, odds)

@@ -1,6 +1,8 @@
 name: zz diagnose failing jobs
 on:
   workflow_dispatch:
+  push:
+    branches: [diag/job-failures]
 permissions:
   contents: write
 jobs:

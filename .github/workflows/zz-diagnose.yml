@@ -26,7 +26,7 @@ jobs:
           mkdir -p diag
           for s in prepare_manual_mybookie.py safe_market_comparison.py api_football_odds_fallback.py post_match_process_audit.py; do
             echo "### $s" >> diag/out.txt
-            python $s >> diag/out.txt 2>&1; echo "exit=$?" >> diag/out.txt
+            { python $s >> diag/out.txt 2>&1; echo "exit=$?" >> diag/out.txt; } || true
           done
           sed -i -E 's/(apiKey=|x-apisports-key[^A-Za-z0-9]*)[A-Za-z0-9]+/\1REDACTED/g' diag/out.txt
       - name: Push output

@@ -242,7 +242,11 @@ def main() -> None:
     rankings_file = DATA_DIR / "gameweek_rankings_latest.csv"
     if not rankings_file.exists():
         raise FileNotFoundError("Run gameweek_rankings.py before the V1.3 decision gate")
-    rankings = pd.read_csv(rankings_file)
+    # gameweek_rankings.py writes a column-less file when no fresh MyBookie
+    # quotes exist (e.g. midweek with no fixtures); treat that as "no candidates".
+    rankings = _read_optional_csv(rankings_file)
+    if rankings.empty:
+        print("No ranked MyBookie selections this run; V1.3 shortlist is empty")
     adjusted_path = DATA_DIR / "pre_kickoff_adjusted_latest.csv"
     adj = _read_optional_csv(adjusted_path)
     lineups = _read_optional_csv(LINEUP_PATH)

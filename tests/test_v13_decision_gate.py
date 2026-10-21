@@ -126,3 +126,20 @@ def test_optional_csv_reader_tolerates_empty_scenario_file(tmp_path):
     assert _read_optional_csv(zero).empty
     assert _read_optional_csv(headerless).empty
     assert list(_read_optional_csv(ok).columns) == ["a"]
+
+
+def test_main_handles_columnless_rankings_file(tmp_path, monkeypatch):
+    """gameweek_rankings.py writes a column-less file when there are no fresh quotes."""
+    import actionable_bets_v13 as v13
+
+    data_dir = tmp_path / "processed"
+    data_dir.mkdir()
+    (data_dir / "gameweek_rankings_latest.csv").write_text("\n")
+    monkeypatch.setattr(v13, "DATA_DIR", data_dir)
+    monkeypatch.setattr(v13, "OUT_PATH", data_dir / "actionable_decisions_v13_latest.csv")
+    monkeypatch.setattr(v13, "LINEUP_PATH", tmp_path / "missing_lineups.csv")
+    monkeypatch.setattr(v13, "SCENARIO_PATH", tmp_path / "missing_scenarios.csv")
+
+    v13.main()
+
+    assert (data_dir / "actionable_decisions_v13_latest.csv").exists()

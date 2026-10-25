@@ -6,33 +6,33 @@ Bank £0.3m · estimated free transfers: 1 (selling prices approximated by curre
 
 | Player | Club | Pos | £ | GW9 | GW10 | GW11 | Start |
 |---|---|---|---|---|---|---|---|
-| Raya | ARS | GKP | 6.2 | 4.0 | 5.3 | 4.3 | XI |
-| Konsa | ARS | DEF | 4.6 | 4.1 | 5.6 | 4.5 | XI |
-| Tarkowski | EVE | DEF | 6.2 | 3.6 | 4.9 | 3.6 | XI |
-| Muharemović | LEE | DEF | 5.0 | 3.4 | 4.4 | 3.4 | XI |
-| Tavernier | BOU | MID | 6.3 | 5.0 | 5.7 | 5.2 | XI |
-| Mbeumo | MUN | MID | 7.9 | 4.9 | 5.4 | 4.5 | XI |
-| Rogers | CHE | MID | 8.0 | 4.7 | 4.6 | 4.6 | XI |
-| Groß | BHA | MID | 6.2 | 3.7 | 4.3 | 4.5 | XI |
+| Raya | ARS | GKP | 6.2 | 4.0 | 5.2 | 4.3 | XI |
+| Konsa | ARS | DEF | 4.6 | 4.0 | 5.5 | 4.4 | XI |
+| Tarkowski | EVE | DEF | 6.2 | 3.6 | 4.8 | 3.6 | XI |
+| Muharemović | LEE | DEF | 5.0 | 3.4 | 4.3 | 3.4 | XI |
+| Tavernier | BOU | MID | 6.3 | 5.3 | 6.1 | 5.5 | XI |
+| Mbeumo | MUN | MID | 7.9 | 4.7 | 5.2 | 4.4 | XI |
+| Rogers | CHE | MID | 8.0 | 4.6 | 4.5 | 4.5 | XI |
 | Schade | BRE | MID | 6.2 | 3.6 | 3.3 | 3.6 | XI |
-| Haaland | MCI | FWD | 15.7 | 6.2 | 5.9 | 6.4 | XI |
-| João Pedro | CHE | FWD | 7.9 | 4.5 | 4.4 | 4.4 | XI |
+| Groß | BHA | MID | 6.2 | 3.5 | 4.1 | 4.3 | XI |
+| Haaland | MCI | FWD | 15.7 | 6.3 | 6.0 | 6.4 | XI |
+| Kostoulas | BHA | FWD | 5.8 | 3.4 | 3.8 | 3.9 | XI |
 | Palmer | IPS | GKP | 4.0 | 0.0 | 0.0 | 0.0 | bench |
-| Calafiori | ARS | DEF | 6.0 | 3.4 | 4.9 | 3.8 | bench |
-| Gvardiol | MCI | DEF | 5.8 | 3.4 | 3.3 | 3.7 | bench |
-| Kostoulas | BHA | FWD | 5.8 | 3.3 | 3.7 | 3.8 | bench |
+| Gvardiol | MCI | DEF | 5.8 | 3.3 | 3.2 | 3.6 | bench |
+| Calafiori | ARS | DEF | 6.0 | 2.6 | 4.9 | 3.8 | bench |
+| João Pedro | CHE | FWD | 7.9 | 2.5 | 3.3 | 3.3 | bench |
 
 ## Best transfers
 
 | Out | In | Gain | Hit | Net | Bank after |
 |---|---|---|---|---|---|
-| Gvardiol | Silva | 3.0 | -0 | 3.0 | £1.1m |
-| Muharemović | Silva | 2.9 | -0 | 2.9 | £0.3m |
-| Kostoulas | Barry | 2.5 | -0 | 2.5 | £0.4m |
-| Calafiori | Silva | 2.3 | -0 | 2.3 | £1.3m |
-| Tarkowski | Silva | 2.3 | -0 | 2.3 | £1.5m |
-| Gvardiol | Hall | 2.1 | -0 | 2.1 | £0.8m |
-| Muharemović | Hall | 2.0 | -0 | 2.0 | £0.0m |
-| Gvardiol | Van Hecke | 1.9 | -0 | 1.9 | £1.2m |
-| Calafiori | Hall | 1.5 | -0 | 1.5 | £1.0m |
-| Tarkowski | Hall | 1.4 | -0 | 1.4 | £1.2m |
+| João Pedro | Barry | 3.3 | -0 | 3.3 | £2.5m |
+| Gvardiol | Silva | 3.3 | -0 | 3.3 | £1.1m |
+| Kostoulas | Barry | 3.1 | -0 | 3.1 | £0.4m |
+| Muharemović | Silva | 2.8 | -0 | 2.8 | £0.3m |
+| João Pedro | Evanilson | 2.6 | -0 | 2.6 | £2.0m |
+| Gvardiol | Hill | 2.4 | -0 | 2.4 | £0.6m |
+| João Pedro + Gvardiol | Barry + Silva | 6.3 | -4 | 2.3 | £3.3m |
+| Calafiori | Silva | 2.2 | -0 | 2.2 | £1.3m |
+| Tarkowski | Silva | 2.1 | -0 | 2.1 | £1.5m |
+| João Pedro + Muharemović | Barry + Silva | 6.1 | -4 | 2.1 | £2.5m |

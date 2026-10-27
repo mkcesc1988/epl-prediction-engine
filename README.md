@@ -1,5 +1,9 @@
 # EPL Prediction Engine
 
+NBA winners, spreads and totals are available as an isolated research baseline:
+see [NBA.md](NBA.md) for historical data, daily predictions, odds comparisons and
+walk-forward backtesting. Run the **NBA research predictions** workflow to begin.
+
 A reproducible English Premier League prediction and backtesting engine built around match-level xG, Poisson probabilities, walk-forward calibration, and bookmaker comparison.
 
 ## What this project does
@@ -117,3 +121,4 @@ Changes should be tested one at a time so we know what actually improved the mod
 ## Next upgrades after the baseline is verified
 
 Potential upgrades include Dixon-Coles correction, promoted-team priors, shrinkage between venue-specific and overall xG, rest days, lineup/injury information, BTTS, 1X2 probabilities, and league simulation. These should be added only after the current pipeline runs cleanly and the baseline backtest is reproduced.
+

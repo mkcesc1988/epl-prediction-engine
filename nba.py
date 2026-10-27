@@ -9,6 +9,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
@@ -24,6 +25,27 @@ COMPARISON_COLUMNS = ["EventId", "Date", "HomeTeam", "AwayTeam", "CapturedAt", "
 def read_json(url: str):
     with urlopen(url, timeout=45) as response:
         return json.load(response)
+
+
+def fetch_nba_odds(key: str) -> list[dict]:
+    """Expose useful provider diagnostics without including credential-bearing URLs."""
+    try:
+        payload = read_json("https://api.the-odds-api.com/v4/sports/basketball_nba/odds?" + urlencode({"apiKey": key, "regions": "us", "markets": "h2h,spreads,totals", "oddsFormat": "decimal", "dateFormat": "iso"}))
+        if not isinstance(payload, list):
+            raise ValueError("Unexpected odds payload")
+        return payload
+    except HTTPError as exc:
+        code = None
+        try:
+            code = json.load(exc).get("error_code")
+        except Exception:
+            pass
+        # Only emit known symbolic provider codes, never arbitrary response text.
+        known = {"OUT_OF_USAGE_CREDITS", "INVALID_KEY", "MISSING_KEY", "INVALID_MARKET", "INVALID_SPORT", "RATE_LIMIT_EXCEEDED", "SUBSCRIPTION_REQUIRED"}
+        detail = f" ({code})" if code in known else ""
+        raise RuntimeError(f"NBA odds request failed: HTTP {exc.code}{detail}") from None
+    except Exception:
+        raise RuntimeError("NBA odds request failed: connection or response error") from None
 
 
 def scoreboard(day: str) -> list[dict]:
@@ -254,12 +276,7 @@ def main():
         key = os.getenv("THE_ODDS_API_KEY", "").strip()
         if not key:
             parser.error("--odds requires THE_ODDS_API_KEY")
-        try:
-            payload = read_json("https://api.the-odds-api.com/v4/sports/basketball_nba/odds?" + urlencode({"apiKey": key, "regions": "us", "markets": "h2h,spreads,totals", "oddsFormat": "decimal", "dateFormat": "iso"}))
-        except Exception:
-            # urllib exceptions may embed the credential-bearing URL.
-            (args.output / "market_comparison_latest.csv").write_text(",".join(COMPARISON_COLUMNS)+"\n")
-            raise RuntimeError("NBA odds request failed; verify provider availability and API credentials") from None
+        payload = fetch_nba_odds(key)
         comparisons = compare_odds(predictions, payload, pd.Timestamp.now(tz="UTC"))
     comparisons.to_csv(args.output / "market_comparison_latest.csv", index=False)
     print(f"Wrote {len(predictions)} NBA predictions and {len(comparisons)} market comparisons to {args.output}")

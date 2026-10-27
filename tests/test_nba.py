@@ -1,10 +1,13 @@
 import unittest
+import io
+from unittest.mock import patch
+from urllib.error import HTTPError
 from types import SimpleNamespace
 
 import numpy as np
 import pandas as pd
 
-from nba import (HISTORY_COLUMNS, backtest, compare_odds, features,
+from nba import (HISTORY_COLUMNS, backtest, compare_odds, features, fetch_nba_odds,
                  market_probability, predict, validate_history)
 
 
@@ -22,6 +25,13 @@ def sample_history(n=90):
 
 
 class NBATest(unittest.TestCase):
+    def test_odds_error_diagnostics_do_not_expose_credentials(self):
+        error = HTTPError('https://example.invalid/?apiKey=private', 401, 'private', {}, io.BytesIO(b'{"error_code":"OUT_OF_USAGE_CREDITS"}'))
+        with patch('nba.read_json', side_effect=error):
+            with self.assertRaisesRegex(RuntimeError, 'HTTP 401.*OUT_OF_USAGE_CREDITS') as context:
+                fetch_nba_odds('private')
+        self.assertNotIn('private', str(context.exception))
+
     def test_history_rejects_duplicate_tied_and_nonfinite_scores(self):
         h = sample_history()
         for bad in [pd.concat([h, h.iloc[:1]]), h.assign(AwayScore=h.HomeScore), h.assign(HomeScore=np.inf)]:

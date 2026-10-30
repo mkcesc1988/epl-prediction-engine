@@ -19,7 +19,7 @@ Bank £0.3m · estimated free transfers: 1 (selling prices approximated by curre
 | Kostoulas | BHA | FWD | 5.8 | 3.4 | 3.9 | 3.9 | XI |
 | Palmer | IPS | GKP | 4.0 | 0.0 | 0.0 | 0.0 | bench |
 | Gvardiol | MCI | DEF | 5.7 | 3.3 | 3.2 | 3.6 | bench |
-| Calafiori | ARS | DEF | 6.0 | 2.6 | 4.9 | 3.8 | bench |
+| Calafiori | ARS | DEF | 5.9 | 2.6 | 4.9 | 3.8 | bench |
 | João Pedro | CHE | FWD | 7.8 | 0.0 | 1.6 | 1.6 | bench |
 
 ## Best transfers
@@ -30,9 +30,9 @@ Bank £0.3m · estimated free transfers: 1 (selling prices approximated by curre
 | Gvardiol | Silva | 3.2 | -0 | 3.2 | £1.0m |
 | Kostoulas | Barry | 3.0 | -0 | 3.0 | £0.5m |
 | Muharemović | Silva | 2.5 | -0 | 2.5 | £0.4m |
-| João Pedro | Evanilson | 2.5 | -0 | 2.5 | £1.9m |
+| João Pedro | Evanilson | 2.5 | -0 | 2.5 | £1.8m |
 | Gvardiol | Hill | 2.3 | -0 | 2.3 | £0.5m |
-| Calafiori | Silva | 2.1 | -0 | 2.1 | £1.3m |
+| Calafiori | Silva | 2.1 | -0 | 2.1 | £1.2m |
 | João Pedro + Gvardiol | Barry + Silva | 6.1 | -4 | 2.1 | £3.2m |
 | Tarkowski | Silva | 2.1 | -0 | 2.1 | £1.5m |
 | João Pedro | Calvert-Lewin | 2.0 | -0 | 2.0 | £2.0m |

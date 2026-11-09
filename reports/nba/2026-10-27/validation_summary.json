@@ -1,0 +1,59 @@
+{
+  "FetchedAt": "2026-10-27T17:30:37.234486+00:00",
+  "Source": "ESPN scoreboard",
+  "HistoryGames": 2683,
+  "FirstTipoff": "2024-10-22T23:30:00+00:00",
+  "LastTipoff": "2026-10-27T02:00:00+00:00",
+  "Backtest": {
+    "Games": 2480,
+    "BrierScore": 0.21450928287553261,
+    "LogLoss": 0.6174421273917594,
+    "MarginMAE": 11.653686642792355,
+    "TotalMAE": 15.05768303398035
+  },
+  "ExpandingLeagueMeanBaseline": {
+    "BrierScore": 0.24827441136050926,
+    "LogLoss": 0.689702892810274,
+    "MarginMAE": 13.094725328629167,
+    "TotalMAE": 15.954492515854533
+  },
+  "Seasons": [
+    {
+      "Season": "2024/25",
+      "Games": 1112,
+      "BrierScore": 0.21497631123535202,
+      "LogLoss": 0.6185068075220339,
+      "MarginMAE": 11.575466606674269,
+      "TotalMAE": 14.827130976455601
+    },
+    {
+      "Season": "2025/26",
+      "Games": 1316,
+      "BrierScore": 0.2128099798892934,
+      "LogLoss": 0.6136755458250316,
+      "MarginMAE": 11.680451410357236,
+      "TotalMAE": 15.256044123959363
+    },
+    {
+      "Season": "2026/27",
+      "Games": 52,
+      "BrierScore": 0.24752749814037103,
+      "LogLoss": 0.6899978396407657,
+      "MarginMAE": 12.649037528329446,
+      "TotalMAE": 14.967888679271443
+    }
+  ],
+  "Live": {
+    "FetchedAt": "2026-10-27T17:30:37.234486+00:00",
+    "FeedGames": 4,
+    "FuturePredictions": 4,
+    "OddsKeyConfigured": false
+  },
+  "LiveOdds": {
+    "Status": "blocked",
+    "HTTPStatus": 401,
+    "ProviderCode": "OUT_OF_USAGE_CREDITS",
+    "WorkflowRun": "https://github.com/mkcesc1988/epl-prediction-engine/actions/runs/40551648098",
+    "MatchingValidated": false
+  }
+}

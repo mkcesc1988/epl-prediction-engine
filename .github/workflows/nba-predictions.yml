@@ -1,0 +1,68 @@
+name: NBA research predictions
+
+on:
+  schedule:
+    - cron: '0 15 * * *'
+  workflow_dispatch:
+    inputs:
+      history_start:
+        description: 'Initial history start (used when no cached history exists)'
+        default: '2024-10-22'
+      backtest:
+        description: 'Run walk-forward backtest'
+        type: boolean
+        default: false
+      odds:
+        description: 'Fetch bookmaker lines (requires THE_ODDS_API_KEY; consumes credits)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nba-research
+  cancel-in-progress: false
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas scipy
+      - uses: actions/cache/restore@v4
+        with:
+          path: data/raw/nba/games.csv
+          key: nba-history-v1-${{ github.run_id }}
+          restore-keys: nba-history-v1-
+      - name: Update history and generate predictions
+        env:
+          HISTORY_START: ${{ inputs.history_start || '2024-10-22' }}
+          RUN_BACKTEST: ${{ inputs.backtest }}
+          FETCH_ODDS: ${{ inputs.odds }}
+          THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+        run: |
+          if [ -f data/raw/nba/games.csv ]; then
+            start=$(date -u -d '7 days ago' +%F)
+          else
+            start="$HISTORY_START"
+          fi
+          flags=()
+          if [ "$RUN_BACKTEST" = 'true' ]; then flags+=(--backtest); fi
+          if [ "$FETCH_ODDS" = 'true' ]; then flags+=(--odds); fi
+          python nba.py --fetch-start "$start" "${flags[@]}"
+      - uses: actions/cache/save@v4
+        with:
+          path: data/raw/nba/games.csv
+          key: nba-history-v1-${{ github.run_id }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nba-research-${{ github.run_id }}
+          path: |
+            data/raw/nba/games.csv
+            data/processed/nba/
+          retention-days: 30

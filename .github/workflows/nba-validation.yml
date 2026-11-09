@@ -1,0 +1,44 @@
+name: NBA real-data validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [codex/nba-research-baseline]
+    paths:
+      - nba.py
+      - nba_validate_run.py
+      - .github/workflows/nba-validation.yml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy pandas scipy
+      - name: Real-data backtest and live fixture validation
+        run: python -u nba_validate_run.py
+      - name: Validate bookmaker feed when repository key is configured
+        env:
+          THE_ODDS_API_KEY: ${{ secrets.THE_ODDS_API_KEY }}
+        run: |
+          if [ -n "$THE_ODDS_API_KEY" ]; then
+            python nba.py --history data/processed/nba_validation/games.csv --output data/processed/nba_validation/live_odds --odds
+          else
+            echo 'Bookmaker validation skipped: THE_ODDS_API_KEY is not configured.'
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nba-real-data-validation-${{ github.run_id }}
+          path: |
+            data/processed/nba_validation/*.csv
+            data/processed/nba_validation/*.json
+            data/processed/nba_validation/live_odds/
+          retention-days: 30

@@ -73,3 +73,4 @@ real_money,RM-20260829-HUL05,2026-08-29T14:00:00+00:00,Coventry City,Hull City,S
 real_money,RM-20260829-NEW05,2026-08-29T16:30:00+00:00,Tottenham,Newcastle,Spread,Newcastle +0.5,0.5,0-2,,FPL_ONLY,W,nan,,INFO
 real_money,RM-20260830-LEEOV25,2026-08-30T13:00:00+00:00,Leeds,Brentford,Total,Over 2.5,2.5,1-1,,FPL_ONLY,L,nan,,INFO
 real_money,RM-20260830-IPS15,2026-08-30T15:30:00+00:00,Man United,Ipswich Town,Spread,Ipswich Town +1.5,1.5,5-2,,FPL_ONLY,L,nan,,INFO
+SYSTEM,,,,,,,,,,,,"API_FOOTBALL:HTTPSConnectionPool(host='v3.football.api-sports.io', port=443): Read timed out. (read timeout=45)",RESULT_SOURCE_WARNING,WARNING
